@@ -45,5 +45,5 @@ REM @version    SVN: $Id: phpcb 5182 2009-09-03 12:34:35Z elger $
 REM @link       http://www.phpunit.de/
 REM @since      File available since 0.1.0
 
-set PHPBIN="@php_bin@"
+set PHPBIN=@php_bin@
 "@php_bin@" "@bin_dir@\phpcb" %*
