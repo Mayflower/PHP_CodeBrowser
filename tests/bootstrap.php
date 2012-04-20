@@ -52,13 +52,13 @@ if (!defined('PHPCB_SOURCE')) {
  define('PHPCB_SOURCE', realpath(PHPCB_ROOT_DIR) . '/src');
 }
 if (!defined('PHPCB_TEST_DIR')) {
- define('PHPCB_TEST_DIR', realpath(PHPCB_ROOT_DIR) . '/tests/testData');
+ define('PHPCB_TEST_DIR', realpath(PHPCB_ROOT_DIR) . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'testData');
 }
 if (!defined('PHPCB_TEST_LOGS')) {
  define('PHPCB_TEST_LOGS', PHPCB_TEST_DIR . '/logs');
 }
 if (!defined('PHPCB_TEST_OUTPUT')) {
-    define('PHPCB_TEST_OUTPUT', PHPCB_TEST_DIR . '/output');
+    define('PHPCB_TEST_OUTPUT', PHPCB_TEST_DIR . DIRECTORY_SEPARATOR . 'output');
 }
 
 require_once PHPCB_SOURCE . '/Autoload.php';

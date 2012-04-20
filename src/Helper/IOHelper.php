@@ -263,7 +263,7 @@ class CbIOHelper
     protected static function _getCommonPathPrefix($currentPrefix, $path)
     {
         if (strpos($path, $currentPrefix . DIRECTORY_SEPARATOR) === 0
-                || $currentPrefix == '/'
+                || $currentPrefix == DIRECTORY_SEPARATOR
                 || $currentPrefix == ''
                 || $currentPrefix == '.'
                 || preg_match('/^[A-Z]\:\\\\$/', $currentPrefix) === 1) {

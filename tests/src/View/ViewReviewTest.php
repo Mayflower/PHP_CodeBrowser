@@ -98,7 +98,7 @@ class CbViewReviewTest extends CbAbstractTests
      */
     public function test__generateNoIssues()
     {
-        $expectedFile = PHPCB_TEST_OUTPUT . '/' . basename(__FILE__) . '.html';
+        $expectedFile = PHPCB_TEST_OUTPUT . DIRECTORY_SEPARATOR . basename(__FILE__) . '.html';
 
         $this->_ioMock->expects($this->once())
                       ->method('loadFile')
@@ -134,7 +134,7 @@ class CbViewReviewTest extends CbAbstractTests
         );
         $file = new CbFile(__FILE__, $issueList);
 
-        $expectedFile = PHPCB_TEST_OUTPUT . '/' . basename(__FILE__) . '.html';
+        $expectedFile = PHPCB_TEST_OUTPUT . DIRECTORY_SEPARATOR . basename(__FILE__) . '.html';
         $this->_ioMock->expects($this->once())
                       ->method('loadFile')
                       ->with($this->equalTo(__FILE__))
@@ -177,7 +177,7 @@ class CbViewReviewTest extends CbAbstractTests
         );
         $file = new CbFile(__FILE__, $issueList);
 
-        $expectedFile = PHPCB_TEST_OUTPUT . '/' . basename(__FILE__) . '.html';
+        $expectedFile = PHPCB_TEST_OUTPUT . DIRECTORY_SEPARATOR . basename(__FILE__) . '.html';
         $this->_ioMock->expects($this->once())
                       ->method('loadFile')
                       ->with($this->equalTo(__FILE__))
