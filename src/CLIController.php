@@ -160,6 +160,13 @@ class CbCLIController
     private $_phpSuffixes;
 
     /**
+     * We want to exclude files with no issues
+     *
+     * @var boolean
+     */
+    private $_excludeOK;
+
+    /**
      * The constructor
      *
      * Standard setters are initialized
@@ -182,7 +189,8 @@ class CbCLIController
                                 $htmlOutputDir,         Array $excludeExpressions,
                                 Array $excludePatterns, Array $pluginOptions,
                                 $ioHelper,                    $debugLog,
-                                Array $phpSuffixes)
+                                Array $phpSuffixes,
+                                $excludeOK = false)
     {
         $this->_logDir             = $logPath;
         $this->_projectSource      = $projectSource;
@@ -196,6 +204,7 @@ class CbCLIController
         $this->_debugLog           = $debugLog;
         $this->_registeredPlugins  = array();
         $this->_phpSuffixes        = $phpSuffixes;
+        $this->_excludeOK          = $excludeOK;
     }
 
     /**
@@ -312,14 +321,15 @@ class CbCLIController
                 $cbViewReview->generate(
                     $file->getIssues(),
                     $file->name(),
-                    $commonPathPrefix
+                    $commonPathPrefix,
+                    $this->_excludeOK
                 );
             }
             ini_set('error_reporting', $error_reporting);
 
             // Copy needed ressources (eg js libraries) to output directory
             $cbViewReview->copyRessourceFolders();
-            $cbViewReview->generateIndex($files);
+            $cbViewReview->generateIndex($files, $this->_excludeOK);
         }
     }
 
@@ -375,7 +385,8 @@ class CbCLIController
             $opts['debugExcludes'] ? Log::factory('console', '', 'PHPCB')
                                    : Log::factory('null'),
             $opts['phpSuffixes'] ? explode(',', $opts['phpSuffixes'])
-                                 : array('php')
+                                 : array('php'),
+            $opts['excludeOK'] ? $opts['excludeOK'] : false
         );
 
         $plugins = self::getAvailablePlugins();
@@ -579,6 +590,14 @@ HERE
                 'description' => 'Print which files are excluded by which '
                                     . 'expressions and patterns.',
                 'long_name'   => '--debugExcludes',
+                'action'      => 'StoreTrue'
+            )
+        );
+        $parser->addOption(
+            'excludeOK',
+            array(
+                'description' => 'Exclude files with no issues from the report',
+                'long_name'   => '--excludeOK',
                 'action'      => 'StoreTrue'
             )
         );

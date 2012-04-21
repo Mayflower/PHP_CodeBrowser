@@ -128,7 +128,7 @@ class CbViewReview extends CbViewAbstract
      * @see self::_formatSourceCode
      * @see self::_generateJSCode
      */
-    public function generate(Array $issueList, $fileName, $commonPathPrefix)
+    public function generate(Array $issueList, $fileName, $commonPathPrefix, $excludeOK = false)
     {
         $issues           = $this->_formatIssues($issueList);
         $shortFilename    = substr($fileName, strlen($commonPathPrefix));
@@ -139,6 +139,10 @@ class CbViewReview extends CbViewAbstract
         $depth            = substr_count($shortFilename, DIRECTORY_SEPARATOR);
         $data['csspath']  = str_repeat('../', $depth - 1 >= 0 ? $depth - 1 : 0);
 
+        //we want to exclude files without issues and there are no issues in this one
+        if ($excludeOK && !$data['issues']) {
+            return;
+        }
         $this->_ioHelper->createFile(
             $this->_outputDir . $shortFilename . '.html',
             $this->_render('review', $data)

@@ -159,8 +159,13 @@ class CbViewAbstract
      *
      * @return void
      */
-    public function generateIndex(Array $fileList)
+    public function generateIndex(Array $fileList, $excludeOK = false)
     {
+        //we want to exclude files without issues
+        if ($excludeOK) {
+            $fileList = array_filter($fileList, array('CbViewAbstract', 'hasFileAnyIssues'));
+        }
+
         $data['treeList'] = $this->_getTreeListHtml($fileList);
         $data['fileList'] = $fileList;
 
@@ -168,6 +173,17 @@ class CbViewAbstract
             $this->_outputDir . '/index.html',
             $this->_render('index', $data)
         );
+    }
+
+    /**
+     * Has the file any issues?
+     *
+     * @param CbFile $file
+     * @return boolean
+     */
+    public static function hasFileAnyIssues(CbFile $file) {
+        $issues = $file->getIssues();
+        return !empty($issues);
     }
 
     /**
