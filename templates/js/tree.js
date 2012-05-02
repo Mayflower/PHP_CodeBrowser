@@ -1,6 +1,6 @@
 function linkClickedFunction(event) {
     event.preventDefault();
-    target = this.href;
+    target = unescape(this.href);
     $.History.go(target);
 }
 
