@@ -4,6 +4,20 @@ function linkClickedFunction(event) {
     $.History.go(target);
 }
 
+// detect if the browser decodes hash values
+//
+// eg Firfox automaticly decodes hash values:
+// https://bugzilla.mozilla.org/show_bug.cgi?id=483304
+// 
+// take solution to emulate the behaviour form here:
+// http://stackoverflow.com/questions/3213531/creating-a-new-location-object-in-javascript
+function browserDecodesHash() {
+    var testHash = "#%20",
+        url = document.createElement("a");
+    url.href = testHash;
+    return url.hash !== testHash;
+}
+
 $.History.bind(function (state) {
     $('.sidebar-container-right').remove();
     $('#cluetip').remove();
@@ -14,8 +28,12 @@ $.History.bind(function (state) {
             $('#fileList .fileLink').click(linkClickedFunction);
         });
     } else {
+        // check if we have to reencode the url
+        if (browserDecodesHash()) {
+            state = encodeURI(state);
+        }
         // Go to specific review
-        $('#contentBox').empty().load(encodeURI(state) + ' #review', initReview);
+        $('#contentBox').empty().load(state + ' #review', initReview);
     }
 });
 
