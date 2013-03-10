@@ -269,7 +269,7 @@ class CbViewReview extends CbViewAbstract
         }
 
         $sourceDom = new DOMDocument();
-        $sourceDom->loadHTML('<?xml encoding="UTF-8">' . $code);
+        $sourceDom->loadHTML('<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>' . $code);
 
         //fetch <code>-><span>->children from php generated html
         $sourceElements = $sourceDom->getElementsByTagname('code')->item(0)
