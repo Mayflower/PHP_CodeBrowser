@@ -1,0 +1,25 @@
+{
+  "name" : "mayflower/php-codebrowser", 
+  "description" : "A code browser that augments the code with information from various QA tools.", 
+  "license" : "BSD-2-Clause", 
+  "require" : {
+    "pear/console_commandline": "dev-trunk", 
+    "phpunit/php-file-iterator" : "1.3.*", 
+    "pear/log" : "dev-master"
+  }, 
+  "require-dev" : {
+    "phpunit/phpunit" : "3.7.*"
+  }, 
+  "autoload" : {
+    "classmap" : [ "src/" ]
+  }, 
+  "include-path": [ "src/" ], 
+  "bin" : [ "bin/phpcb" ], 
+  "extra" : {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  }, 
+  "minimum-stability" : "dev", 
+  "prefer-stable" : true
+}
