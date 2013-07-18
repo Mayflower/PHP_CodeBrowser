@@ -405,6 +405,7 @@ class CbViewReview extends CbViewAbstract
             $sourceCode = preg_replace('/ /', '&nbsp;', $sourceCode);
             $sourceCode = '<div class="code"><ol class="code">'
                         . $sourceCode.'</ol></div>';
+            $sourceCode = $this->_stripInvalidXml($sourceCode);
 
             $doc = new DOMDocument();
             $doc->loadHTML($sourceCode);
@@ -430,6 +431,39 @@ class CbViewReview extends CbViewAbstract
             }
         }
         return $outputIssues;
+    }
+
+    /**
+     * Removes invalid XML
+     *
+     * @access private
+     * @param string $value
+     * @return string
+     */
+    private function _stripInvalidXml($value)
+    {
+        $ret = "";
+        $current;
+        if (empty($value)) {
+            return $ret;
+        }
+
+        $length = strlen($value);
+        for ($i=0; $i < $length; $i++) {
+            $current = ord($value{$i});
+            if (($current == 0x9)
+                || ($current == 0xA)
+                || ($current == 0xD)
+                || (($current >= 0x20) && ($current <= 0xD7FF))
+                || (($current >= 0xE000) && ($current <= 0xFFFD))
+                || (($current >= 0x10000) && ($current <= 0x10FFFF))
+            ) {
+                $ret .= chr($current);
+            } else {
+                $ret .= " ";
+            }
+        }
+        return $ret;
     }
 
 }
