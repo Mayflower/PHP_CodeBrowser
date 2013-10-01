@@ -22,7 +22,7 @@
     <body class="codebrowser">
         <div class="header">
             <a href="./<?php echo $csspath; ?>index.html">Go back to index</a> |
-            <a href="http://github.com/mayflowergmbh/PHP_CodeBrowser">PHP CodeBrowser</a>
+            <a href="https://github.com/Mayflower/PHP_CodeBrowser">PHP CodeBrowser</a>
         </div>
         <hr/>
         <div id="review">
