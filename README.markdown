@@ -75,7 +75,7 @@ Open `/path/to/defined/output/index.html`.
       </cruisecontrol:artifactsLink>
     </cruisecontrol:tab>
 
-### Hudson ###
+### Jenkins/Hudson ###
 
 Have a look at the [standard template for Jenkins jobs for PHP projects](https://github.com/sebastianbergmann/php-jenkins-template) to see how PHP_CodeBrowser can be used together with Jenkins.
 
