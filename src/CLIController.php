@@ -64,9 +64,12 @@ if (strpos('@php_dir@', '@php_dir') === false) {
 }
 
 require_once dirname(__FILE__) . '/Autoload.php';
-require_once 'Console/CommandLine.php';
 require_once 'File/Iterator/Autoload.php';
-require_once 'Log.php';
+
+if (stream_resolve_include_path('ezc/Base/base.php')) {
+    require_once 'ezc/Base/base.php';
+    spl_autoload_register(array('ezcBase', 'autoload'));
+}
 
 /**
  * CbCLIController
@@ -134,9 +137,9 @@ class CbCLIController
     private $_ioHelper;
 
     /**
-     * Pear Log object where debug output should go to.
+     * ezcConsoleOutput object where debug output should go to.
      *
-     * @var Log
+     * @var ezcConsoleOutput
      */
     private $_debugLog;
 
@@ -340,13 +343,8 @@ class CbCLIController
      */
     public static function main()
     {
-        $parser = self::createCommandLineParser();
-
-        try {
-            $opts = $parser->parse()->options;
-        } catch (Exception $e) {
-            $parser->displayError($e->getMessage());
-        }
+        $parser = self::createEzcCommandLineParser();
+        $opts = $parser->getOptionValues(true);
 
         $errors = self::errorsForOpts($opts);
         if ($errors) {
@@ -357,7 +355,7 @@ class CbCLIController
         }
 
         // Convert the --ignore arguments to patterns
-        if (null !== $opts['ignore']) {
+        if ($opts['ignore']) {
             $dirSep = preg_quote(DIRECTORY_SEPARATOR, '/');
             foreach (explode(',', $opts['ignore']) as $ignore) {
                 $ig = realpath($ignore);
@@ -370,23 +368,29 @@ class CbCLIController
             }
         }
 
+        $output = new ezcConsoleOutput();
+        if (isset($opts['debugExcludes'])) {
+            $output->setOptions(
+                array("verbosityLevel" => LOG_DEBUG)
+            );
+        }
+        
         // init new CLIController
         $controller = new CbCLIController(
             $opts['log'],
             $opts['source'] ? $opts['source'] : array(),
             $opts['output'],
             $opts['excludePCRE'] ? $opts['excludePCRE'] : array(),
-            $opts['excludePattern'] ? $opts['excludePattern'] : array(),
+            isset($opts['excludePattern']) ? $opts['excludePattern'] : array(),
             $opts['crapThreshold'] ? array('CRAP' => array(
                                         'threshold' => $opts['crapThreshold'])
                                      )
                                    : array(),
             new CbIOHelper(),
-            $opts['debugExcludes'] ? Log::factory('console', '', 'PHPCB')
-                                   : Log::factory('null'),
-            $opts['phpSuffixes'] ? explode(',', $opts['phpSuffixes'])
+            $output,
+            isset($opts['phpSuffixes']) ? explode(',', $opts['phpSuffixes'])
                                  : array('php'),
-            $opts['excludeOK'] ? $opts['excludeOK'] : false
+            isset($opts['excludeOK']) ? $opts['excludeOK'] : false
         );
 
         $plugins = self::getAvailablePlugins();
@@ -476,164 +480,190 @@ HERE
     }
 
     /**
-     * Creates a Console_CommandLine object to parse options.
-     *
-     * @return Console_CommandLine
+     * Creates a ezcConsoleInput object to parse options.
+     * 
+     * @return \ezcConsoleInput
      */
-    private static function createCommandLineParser()
+    private static function createEzcCommandLineParser()
     {
-        $parser = new Console_CommandLine(
-            array(
-                'description' => 'A Code browser for PHP files with syntax '
-                                    . 'highlighting and colored error-sections '
-                                    . 'found by quality assurance tools like '
-                                    . 'PHPUnit or PHP_CodeSniffer.',
-                'version'     => (strpos('@package_version@', '@') === false)
-                                    ? '@package_version@'
-                                    : 'from Git'
-            )
-        );
+        $input = new \ezcConsoleInput();
 
-        $parser->addOption(
-            'log',
-            array(
-                'description' => 'The path to the xml log files, e.g. generated'
-                                    . ' from PHPUnit. Either this or --source '
-                                    . 'must be given',
-                'short_name'  => '-l',
-                'long_name'   => '--log',
-                'help_name'   => '<directory>'
-            )
+        $optionLog = new \ezcConsoleOption(
+            "l", "log", \ezcConsoleInput::TYPE_STRING, '', false,
+            "<directory>", 
+            "The path to the xml log files, e.g. generated from PHPUnit.\n"
+                . "Either this or --source must be given\n"
         );
+        $input->registerOption($optionLog);
 
-        $parser->addOption(
-            'phpSuffixes',
-            array(
-                'description' => 'A comma separated list of php file extensions'
-                                    .' to include.',
-                'short_name'  => '-S',
-                'long_name'   => '--extensions',
-                'help_name'   => '<extensions>'
-            )
+        $optionPhpSuffixes = new \ezcConsoleOption(
+            "S", "extensions", \ezcConsoleInput::TYPE_STRING, '', false,
+            "<extensions>",
+            "A comma separated list of php file extensions to include.\n"
         );
+        $input->registerOption($optionPhpSuffixes);
 
-        $parser->addOption(
-            'output',
-            array(
-                'description' => 'Path to the output folder where generated '
-                                    . 'files should be stored.',
-                'short_name'  => '-o',
-                'long_name'   => '--output',
-                'help_name'   => '<directory>'
-            )
+        $optionOutput = new \ezcConsoleOption(
+            "o", "output", \ezcConsoleInput::TYPE_STRING, '', false,
+            "<directory>", 
+            "Path to the output folder where generated files should be stored\n"
         );
+        $input->registerOption($optionOutput);
 
-        $parser->addOption(
-            'source',
-            array(
-                'description' => 'Path to the project source code. Can either '
-                                    . 'be a directory or a single file. Parse '
-                                    . 'complete source directory if set, else '
-                                    . 'only files found in logs. Either this or'
-                                    . ' --log must be given. Can be given '
-                                    . 'multiple times',
-                'short_name'  => '-s',
-                'long_name'   => '--source',
-                'action'      => 'StoreArray',
-                'help_name'   => '<dir|file>'
-            )
+        $optionSource = new \ezcConsoleOption(
+            "s", "source", \ezcConsoleInput::TYPE_STRING, array(), true,
+            "<dir|file>",
+            "Path to the project source code.\n"
+                . "Can either be a directory or a single file. Parse complete\n"
+                . "source directory if set, else only files found in logs.\n"
+                . "Either this or --log must be given.\n"
+                . "Can be given multiple times.\n"
         );
+        $input->registerOption($optionSource);
 
-        $parser->addOption(
-            'ignore',
-            array(
-                'description' => 'Comma separated string of files or '
-                                    . 'directories that will be ignored during'
-                                    . 'the parsing process.',
-                'short_name'  => '-i',
-                'long_name'   => '--ignore',
-                'help_name'   => '<files>'
-            )
+        $optionIgnore = new \ezcConsoleOption(
+            "i", "ignore", \ezcConsoleInput::TYPE_STRING, '', false,
+            "<files>", 
+            "Comma separated string of files or directories\n"
+                . "that will be ignored during the parsing process.\n"
         );
+        $input->registerOption($optionIgnore);
 
-        $parser->addOption(
-            'excludePattern',
-            array(
-                'description' => 'Excludes all files matching the given glob '
-                                    . 'pattern. This is done after pulling the '
-                                    . 'files in the source dir in if one is '
-                                    . 'given. Can be given multiple times. Note'
-                                    . ' that the match is run against '
-                                    . 'absolute filenames.',
-                'short_name'  => '-e',
-                'long_name'   => '--exclude',
-                'action'      => 'StoreArray',
-                'help_name'   => '<pattern>'
-            )
+        $optionExcludePattern = new \ezcConsoleOption(
+            "e", "exclude", \ezcConsoleInput::TYPE_STRING, array(), true,
+            "<pattern>",
+            "Excludes all files matching the given glob pattern.\n"
+                . "This is done after pulling the files in the source dir in\n"
+                . "if one is given. Can be given multiple times.\n"
+                . "Note that the match is run against absolute filenames.\n"
         );
+        $input->registerOption($optionExcludePattern);
 
-        $parser->addOption(
-            'excludePCRE',
-            array(
-                'description' => 'Works like -e but takes PCRE instead of '
-                                    . 'glob patterns.',
-                'short_name'  => '-E',
-                'long_name'   => '--excludePCRE',
-                'action'      => 'StoreArray',
-                'help_name'   => '<expression>'
-            )
+        $optionExcludePCRE = new \ezcConsoleOption(
+            "E", "excludePCRE", \ezcConsoleInput::TYPE_STRING, array(), true,
+            "<expression>",
+            "Works like -e but takes PCRE instead of glob patterns.\n"
         );
+        $input->registerOption($optionExcludePCRE);
 
-        $parser->addOption(
-            'debugExcludes',
-            array(
-                'description' => 'Print which files are excluded by which '
-                                    . 'expressions and patterns.',
-                'long_name'   => '--debugExcludes',
-                'action'      => 'StoreTrue'
-            )
+        $optionDebugExcludes = new \ezcConsoleOption(
+            "", "debugExcludes", \ezcConsoleInput::TYPE_NONE, null, false,
+            "", 
+            "Print which files are excluded by which expressions and patterns.",
+            array(), array(), false
         );
-        $parser->addOption(
-            'excludeOK',
-            array(
-                'description' => 'Exclude files with no issues from the report',
-                'long_name'   => '--excludeOK',
-                'action'      => 'StoreTrue'
-            )
+        $input->registerOption($optionDebugExcludes);
+
+        $optionExcludeOK = new \ezcConsoleOption(
+            "", "excludeOK", \ezcConsoleInput::TYPE_NONE, null, false,
+            "", 
+            "Exclude files with no issues from the report.",
+            array(), array(), false
         );
+        $input->registerOption($optionExcludeOK);
 
         $plugins = array_map(
             array(__CLASS__, 'arrayMapCallback'),
             self::getAvailablePlugins()
         );
-
-        $parser->addOption(
-            'disablePlugin',
-            array(
-                'description' => 'Disable single Plugins. Can be one of '
-                                    . implode(', ', $plugins),
-                'choices'     => $plugins,
-                'long_name'   => '--disablePlugin',
-                'action'      => 'StoreArray',
-                'help_name'   => '<plugin>'
-            )
+        $optionDisablePlugin = new \ezcConsoleOption(
+            "", "disablePlugin", \ezcConsoleInput::TYPE_STRING, array(), true,
+            "<plugin>",
+            "Disable single Plugins. Can be one of\n"
+                . implode(', ', $plugins)
         );
+        $input->registerOption($optionDisablePlugin);
 
-        $parser->addOption(
-            'crapThreshold',
-            array(
-                'description' => 'The minimum value for CRAP errors to be '
-                                    . 'recognized. Defaults to 0. Regardless '
-                                    . 'of this setting, values below 30 will '
-                                    . 'be considered notices, those above '
-                                    . 'warnings.',
-                'long_name'   => '--crapThreshold',
-                'action'      => 'StoreInt',
-                'help_name'   => '<threshold>'
-            )
+        $optionСrapThreshold = new \ezcConsoleOption(
+            "", "crapThreshold", \ezcConsoleInput::TYPE_INT, 0, false,
+            "<threshold>", 
+            "The minimum value for CRAP errors to be recognized. Defaults to 0.\n"
+                . "Regardless of this setting, values below 30 will be\n"
+                . "considered notices, those above warnings."
         );
+        $input->registerOption($optionСrapThreshold);
 
-        return $parser;
+        $optionHelp = new \ezcConsoleOption(
+            "h", "help", \ezcConsoleInput::TYPE_NONE, null, false,
+            "",
+            "",
+            array(), array(), false, false, true
+        );
+        $input->registerOption($optionHelp);
+
+        $optionVersion = new \ezcConsoleOption(
+            "v", "version", \ezcConsoleInput::TYPE_NONE, null, false,
+            "",
+            "",
+            array(), array(), false, false, true
+        );
+        $input->registerOption($optionVersion);
+        
+        try {
+            $input->process();
+        }
+        catch (\ezcConsoleOptionException $e) {
+            print $e->getMessage() . "\n";
+            exit(1);
+        }
+
+        $arguments = $input->getOptionValues(true);
+        $argumentsCount = 0;
+        foreach ($arguments as $argument) {
+            if ($argument) {
+               $argumentsCount++;
+            }
+        }
+
+        if (strpos('@package_version@', '@') === false) {
+            $version = '@package_version@';
+        } else {
+            $version = 'from Git';
+        }
+        if (!$argumentsCount || $input->getOption('help')->value) {
+            $desc = "A Code browser for PHP files with syntax highlighting"
+                . " and colored error-sections found by quality assurance"
+                . " tools like PHPUnit or PHP_CodeSniffer";
+            
+            print(
+                implode(
+                    "\n", array(
+                        wordwrap($desc, 75, "\n", true), 
+                        "",
+                        "Usage:",
+                        "  phpcb [options]",
+                        "", 
+                        "Options:",
+                        ""
+                    )
+                )
+            );
+          
+            foreach ($input->getOptions() as $option) {
+                /* @var $option \ezcConsoleOption */
+                $nameShort = $option->short ? "-" . $option->short : "";
+                $nameLong = "--" . $option->long;
+                $helpShort = $option->shorthelp;
+                $helpLong = explode("\n", $option->longhelp);
+
+                foreach ($helpLong as $helpLine) {
+                    printf(
+                        "  %-2s %-30s%s\n",
+                        $nameShort,
+                        $nameLong . " " . $helpShort, 
+                        $helpLine
+                    );
+                    $nameShort = $nameLong = $helpShort = "";
+                }
+            }
+            exit(0);
+        } elseif ($input->getOption('version')->value) {
+            print("phpcb version " . $version);
+            
+            exit(0);
+        }
+
+        return $input;
     }
 
     private static function arrayMapCallback($class)

@@ -3,9 +3,9 @@
   "description" : "A code browser that augments the code with information from various QA tools.", 
   "license" : "BSD-2-Clause", 
   "require" : {
-    "pear/console_commandline": "dev-trunk", 
-    "phpunit/php-file-iterator" : "1.3.*", 
-    "pear/log" : "dev-master"
+    "zetacomponents/base": "*",
+    "zetacomponents/console-tools": "~1.6",
+    "phpunit/php-file-iterator" : "~1.3"
   }, 
   "require-dev" : {
     "phpunit/phpunit" : "3.7.*"

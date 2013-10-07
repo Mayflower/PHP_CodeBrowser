@@ -78,16 +78,17 @@ class CbSourceHandler
     /**
      * Pear Log object where debug output should go to.
      *
-     * @var Log
+     * @var ezcConsoleOutput
      */
     protected $_debugLog;
 
     /**
      * Default constructor
      *
-     * @param Array $plugins The plugins to get issues from.
+     * @param ezcConsoleOutput $debugLog ConsoleOutput
+     * @param array            $plugins  The plugins to get issues from.
      */
-    public function __construct ($debugLog, array $plugins = array())
+    public function __construct (ezcConsoleOutput $debugLog, array $plugins = array())
     {
         $this->_debugLog = $debugLog;
         array_walk($plugins, array($this, 'addPlugin'));
@@ -186,8 +187,10 @@ class CbSourceHandler
     {
         foreach (array_keys($this->_files) as $filename) {
             if (preg_match($expr, $filename)) {
-                $this->_debugLog->debug(
-                    "Excluding $filename, it matches PCRE $expr"
+                $this->_debugLog->outputLine(
+                    "Excluding $filename, it matches PCRE $expr",
+                    "default",
+                    LOG_DEBUG
                 );
                 unset($this->_files[$filename]);
             }
@@ -205,8 +208,10 @@ class CbSourceHandler
     {
         foreach (array_keys($this->_files) as $filename) {
             if (fnmatch($pattern, $filename)) {
-                $this->_debugLog->debug(
-                    "Excluding $filename, it matches pattern $pattern"
+                $this->_debugLog->outputLine(
+                    "Excluding $filename, it matches pattern $pattern",
+                    "default",
+                    LOG_DEBUG
                 );
                 unset($this->_files[$filename]);
             }

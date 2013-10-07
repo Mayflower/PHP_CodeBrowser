@@ -78,7 +78,7 @@ class CLIControllerTest extends CbAbstractTests
         array(),
         array(),
         new CbIOHelper(),
-        Log::singleton('null'),
+        new ezcConsoleOutput(),
         array('php')
     );
 
