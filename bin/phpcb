@@ -47,7 +47,7 @@
  * @since     File available since  0.1.0
  */
 
-require_once dirname(__FILE__) . '/../vendor/autoload.php';
+(@include_once __DIR__ . '/../vendor/autoload.php') || @include_once __DIR__ . '/../../../autoload.php';
 
 $app = new PHPCodeBrowser\Application();
 $app->run();
