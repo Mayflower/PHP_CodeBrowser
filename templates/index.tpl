@@ -82,7 +82,7 @@ foreach ($fileList as $filename => $f) {
     $errors = $f->getErrorCount();
     $warnings = $f->getWarningCount();
 
-    $counts = array_fill_keys($occuringErrorTypes, '');
+    $counts = array_fill_keys($occuringErrorTypes, 0);
 
     foreach ($f->getIssues() as $issue) {
         $counts[$issue->foundBy] += 1;
