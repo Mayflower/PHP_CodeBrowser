@@ -27,24 +27,16 @@
 
 ## Installation ##
 
-### Git Checkout ###
-
-    $ git clone git://github.com/Mayflower/PHP_CodeBrowser.git
-
 ### Installation via Composer ###
 
 Add this line to the require section in composer.json:
 
-    "mayflower/php-codebrowser": "~1.1"
+    composer require mayflower/php-codebrowser
 
 Or to install it globally
 
-    composer global require "mayflower/php-codebrowser=~1.1"
+    composer global require mayflower/php-codebrowser
     
-### Get PHAR ###
-    
-see [Releases](https://github.com/Mayflower/PHP_CodeBrowser/releases)
-
 ## Usage ##
 
 ### Shell Usage ###
