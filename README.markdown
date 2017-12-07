@@ -1,7 +1,7 @@
 # PHP_CodeBrowser #
 
 [![Latest Stable Version](https://poser.pugx.org/mayflower/php-codebrowser/v/stable.png)](https://packagist.org/packages/mayflower/php-codebrowser)
-[![Build Status](https://travis-ci.org/Mayflower/PHP_CodeBrowser.png?branch=master)](https://travis-ci.org/Mayflower/PHP_CodeBrowser)
+[![Build Status](https://travis-ci.org/mayflower/PHP_CodeBrowser.png?branch=master)](https://travis-ci.org/mayflower/PHP_CodeBrowser)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Mayflower/PHP_CodeBrowser/badges/quality-score.png?s=2c0379f0efea966daeaef3fc5abf8adb4a910b24)](https://scrutinizer-ci.com/g/Mayflower/PHP_CodeBrowser/)
 [![Code Coverage](https://scrutinizer-ci.com/g/Mayflower/PHP_CodeBrowser/badges/coverage.png?s=543238e3d9fb4584d8cb31e3af48e67ed846f9e5)](https://scrutinizer-ci.com/g/Mayflower/PHP_CodeBrowser/)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/79205008-1c3d-4142-ab81-a9465008d440/mini.png)](https://insight.sensiolabs.com/projects/79205008-1c3d-4142-ab81-a9465008d440)
