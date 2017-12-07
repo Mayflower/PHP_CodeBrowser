@@ -90,7 +90,7 @@ class ViewReviewTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $this->ioMock = $this->getMock('PHPCodeBrowser\Helper\IOHelper');
+        $this->ioMock = $this->createMock('PHPCodeBrowser\Helper\IOHelper');
 
         $this->viewReview = new ViewReview(
             PHPCB_ROOT_DIR . '/../templates/',
