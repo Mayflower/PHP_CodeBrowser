@@ -208,16 +208,13 @@ class IOHelperTest extends AbstractTestCase
      */
     public function testLoadFileWithNonexistentFile()
     {
+        $this->expectException(\Exception::class);
+
         $sourceFile = PHPCB_TEST_OUTPUT . '/doesNotExist';
         if (file_exists($sourceFile)) {
             unlink(PHPCB_TEST_OUTPUT . '/doesNotExist');
         }
-        try {
-            $this->ioHelper->loadFile($sourceFile);
-            $this->fail();
-        } catch (\Exception $e) {
-            // expected
-        }
+        $this->ioHelper->loadFile($sourceFile);
     }
 
 
@@ -228,6 +225,8 @@ class IOHelperTest extends AbstractTestCase
      */
     public function testCopyFileNonExisting()
     {
+        $this->expectException(\Exception::class);
+
         $file = PHPCB_TEST_OUTPUT . '/tmpfile';
         $dstDir = PHPCB_TEST_OUTPUT . '/tmpdir';
 
@@ -235,12 +234,7 @@ class IOHelperTest extends AbstractTestCase
             unlink($file);
         }
 
-        try {
-            $this->ioHelper->copyFile($file, $dstDir);
-        } catch (\Exception $e) {
-            return;
-        }
-        $this->fail('Expected exception was not thrown.');
+        $this->ioHelper->copyFile($file, $dstDir);
     }
 
     /**

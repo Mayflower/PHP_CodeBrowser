@@ -16,12 +16,16 @@
             "name": "*.php",
             "path": [
                 "composer",
+                "herrera-io/json",
+                "herrera-io/phar-update",
                 "monolog/monolog",
+                "myclabs/deep-copy",
+                "phpseclib/phpseclib",
                 "phpunit/php-file-iterator",
+                "psr/log",
                 "symfony/console",
                 "symfony/polyfill-mbstring",
-                "myclabs/deep-copy",
-                "psr/log"
+                "symfony/polyfill-ctype"
             ],
             "notPath": [
                 "Tests",

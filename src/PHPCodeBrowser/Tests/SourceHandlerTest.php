@@ -98,6 +98,7 @@ class SourceHandlerTest extends AbstractTestCase
      */
     public function __construct()
     {
+        parent::__construct();
         $xmlStrings = array(
             <<<HERE
 <?xml version="1.0" encoding="UTF-8"?>
@@ -235,15 +236,11 @@ HERE
      */
     public function testAddSourceFilesWithNonExisting()
     {
-        try {
-            $this->sourceHandler->addSourceFiles(
-                array(new SplFileInfo('/i/do/not/exist'))
-            );
-        } catch (Exception $e) {
-            //expected
-            return;
-        }
-        $this->fail('Expected Exception was not thrown');
+        $this->expectException(\Exception::class);
+
+        $this->sourceHandler->addSourceFiles(
+            array(new SplFileInfo('/i/do/not/exist'))
+        );
     }
 
     /**

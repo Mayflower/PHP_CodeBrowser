@@ -61,7 +61,7 @@ namespace PHPCodeBrowser\Tests;
  * @link       http://www.phpunit.de/
  * @since      Class available since  0.1.0
  */
-class AbstractTestCase extends \PHPUnit_Framework_TestCase
+class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * Merged cruisecontrol XML error file

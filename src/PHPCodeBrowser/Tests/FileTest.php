@@ -85,6 +85,7 @@ class FileTest extends AbstractTestCase
      */
     public function __construct()
     {
+        parent::__construct();
         $this->issues = array(
             new Issue('/some/file/name.php', 39, 39, 'Checkstyle', 'm3', 'error'),
             new Issue('/some/file/name.php', 50, 52, 'Checkstyle', 'm4', 'warning'),
@@ -138,13 +139,10 @@ class FileTest extends AbstractTestCase
      */
     public function testAddingIssueToWrongFile()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $issue = new Issue('/the/wrong/file/name.php', 39, 39, 'Checkstyle', 'm3', 'error');
-        try {
-            $this->file->addIssue($issue);
-            $this->fail();
-        } catch (\InvalidArgumentException $e) {
-            // Expected
-        }
+        $this->file->addIssue($issue);
     }
 
 
@@ -244,12 +242,9 @@ class FileTest extends AbstractTestCase
      */
     public function testMergeWithDifferentFile()
     {
-        try {
-            $this->file->mergeWith(new File('/the/wrong/file/name.php'));
-            $this->fail();
-        } catch (\InvalidArgumentException $e) {
-            // Expected
-        }
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->file->mergeWith(new File('/the/wrong/file/name.php'));
     }
 
     /**
