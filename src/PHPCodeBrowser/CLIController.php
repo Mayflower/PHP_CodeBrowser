@@ -49,7 +49,7 @@
 
 namespace PHPCodeBrowser;
 
-use SebastianBergmann\FileIterator\Factory;
+use SebastianBergmann\FileIterator\Factory as FileIteratorFactory;
 use Monolog\Logger;
 use PHPCodeBrowser\Helper\IOHelper;
 use PHPCodeBrowser\View\ViewReview;
@@ -273,7 +273,7 @@ class CLIController
         if (isset($this->projectSource)) {
             foreach ($this->projectSource as $source) {
                 if (is_dir($source)) {
-                    $factory = new Factory;
+                    $factory = new FileIteratorFactory;
 
                     $suffixes = array_merge(
                         $this->phpSuffixes,

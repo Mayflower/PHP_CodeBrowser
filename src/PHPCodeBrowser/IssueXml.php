@@ -49,7 +49,7 @@
 
 namespace PHPCodeBrowser;
 
-use SebastianBergmann\FileIterator\Factory;
+use SebastianBergmann\FileIterator\Factory as FileIteratorFactory;
 use \DOMDocument;
 use \DOMNode;
 use \DOMNodeList;
@@ -121,7 +121,7 @@ class IssueXml extends DOMDocument
      */
     public function addDirectory($directory)
     {
-        $factory  = new Factory;
+        $factory  = new FileIteratorFactory;
         $iterator = $factory->getFileIterator($directory, 'xml');
 
         foreach ($iterator as $current) {
