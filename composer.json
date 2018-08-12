@@ -34,12 +34,12 @@
             "php -c php.ini vendor/bin/phpunit -c phpunit.xml.dist",
             "phpcpd -q --log-pmd=build/logs/pmd-cpd.xml src || true",
             "phpmd src xml cleancode,codesize,controversial,design,naming,unusedcode --reportfile build/logs/pmd.xml || true",
+            "phpcs -q --standard=PSR2 --report-checkstyle=build/logs/checkstyle.xml src || true",
             "@browser"
         ],
         "nope": [
             "@clean",
             "pdepend --quiet --dependency-xml=build/logs/pdepend.xml src || true",
-            "phpcs -q --standard=PSR2 --report-xml=build/logs/checkstyle.xml src || true",
             "phploc -q --log-xml=build/logs/phploc.xml src || true",
             "@browser"
         ],
