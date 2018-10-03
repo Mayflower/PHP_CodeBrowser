@@ -1,9 +1,19 @@
-dist: trusty
 language: php
-php:
-    - 7.1
-    - 7.2
+matrix:
+  include:
+  - php: 7.1
+    env: DEPENDENCIES=lowest
+  - php: 7.1
+    env: DEPENDENCIES=highest
+  - php: 7.2
+    env: DEPENDENCIES=lowest
+  - php: 7.2
+    env: DEPENDENCIES=highest
+
 before_script:
-    - composer install
+  - phpenv config-rm xdebug.ini
+  - if [ "${DEPENDENCIES}" = "lowest" ]; then composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
+  - if [ "${DEPENDENCIES}" = "highest" ]; then composer update --prefer-dist --no-interaction --no-progress; fi;
+
 script:
     - vendor/bin/phpunit
