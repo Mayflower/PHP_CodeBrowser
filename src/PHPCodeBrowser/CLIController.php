@@ -37,42 +37,52 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   SVN: $Id$
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     File available since  0.1.0
  */
 
 namespace PHPCodeBrowser;
 
-use SebastianBergmann\FileIterator\Factory as FileIteratorFactory;
 use Monolog\Logger;
 use PHPCodeBrowser\Helper\IOHelper;
 use PHPCodeBrowser\View\ViewReview;
+use SebastianBergmann\FileIterator\Factory as FileIteratorFactory;
 
 if (!defined('PHPCB_ROOT_DIR')) {
-    define('PHPCB_ROOT_DIR', dirname(__FILE__) . '/../');
+    define('PHPCB_ROOT_DIR', dirname(__FILE__).'/../');
 }
 if (!defined('PHPCB_TEMPLATE_DIR')) {
-    define('PHPCB_TEMPLATE_DIR', dirname(__FILE__) . '/../../templates');
+    define('PHPCB_TEMPLATE_DIR', dirname(__FILE__).'/../../templates');
 }
 
 /**
  * CLIController
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Michel Hartmann <michel.hartmann@mayflower.de>
  * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   Release: @package_version@
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     Class available since  0.1.0
  */
 class CLIController
@@ -143,7 +153,7 @@ class CLIController
      *
      * @var array
      */
-    private $pluginOptions = array();
+    private $pluginOptions = [];
 
     /**
      * File extensions that we take as php files.
@@ -155,7 +165,7 @@ class CLIController
     /**
      * We want to exclude files with no issues
      *
-     * @var boolean
+     * @var bool
      */
     private $excludeOK;
 
@@ -164,42 +174,32 @@ class CLIController
      *
      * Standard setters are initialized
      *
-     * @param string   $logPath            The (path-to) xml log files. Can be null.
-     * @param array    $projectSource      The project sources. Can be null.
-     * @param string   $htmlOutputDir      The html output dir, where new files will be created
-     * @param array    $excludeExpressions A list of PCREs. Files matching will not appear in the output.
-     * @param array    $excludePatterns    A list of glob patterns. Files matching will not appear in the output.
-     * @param array    $pluginOptions      array of arrays with plugin-specific options
-     * @param IOHelper $ioHelper           The IOHelper object to be used for filesystem interaction.
-     * @param Logger   $debugLog
-     * @param array    $phpSuffixes
-     * @param bool     $excludeOK
+     * @param string|null $logPath            The (path-to) xml log files. Can be null.
+     * @param array|null  $projectSource      The project sources. Can be null.
+     * @param string      $htmlOutputDir      The html output dir, where new files will be created
+     * @param array       $excludeExpressions A list of PCREs. Files matching will not appear in the output.
+     * @param array       $excludePatterns    A list of glob patterns. Files matching will not appear in the output.
+     * @param array       $pluginOptions      array of arrays with plugin-specific options
+     * @param IOHelper    $ioHelper           The IOHelper object to be used for filesystem interaction.
+     * @param Logger      $debugLog
+     * @param array       $phpSuffixes
+     * @param bool        $excludeOK
      */
-    public function __construct(
-        $logPath,
-        array $projectSource,
-        $htmlOutputDir,
-        array $excludeExpressions,
-        array $excludePatterns,
-        array $pluginOptions,
-        $ioHelper,
-        Logger $debugLog,
-        array $phpSuffixes,
-        $excludeOK = false
-    ) {
+    public function __construct(?string $logPath, ?array $projectSource, string $htmlOutputDir, array $excludeExpressions, array $excludePatterns, array $pluginOptions, IOHelper $ioHelper, Logger $debugLog, array $phpSuffixes, bool $excludeOK = false)
+    {
         $this->logDir             = $logPath;
         $this->projectSource      = $projectSource;
         $this->htmlOutputDir      = $htmlOutputDir;
         $this->excludeExpressions = $excludeExpressions;
         $this->excludePatterns    = $excludePatterns;
         foreach ($pluginOptions as $plugin => $options) {
-            $this->pluginOptions["Error$plugin"] = $options;
+            $this->pluginOptions["Error{$plugin}"] = $options;
         }
-        $this->ioHelper           = $ioHelper;
-        $this->debugLog           = $debugLog;
-        $this->registeredPlugins  = array();
-        $this->phpSuffixes        = $phpSuffixes;
-        $this->excludeOK          = $excludeOK;
+        $this->ioHelper          = $ioHelper;
+        $this->debugLog          = $debugLog;
+        $this->registeredPlugins = [];
+        $this->phpSuffixes       = $phpSuffixes;
+        $this->excludeOK         = $excludeOK;
     }
 
     /**
@@ -210,7 +210,7 @@ class CLIController
      *
      * @return void
      */
-    public function addErrorPlugins($classNames)
+    public function addErrorPlugins($classNames): void
     {
         foreach ((array) $classNames as $className) {
             $this->registeredPlugins[] = $className;
@@ -230,7 +230,7 @@ class CLIController
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // clear and create output directory
         if (is_dir($this->htmlOutputDir)) {
@@ -241,7 +241,7 @@ class CLIController
         $this->ioHelper->createDirectory($this->htmlOutputDir);
 
         // init needed classes
-        $viewReview  = new ViewReview(
+        $viewReview = new ViewReview(
             PHPCB_TEMPLATE_DIR,
             $this->htmlOutputDir,
             $this->ioHelper,
@@ -251,21 +251,17 @@ class CLIController
         $sourceHandler = new SourceHandler($this->debugLog);
 
         if (isset($this->logDir)) {
-            $issueXml    = new IssueXml();
+            $issueXml = new IssueXML();
 
             // merge xml files
             $issueXml->addDirectory($this->logDir);
 
             // conversion of XML file cc to cb format
             foreach ($this->registeredPlugins as $className) {
-                if (array_key_exists($className, $this->pluginOptions)) {
-                    $plugin = new $className(
-                        $issueXml,
-                        $this->pluginOptions[$className]
-                    );
-                } else {
-                    $plugin = new $className($issueXml);
-                }
+                $plugin = array_key_exists($className, $this->pluginOptions) ? new $className(
+                    $issueXml,
+                    $this->pluginOptions[$className]
+                ) : new $className($issueXml);
                 $sourceHandler->addPlugin($plugin);
             }
         }
@@ -273,11 +269,11 @@ class CLIController
         if (isset($this->projectSource)) {
             foreach ($this->projectSource as $source) {
                 if (is_dir($source)) {
-                    $factory = new FileIteratorFactory;
+                    $factory = new FileIteratorFactory();
 
                     $suffixes = array_merge(
                         $this->phpSuffixes,
-                        array('php','js','css', 'html')
+                        ['php', 'js', 'css', 'html']
                     );
 
                     $sourceHandler->addSourceFiles(
@@ -294,11 +290,11 @@ class CLIController
 
         array_walk(
             $this->excludeExpressions,
-            array($sourceHandler, 'excludeMatchingPCRE')
+            [$sourceHandler, 'excludeMatchingPCRE']
         );
         array_walk(
             $this->excludePatterns,
-            array($sourceHandler, 'excludeMatchingPattern')
+            [$sourceHandler, 'excludeMatchingPattern']
         );
 
         $files = $sourceHandler->getFiles();

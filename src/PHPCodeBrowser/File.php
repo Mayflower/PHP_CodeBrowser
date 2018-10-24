@@ -37,12 +37,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   SVN: $Id$
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     File available since 0.2.0
  */
 
@@ -57,12 +62,17 @@ use PHPCodeBrowser\Helper\IOHelper;
  * with it's issues, if any.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   Release: @package_version@
+ *
  * @link      http://github.com/mayflowergmbh
+ *
  * @since     Class available since 0.2.0
  */
 class File
@@ -84,17 +94,16 @@ class File
     /**
      * Default constructor.
      *
-     * @param string  $name The name of the file.
+     * @param string  $name   The name of the file.
      * @param Issue[] $issues
      */
-    public function __construct($name, array $issues = array())
+    public function __construct(string $name, array $issues = [])
     {
-        if (DIRECTORY_SEPARATOR !== '/')
-        {
+        if (DIRECTORY_SEPARATOR !== '/') {
             $name = str_replace('/', DIRECTORY_SEPARATOR, $name);
         }
 
-        $this->name = $name;
+        $this->name   = $name;
         $this->issues = $issues;
     }
 
@@ -102,9 +111,10 @@ class File
      * Add an issue for this file.
      *
      * @param Issue $issue The issue to add.
+     *
      * @throws \InvalidArgumentException
      */
-    public function addIssue(Issue $issue)
+    public function addIssue(Issue $issue): void
     {
         if ($issue->fileName !== $this->name) {
             throw new \InvalidArgumentException(
@@ -119,7 +129,7 @@ class File
      *
      * @return Issue[] The issues.
      */
-    public function getIssues()
+    public function getIssues(): array
     {
         return $this->issues;
     }
@@ -129,7 +139,7 @@ class File
      *
      * @return string
      */
-    public function name()
+    public function name(): string
     {
         return $this->name;
     }
@@ -139,7 +149,7 @@ class File
      *
      * @return string
      */
-    public function basename()
+    public function basename(): string
     {
         return basename($this->name);
     }
@@ -149,7 +159,7 @@ class File
      *
      * @return string
      */
-    public function dirName()
+    public function dirName(): string
     {
         return dirname($this->name);
     }
@@ -157,9 +167,9 @@ class File
     /**
      * Returns the number of issues this file has.
      *
-     * @return Integer
+     * @return int
      */
-    public function getIssueCount()
+    public function getIssueCount(): int
     {
         return count($this->issues);
     }
@@ -167,25 +177,28 @@ class File
     /**
      * Returns the number of errors this file has.
      *
-     * @return Integer
+     * @return int
      */
-    public function getErrorCount()
+    public function getErrorCount(): int
     {
         $count = 0;
         foreach ($this->issues as $issue) {
-            if (strcasecmp($issue->severity, 'error') === 0) {
-                $count += 1;
+            if (strcasecmp($issue->severity, 'error') !== 0) {
+                continue;
             }
+
+            $count += 1;
         }
+
         return $count;
     }
 
     /**
      * Returns the number of issues this file has that are not errors.
      *
-     * @return Integer
+     * @return int
      */
-    public function getWarningCount()
+    public function getWarningCount(): int
     {
         return $this->getIssueCount() - $this->getErrorCount();
     }
@@ -194,9 +207,10 @@ class File
      * Merges the issues from two file objects representing the same file.
      *
      * @param File $file The file to merge with.
+     *
      * @throws \InvalidArgumentException
      */
-    public function mergeWith(File $file)
+    public function mergeWith(File $file): void
     {
         if ($this->name !== $file->name) {
             throw new \InvalidArgumentException(
@@ -211,46 +225,37 @@ class File
      *
      * @param File[] $files The files to sort.
      */
-    public static function sort(array &$files)
+    public static function sort(array &$files): void
     {
         uasort($files, 'PHPCodeBrowser\File::internalSort');
     }
 
     /**
      * Sorting function used in File::sort()
+     *
+     * @param File $first
+     * @param File $second
+     *
+     * @return int
      */
-    protected static function internalSort(File $first, File $second)
+    protected static function internalSort(File $first, File $second): int
     {
-        $first = $first->name();
-        $second = $second->name();
+        $firstName  = $first->name();
+        $secondName = $second->name();
 
-        $prefix = IOHelper::getCommonPathPrefix(array($first, $second));
+        $prefix       = IOHelper::getCommonPathPrefix([$firstName, $secondName]);
         $prefixLength = strlen($prefix);
 
-        $first = substr($first, $prefixLength);
-        $second = substr($second, $prefixLength);
+        $firstSubName  = substr($firstName, $prefixLength);
+        $secondSubName = substr($secondName, $prefixLength);
 
-        $firstIsInSubDir = (substr_count($first, DIRECTORY_SEPARATOR) !== 0);
-        $secondIsInSubDir = (substr_count($second, DIRECTORY_SEPARATOR) !== 0);
+        $firstIsInSubDir  = (substr_count($firstSubName, DIRECTORY_SEPARATOR) !== 0);
+        $secondIsInSubDir = (substr_count($secondSubName, DIRECTORY_SEPARATOR) !== 0);
 
         if ($firstIsInSubDir) {
-            if ($secondIsInSubDir) {
-                // both are subdirectories
-                return strcmp($first, $second);
-            } else {
-                // a lies in a subDir of the dir in which b lies,
-                // so b comes later.
-                return -1;
-            }
-        } else {
-            if ($secondIsInSubDir) {
-                // b lies in a subDir of the dir in which a lies,
-                // so a comes later.
-                return 1;
-            } else {
-                // both are files
-                return strcmp($first, $second);
-            }
+            return $secondIsInSubDir ? strcmp($firstSubName, $secondSubName) : -1;
         }
+
+        return $secondIsInSubDir ? 1 : strcmp($firstSubName, $secondSubName);
     }
 }

@@ -37,35 +37,54 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Robin Gloster <robin.gloster@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   SVN: $Id$
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     File available since 1.1
  */
 namespace PHPCodeBrowser;
 
 use PHPCodeBrowser\Command\RunCommand;
 use Symfony\Component\Console\Application as BaseApplication;
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Class Application
- * @package PHPCodeBrowser
  */
 class Application extends BaseApplication
 {
     /**
+     * Gets the InputDefinition related to this Application.
+     *
+     * @return InputDefinition The InputDefinition instance
+     */
+    public function getDefinition(): InputDefinition
+    {
+        $inputDefinition = parent::getDefinition();
+        // clear out the normal first argument, which is the command name
+        $inputDefinition->setArguments();
+
+        return $inputDefinition;
+    }
+
+    /**
      * Gets the name of the command based on input.
      *
      * @param InputInterface $input
+     *
      * @return string The command name
      */
-    protected function getCommandName(InputInterface $input)
+    protected function getCommandName(InputInterface $input): string
     {
         return 'phpcb';
     }
@@ -75,7 +94,7 @@ class Application extends BaseApplication
      *
      * @return Command[] An array of default Command instances
      */
-    protected function getDefaultCommands()
+    protected function getDefaultCommands(): array
     {
         // Adds HelpCommand for --help
         $defaultCommands = parent::getDefaultCommands();
@@ -83,19 +102,5 @@ class Application extends BaseApplication
         $defaultCommands[] = new RunCommand();
 
         return $defaultCommands;
-    }
-
-    /**
-     * Gets the InputDefinition related to this Application.
-     *
-     * @return InputDefinition The InputDefinition instance
-     */
-    public function getDefinition()
-    {
-        $inputDefinition = parent::getDefinition();
-        // clear out the normal first argument, which is the command name
-        $inputDefinition->setArguments();
-
-        return $inputDefinition;
     }
 }

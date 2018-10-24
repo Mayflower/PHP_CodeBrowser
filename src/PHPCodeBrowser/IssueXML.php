@@ -37,23 +37,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   SVN: $Id$
+ *
  * @link      http://www.phpunit.de/
- * @since     File available since  0.1.0
+ *
+ * @since     File available since 0.1.0
  */
 
 namespace PHPCodeBrowser;
 
-use SebastianBergmann\FileIterator\Factory as FileIteratorFactory;
 use \DOMDocument;
 use \DOMNode;
 use \DOMNodeList;
 use \DOMXPath;
+use SebastianBergmann\FileIterator\Factory as FileIteratorFactory;
 
 /**
  * IssueXML
@@ -64,21 +69,26 @@ use \DOMXPath;
  * against it to retrieve the issues from them.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   Release: @package_version@
+ *
  * @link      http://www.phpunit.de/
- * @since     Class available since  0.1.0
+ *
+ * @since     Class available since 0.1.0
  */
-class IssueXml extends DOMDocument
+class IssueXML extends DOMDocument
 {
     /**
      *
      *
-     * @var \DOMXPath
+     * @var DOMXPath
      */
     protected $xpath;
 
@@ -86,14 +96,14 @@ class IssueXml extends DOMDocument
      * Do not preserve white spaces.
      * @see DOMDocument
      *
-     * @var Boolean
+     * @var bool
      */
     public $preserveWhiteSpace = false;
 
     /**
      * Provide nice output.
      *
-     * @var Boolean
+     * @var bool
      */
     public $formatOutput = true;
 
@@ -103,7 +113,7 @@ class IssueXml extends DOMDocument
      * @param string $version  The version definition for DomDocument
      * @param string $encoding The used encoding for DomDocument
      */
-    public function __construct($version = '1.0', $encoding = 'UTF-8')
+    public function __construct(string $version = '1.0', string $encoding = 'UTF-8')
     {
         parent::__construct($version, $encoding);
         $this->appendChild(
@@ -117,31 +127,31 @@ class IssueXml extends DOMDocument
      *
      * @param string $directory The path to directory where xml files are stored
      *
-     * @return IssueXml This object
+     * @return IssueXML This object
      */
-    public function addDirectory($directory)
+    public function addDirectory(string $directory): IssueXML
     {
-        $factory  = new FileIteratorFactory;
+        $factory  = new FileIteratorFactory();
         $iterator = $factory->getFileIterator($directory, 'xml');
 
         foreach ($iterator as $current) {
-            $realFileName = realpath($current);
+            $realFileName         = realpath($current);
             $xml                  = new DOMDocument('1.0', 'UTF-8');
             $xml->validateOnParse = true;
             if (@$xml->load(realpath($current))) {
                 $this->addXMLFile($xml);
             } else {
                 error_log(
-                    "[Warning] Could not read file '$realFileName'. "
-                    . 'Make sure it contains valid xml.'
+                    "[Warning] Could not read file '{$realFileName}'. ".'Make sure it contains valid xml.'
                 );
             }
             unset($xml);
         }
 
         if (!$this->documentElement->hasChildNodes()) {
-            error_log("[Warning] No valid log files found in '$directory'");
+            error_log("[Warning] No valid log files found in '{$directory}'");
         }
+
         return $this;
     }
 
@@ -152,7 +162,7 @@ class IssueXml extends DOMDocument
      *
      * @return void
      */
-    public function addXMLFile(DOMDocument $domDocument)
+    public function addXMLFile(DOMDocument $domDocument): void
     {
         foreach ($domDocument->childNodes as $node) {
             $this->documentElement->appendChild($this->importNode($node, true));
@@ -168,17 +178,14 @@ class IssueXml extends DOMDocument
      *
      * @return DOMNodeList         List of all matching nodes.
      */
-    public function query($expression, DOMNode $contextNode = null)
+    public function query(string $expression, ?DOMNode $contextNode = null): DOMNodeList
     {
         if (!isset($this->xpath)) {
             $this->xpath = new DOMXPath($this);
         }
 
-        if ($contextNode) {
-            $result = $this->xpath->query($expression, $contextNode);
-        } else {
-            $result = $this->xpath->query($expression);
-        }
+        $result = $contextNode ? $this->xpath->query($expression, $contextNode) : $this->xpath->query($expression);
+
         return $result;
     }
 }

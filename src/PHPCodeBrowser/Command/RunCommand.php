@@ -37,17 +37,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Robin Gloster <robin.gloster@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   SVN: $Id$
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     File available since 1.1
  */
 
 namespace PHPCodeBrowser\Command;
-
 
 use Exception;
 use Monolog\Handler\NullHandler;
@@ -61,15 +65,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class RunCommand
- * @package PHPCodeBrowser\Command
  */
 class RunCommand extends Command
 {
-    protected function configure()
+    /**
+     *
+     */
+    protected function configure(): void
     {
         $plugins = array_map(
             function ($class) {
-                return '"' . substr($class, strlen('Error')) . '"';
+                return '"'.substr($class, strlen('Error')).'"';
             },
             $this->getAvailablePlugins()
         );
@@ -77,8 +83,7 @@ class RunCommand extends Command
 
         $this->setName('phpcb')
             ->setHelp(
-                'A Code browser for PHP files with syntax highlighting and colored error-sections '
-                . 'found by quality assurance tools like PHPUnit, PHPMD or PHP_CodeSniffer.'
+                'A Code browser for PHP files with syntax highlighting and colored error-sections found by quality assurance tools like PHPUnit, PHPMD or PHP_CodeSniffer.'
             )->addOption(
                 'log',
                 'l',
@@ -98,9 +103,7 @@ class RunCommand extends Command
                 'source',
                 's',
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'Path to the project source code. Can either be a directory or a single file. Parse '
-                . 'complete source directory if set, else only files found in logs. Either this or'
-                . ' --log must be given. Can be given multiple times'
+                'Path to the project source code. Can either be a directory or a single file. Parse complete source directory if set, else only files found in logs. Either this or --log must be given. Can be given multiple times'
             )->addOption(
                 'ignore',
                 'i',
@@ -110,9 +113,7 @@ class RunCommand extends Command
                 'exclude',
                 'e',
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'Excludes all files matching the given glob pattern. This is done after pulling the '
-                . 'files in the source dir in if one is given. Can be given multiple times. Note'
-                . ' that the match is run against absolute file names'
+                'Excludes all files matching the given glob pattern. This is done after pulling the files in the source dir in if one is given. Can be given multiple times. Note that the match is run against absolute file names'
             )->addOption(
                 'excludePCRE',
                 'E',
@@ -132,30 +133,29 @@ class RunCommand extends Command
                 'disablePlugin',
                 null,
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'Disable single Plugins. Can be one of ' . implode(', ', $plugins)
+                'Disable single Plugins. Can be one of '.implode(', ', $plugins)
             )->addOption(
                 'crapThreshold',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'The minimum value for CRAP errors to be recognized. Defaults to 0. Regardless '
-                . 'of this setting, values below 30 will be considered notices, those above warnings'
+                'The minimum value for CRAP errors to be recognized. Defaults to 0. Regardless of this setting, values below 30 will be considered notices, those above warnings'
             );
     }
 
     /**
      * Executes the current command.
      *
-     * @param InputInterface $input An InputInterface instance
+     * @param InputInterface  $input  An InputInterface instance
      * @param OutputInterface $output
      *
-     * @return null|integer null or 0 if everything went fine, or an error code
+     * @return int|null null or 0 if everything went fine, or an error code
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $this->checkErrors($input);
 
         $extensions = $this->handleBackwardCompatibility($input->getOption('extensions'));
-        $ignore = $this->handleBackwardCompatibility($input->getOption('ignore'));
+        $ignore     = $this->handleBackwardCompatibility($input->getOption('ignore'));
 
         $excludePCRE = $input->getOption('excludePCRE');
         $excludePCRE = $this->convertIgnores($ignore, $excludePCRE);
@@ -173,10 +173,10 @@ class RunCommand extends Command
             $input->getOption('output'),
             $excludePCRE,
             $input->getOption('exclude'),
-            array('CRAP' => array('threshold' => $input->getOption('crapThreshold'))),
+            ['CRAP' => ['threshold' => $input->getOption('crapThreshold')]],
             new IOHelper(),
             $logger,
-            array_merge($extensions, array('php')),
+            array_merge($extensions, ['php']),
             (bool) $input->getOption('excludeOK')
         );
 
@@ -202,9 +202,10 @@ HERE
 
     /**
      * @param InputInterface $input
+     *
      * @throws \InvalidArgumentException if errors are found
      */
-    protected function checkErrors(InputInterface $input)
+    protected function checkErrors(InputInterface $input): void
     {
         if (!$input->getOption('log')) {
             if (!$input->getOption('source')) {
@@ -219,14 +220,16 @@ HERE
         if ($input->getOption('source')) {
             foreach ($input->getOption('source') as $s) {
                 if (!file_exists($s)) {
-                    throw new \InvalidArgumentException("Source '$s' does not exist");
+                    throw new \InvalidArgumentException("Source '{$s}' does not exist");
                 }
             }
         }
 
         if (!$input->getOption('output')) {
             throw new \InvalidArgumentException('Missing output argument.');
-        } elseif (file_exists($input->getOption('output')) && !is_dir($input->getOption('output'))) {
+        }
+
+        if (file_exists($input->getOption('output')) && !is_dir($input->getOption('output'))) {
             throw new \InvalidArgumentException('Output argument must be a directory, a file was given.');
         }
     }
@@ -238,16 +241,16 @@ HERE
      *
      * @return string[] Class names of error plugins
      */
-    protected function getAvailablePlugins()
+    protected function getAvailablePlugins(): array
     {
-        return array(
+        return [
             'PHPCodeBrowser\\Plugins\\ErrorCheckstyle',
             'PHPCodeBrowser\\Plugins\\ErrorPMD',
             'PHPCodeBrowser\\Plugins\\ErrorCPD',
             'PHPCodeBrowser\\Plugins\\ErrorPadawan',
             'PHPCodeBrowser\\Plugins\\ErrorCoverage',
-            'PHPCodeBrowser\\Plugins\\ErrorCRAP'
-        );
+            'PHPCodeBrowser\\Plugins\\ErrorCRAP',
+        ];
     }
 
     /**
@@ -256,7 +259,7 @@ HERE
      *
      * @return array
      */
-    protected function disablePlugins(array $disabledPlugins, array $plugins)
+    protected function disablePlugins(array $disabledPlugins, array $plugins): array
     {
         $disabledPlugins = array_map(
             function ($param) {
@@ -267,10 +270,12 @@ HERE
 
         foreach ($plugins as $pluginKey => $plugin) {
             $name = substr($plugin, strlen('Error'));
-            if (in_array(strtolower($name), $disabledPlugins)) {
-                // Remove it from the plugins list
-                unset($plugins[$pluginKey]);
+            if (!in_array(strtolower($name), $disabledPlugins)) {
+                continue;
             }
+
+            // Remove it from the plugins list
+            unset($plugins[$pluginKey]);
         }
 
         return $plugins;
@@ -280,21 +285,23 @@ HERE
      * Convert the --ignore arguments to patterns
      *
      * @param array $ignored
-     * @param $excludePCRE
+     * @param array $excludePCRE
+     *
      * @return array
      */
-    protected function convertIgnores(array $ignored, $excludePCRE)
+    protected function convertIgnores(array $ignored, array $excludePCRE): array
     {
         $dirSep = preg_quote(DIRECTORY_SEPARATOR, '/');
         foreach ($ignored as $ignore) {
             $ig = realpath($ignore);
             if (!$ig) {
-                error_log("[Warning] $ignore does not exists");
+                error_log("[Warning] {$ignore} does not exists");
             } else {
-                $ig = preg_quote($ig, '/');
-                $excludePCRE[] = "/^$ig($dirSep|$)/";
+                $ig            = preg_quote($ig, '/');
+                $excludePCRE[] = "/^{$ig}({$dirSep}|$)/";
             }
         }
+
         return $excludePCRE;
     }
 
@@ -302,11 +309,12 @@ HERE
      * This converts comma-separated options into an array
      *
      * @param array $option
+     *
      * @return array
      */
-    private function handleBackwardCompatibility(array $option)
+    private function handleBackwardCompatibility(array $option): array
     {
-        if (count($option) == 1 && strpos($option[0], ',') !== false) {
+        if (\count($option) === 1 && strpos($option[0], ',') !== false) {
             $option = explode(',', $option[0]);
             error_log('Usage of comma-separated options is deprecated, specify them one-by-one.', E_DEPRECATED);
         }

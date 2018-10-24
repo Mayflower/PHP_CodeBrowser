@@ -37,14 +37,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Jan Mergler <jan.mergler@mayflower.de>
  * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   SVN: $Id$
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     File available since  0.1.0
  */
 
@@ -61,14 +66,19 @@ use PHPCodeBrowser\Helper\IOHelper;
  * This class is generating the highlighted and formatted html view for file.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Jan Mergler <jan.mergler@mayflower.de>
  * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   Release: @package_version@
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     Class available since  0.1.0
  */
 class ViewReview extends ViewAbstract
@@ -92,22 +102,22 @@ class ViewReview extends ViewAbstract
      *
      * Highlighting strings are set.
      *
-     * @param string $templateDir The directory containing the templates.
-     * @param string $outputDir   The directory where the reviews should be.
-     * @param IOHelper $ioHelper  The IOHelper object to use for I/O.
-     * @param array $phpSuffixes  The array with extensions of php files.
+     * @param string   $templateDir The directory containing the templates.
+     * @param string   $outputDir   The directory where the reviews should be.
+     * @param IOHelper $ioHelper    The IOHelper object to use for I/O.
+     * @param array    $phpSuffixes The array with extensions of php files.
      */
-    public function __construct($templateDir, $outputDir, $ioHelper, $phpSuffixes = array('php'))
+    public function __construct(string $templateDir, string $outputDir, IOHelper $ioHelper, array $phpSuffixes = ['php'])
     {
         parent::__construct($templateDir, $outputDir, $ioHelper);
 
-        $this->phpHighlightColorMap = array(
+        $this->phpHighlightColorMap = [
             ini_get('highlight.string')  => 'string',
             ini_get('highlight.comment') => 'comment',
             ini_get('highlight.keyword') => 'keyword',
             ini_get('highlight.default') => 'default',
             ini_get('highlight.html')    => 'html',
-        );
+        ];
 
         $this->phpSuffixes = $phpSuffixes;
     }
@@ -119,11 +129,11 @@ class ViewReview extends ViewAbstract
      * Source code is highlighted.
      * Generated Html source code is be saved as Html.
      *
-     * @param array $issueList The issue list for given file
-     * @param $fileName
+     * @param array  $issueList        The issue list for given file
+     * @param string $fileName
      * @param string $commonPathPrefix The prefix path all given files have
      *                                 in common
-     * @param bool $excludeOK
+     * @param bool   $excludeOK
      *
      * @return void
      *
@@ -131,7 +141,7 @@ class ViewReview extends ViewAbstract
      * @see self::_formatSourceCode
      * @see self::_generateJSCode
      */
-    public function generate(array $issueList, $fileName, $commonPathPrefix, $excludeOK = false)
+    public function generate(array $issueList, string $fileName, string $commonPathPrefix, bool $excludeOK = false): void
     {
         $issues           = $this->formatIssues($issueList);
         $shortFilename    = substr($fileName, strlen($commonPathPrefix));
@@ -139,17 +149,151 @@ class ViewReview extends ViewAbstract
         $data['filepath'] = $shortFilename;
         $data['source']   = $this->formatSourceCode($fileName, $issues);
 
-        $depth            = substr_count($shortFilename, DIRECTORY_SEPARATOR);
-        $data['csspath']  = str_repeat('../', $depth - 1 >= 0 ? $depth - 1 : 0);
+        $depth           = substr_count($shortFilename, DIRECTORY_SEPARATOR);
+        $data['csspath'] = str_repeat('../', $depth - 1 >= 0 ? $depth - 1 : 0);
 
         //we want to exclude files without issues and there are no issues in this one
         if ($excludeOK && !$data['issues']) {
             return;
         }
         $this->ioHelper->createFile(
-            $this->outputDir . $shortFilename . '.html',
+            $this->outputDir.$shortFilename.'.html',
             $this->render('review', $data)
         );
+    }
+
+    /**
+     * Highlighter method for PHP source code
+     *
+     * The source code is highlighted by PHP native method.
+     * Afterwords a DOMDocument will be generated with each
+     * line in a separate node.
+     *
+     * @param string $sourceCode The PHP source code
+     *
+     * @return DOMDocument
+     */
+    protected function highlightPhpCode(string $sourceCode): DOMDocument
+    {
+        $code = highlight_string($sourceCode, true);
+        if (\extension_loaded('mbstring') && !mb_check_encoding($code, 'UTF-8')) {
+            $detectOrder   = mb_detect_order();
+            $detectOrder[] = 'iso-8859-1';
+
+            $encoding = mb_detect_encoding($code, $detectOrder, true);
+            if (false === $encoding) {
+                error_log('Error detecting file encoding');
+            }
+            $code = mb_convert_encoding(
+                $code,
+                'UTF-8',
+                $encoding
+            );
+        }
+
+        $sourceDom = new DOMDocument();
+        $sourceDom->loadHTML('<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'.$code);
+
+        //fetch <code>-><span>->children from php generated html
+        $sourceElements = $sourceDom->getElementsByTagname('code')->item(0)
+                                    ->childNodes->item(0)->childNodes;
+
+        //create target dom
+        $targetDom  = new DOMDocument();
+        $targetNode = $targetDom->createElement('ol');
+        $targetNode->setAttribute('class', 'code');
+        $targetDom->appendChild($targetNode);
+
+        $li = $targetDom->createElement('li');
+        $targetNode->appendChild($li);
+
+        // iterate through all <span> elements
+        foreach ($sourceElements as $sourceElement) {
+            if (!$sourceElement instanceof DOMElement) {
+                $span            = $targetDom->createElement('span');
+                $span->nodeValue = htmlspecialchars($sourceElement->wholeText);
+                $li->appendChild($span);
+                continue;
+            }
+
+            if ('br' === $sourceElement->tagName) {
+                // create new li and new line
+                $li = $targetDom->createElement('li');
+                $targetNode->appendChild($li);
+                continue;
+            }
+
+            $elementClass = $this->mapPhpColors(
+                $sourceElement->getAttribute('style')
+            );
+
+            foreach ($sourceElement->childNodes as $sourceChildElement) {
+                if ($sourceChildElement instanceof DOMElement
+                    && 'br' === $sourceChildElement->tagName
+                ) {
+                    // create new li and new line
+                    $li = $targetDom->createElement('li');
+                    $targetNode->appendChild($li);
+                } else {
+                    // append content to current li element
+                    $span            = $targetDom->createElement('span');
+                    $span->nodeValue = htmlspecialchars($sourceChildElement->textContent);
+                    $span->setAttribute('class', $elementClass);
+                    $li->appendChild($span);
+                }
+            }
+        }
+
+        return $targetDom;
+    }
+
+    /**
+     * Return colors defined in ini files.
+     *
+     * @param string $style The given style name, e.g. "comment"
+     *
+     * @return string
+     */
+    protected function mapPhpColors(string $style): string
+    {
+        $color = substr($style, 7);
+
+        return $this->phpHighlightColorMap[$color];
+    }
+
+    /**
+     * Highlighting source code of given file.
+     *
+     * Php code is using native php highlighter.
+     * If PEAR Text_Highlighter is installed all defined files in $highlightMap
+     * will be highlighted as well.
+     *
+     * @param string $file The filename / real path to file
+     *
+     * @return DOMDocument Html representation of parsed source code
+     */
+    protected function highlightCode(string $file): DOMDocument
+    {
+        $sourceCode = $this->ioHelper->loadFile($file);
+        $extension  = pathinfo($file, PATHINFO_EXTENSION);
+
+        if (in_array($extension, $this->phpSuffixes)) {
+            return $this->highlightPhpCode($sourceCode);
+        }
+
+        $sourceCode = preg_replace(
+            '/^.*$/m',
+            '<li>$0</li>',
+            htmlentities($sourceCode)
+        );
+        $sourceCode = preg_replace('/ /', '&nbsp;', $sourceCode);
+        $sourceCode = '<div class="code"><ol class="code">'.$sourceCode.'</ol></div>';
+        $sourceCode = $this->stripInvalidXml($sourceCode);
+
+        $doc = new DOMDocument();
+        $doc->loadHTML($sourceCode);
+
+        return $doc;
     }
 
     /**
@@ -163,11 +307,11 @@ class ViewReview extends ViewAbstract
      *
      * @return string Html formatted string
      */
-    private function formatSourceCode($filename, $outputIssues)
+    private function formatSourceCode(string $filename, array $outputIssues): string
     {
-        $sourceDom  = $this->highlightCode($filename);
-        $xpath      = new DOMXPath($sourceDom);
-        $lines      = $xpath->query('//ol/li');
+        $sourceDom = $this->highlightCode($filename);
+        $xpath     = new DOMXPath($sourceDom);
+        $lines     = $xpath->query('//ol/li');
 
         // A shortcut to prevent possible trouble with log(0)
         // Note that this is exactly what will happen anyways.
@@ -178,18 +322,18 @@ class ViewReview extends ViewAbstract
         $lineNumber = 0;
         $linePlaces = floor(log($lines->length, 10)) + 1;
 
-        /** @var $line DOMElement:: */
+        /** @var DOMElement:: $line */
         foreach ($lines as $line) {
             ++$lineNumber;
-            $line->setAttribute('id', 'line_' . $lineNumber);
+            $line->setAttribute('id', 'line_'.$lineNumber);
 
-            $lineClasses = array(
-                ($lineNumber % 2) ? 'odd' : 'even'
-            );
+            $lineClasses = [
+                ($lineNumber % 2) ? 'odd' : 'even',
+            ];
 
             if (isset($outputIssues[$lineNumber])) {
                 $lineClasses[] = 'hasIssues';
-                $message = '|';
+                $message       = '|';
                 foreach ($outputIssues[$lineNumber] as $issue) {
                     $message .= sprintf(
                         '
@@ -209,7 +353,7 @@ class ViewReview extends ViewAbstract
             // Add line number
             $nuSpan = $sourceDom->createElement('span');
             $nuSpan->setAttribute('class', 'lineNumber');
-            for ($i = 0; $i < $linePlaces - strlen($lineNumber); $i++) {
+            for ($i = 0; $i < $linePlaces - strlen($lineNumber); ++$i) {
                 $nuSpan->appendChild($sourceDom->createEntityReference('nbsp'));
             }
             $nuSpan->appendChild($sourceDom->createTextNode($lineNumber));
@@ -218,13 +362,13 @@ class ViewReview extends ViewAbstract
 
             //create anchor for the new line
             $anchor = $sourceDom->createElement('a');
-            $anchor->setAttribute('name', 'line_' . $lineNumber);
+            $anchor->setAttribute('name', 'line_'.$lineNumber);
             $line->appendChild($anchor);
 
             // set li css class depending on line errors
             switch ($tmp = (isset($outputIssues[$lineNumber])
-                    ? count($outputIssues[$lineNumber])
-                    : 0)) {
+                ? count($outputIssues[$lineNumber])
+                : 0)) {
                 case 0:
                     break;
                 case 1:
@@ -241,141 +385,8 @@ class ViewReview extends ViewAbstract
             }
             $line->setAttribute('class', implode(' ', $lineClasses));
         }
+
         return $sourceDom->saveHTML();
-    }
-
-    /**
-     * Highlighter method for PHP source code
-     *
-     * The source code is highlighted by PHP native method.
-     * Afterwords a DOMDocument will be generated with each
-     * line in a separate node.
-     *
-     * @param string $sourceCode The PHP source code
-     *
-     * @return DOMDocument
-     */
-    protected function highlightPhpCode($sourceCode)
-    {
-        $code = highlight_string($sourceCode, true);
-        if (extension_loaded('mbstring') && !mb_check_encoding($code, 'UTF-8')) {
-            $detectOrder = mb_detect_order();
-            $detectOrder[] = 'iso-8859-1';
-
-            $encoding = mb_detect_encoding($code, $detectOrder, true);
-            if ($encoding === false) {
-                error_log('Error detecting file encoding');
-            }
-            $code = mb_convert_encoding(
-                $code,
-                'UTF-8',
-                $encoding
-            );
-        }
-
-        $sourceDom = new DOMDocument();
-        $sourceDom->loadHTML('<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>' . $code);
-
-        //fetch <code>-><span>->children from php generated html
-        $sourceElements = $sourceDom->getElementsByTagname('code')->item(0)
-                                    ->childNodes->item(0)->childNodes;
-
-        //create target dom
-        $targetDom  = new DOMDocument();
-        $targetNode = $targetDom->createElement('ol');
-        $targetNode->setAttribute('class', 'code');
-        $targetDom->appendChild($targetNode);
-
-        $li = $targetDom->createElement('li');
-        $targetNode->appendChild($li);
-
-        // iterate through all <span> elements
-        foreach ($sourceElements as $sourceElement) {
-            if (!$sourceElement instanceof DOMElement) {
-                $span = $targetDom->createElement('span');
-                $span->nodeValue = htmlspecialchars($sourceElement->wholeText);
-                $li->appendChild($span);
-                continue;
-            }
-
-            if ('br' === $sourceElement->tagName) {
-                // create new li and new line
-                $li = $targetDom->createElement('li');
-                $targetNode->appendChild($li);
-                continue;
-            }
-
-            $elementClass = $this->mapPhpColors(
-                $sourceElement->getAttribute('style')
-            );
-
-            foreach ($sourceElement->childNodes as $sourceChildElement) {
-                if ($sourceChildElement instanceof DOMElement
-                && 'br' === $sourceChildElement->tagName) {
-                    // create new li and new line
-                    $li = $targetDom->createElement('li');
-                    $targetNode->appendChild($li);
-                } else {
-                    // append content to current li element
-                    $span = $targetDom->createElement('span');
-                    $span->nodeValue = htmlspecialchars(
-                        $sourceChildElement->textContent
-                    );
-                    $span->setAttribute('class', $elementClass);
-                    $li->appendChild($span);
-                }
-            }
-        }
-        return $targetDom;
-    }
-
-    /**
-     * Return colors defined in ini files.
-     *
-     * @param string $style The given style name, e.g. "comment"
-     *
-     * @return string
-     */
-    protected function mapPhpColors($style)
-    {
-        $color = substr($style, 7);
-        return $this->phpHighlightColorMap[$color];
-    }
-
-    /**
-     * Highlighting source code of given file.
-     *
-     * Php code is using native php highlighter.
-     * If PEAR Text_Highlighter is installed all defined files in $highlightMap
-     * will be highlighted as well.
-     *
-     * @param string $file The filename / real path to file
-     *
-     * @return DOMDocument Html representation of parsed source code
-     */
-    protected function highlightCode($file)
-    {
-        $sourceCode = $this->ioHelper->loadFile($file);
-        $extension  = pathinfo($file, PATHINFO_EXTENSION);
-
-        if (in_array($extension, $this->phpSuffixes)) {
-            return $this->highlightPhpCode($sourceCode);
-        } else {
-            $sourceCode = preg_replace(
-                '/^.*$/m',
-                '<li>$0</li>',
-                htmlentities($sourceCode)
-            );
-            $sourceCode = preg_replace('/ /', '&nbsp;', $sourceCode);
-            $sourceCode = '<div class="code"><ol class="code">'
-                        . $sourceCode.'</ol></div>';
-            $sourceCode = $this->stripInvalidXml($sourceCode);
-
-            $doc = new DOMDocument();
-            $doc->loadHTML($sourceCode);
-
-            return $doc;
-        }
     }
 
     /**
@@ -386,14 +397,15 @@ class ViewReview extends ViewAbstract
      *
      * @return array
      */
-    private function formatIssues($issueList)
+    private function formatIssues(array $issueList): array
     {
-        $outputIssues = array();
+        $outputIssues = [];
         foreach ($issueList as $issue) {
-            for ($i = $issue->lineStart; $i <= $issue->lineEnd; $i++) {
+            for ($i = $issue->lineStart; $i <= $issue->lineEnd; ++$i) {
                 $outputIssues[$i][] = $issue;
             }
         }
+
         return $outputIssues;
     }
 
@@ -401,32 +413,35 @@ class ViewReview extends ViewAbstract
      * Removes invalid XML
      *
      * @access private
+     *
      * @param string $value
+     *
      * @return string
      */
-    private function stripInvalidXml($value)
+    private function stripInvalidXml(string $value): string
     {
-        $ret = "";
+        $ret     = '';
         $current = null;
         if (empty($value)) {
             return $ret;
         }
 
         $length = strlen($value);
-        for ($i=0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $current = ord($value{$i});
-            if (($current == 0x9)
-                || ($current == 0xA)
-                || ($current == 0xD)
+            if ((0x9 === $current)
+                || (0xA === $current)
+                || (0xD === $current)
                 || (($current >= 0x20) && ($current <= 0xD7FF))
                 || (($current >= 0xE000) && ($current <= 0xFFFD))
                 || (($current >= 0x10000) && ($current <= 0x10FFFF))
             ) {
                 $ret .= chr($current);
             } else {
-                $ret .= " ";
+                $ret .= ' ';
             }
         }
+
         return $ret;
     }
 }

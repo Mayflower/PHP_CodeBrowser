@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Abstract
+ * Abstract Plugin
  *
  * PHP Version 5.3.0
  *
@@ -37,37 +37,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   SVN: $Id$
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     File available since  0.1.0
  */
-
-
 namespace PHPCodeBrowser;
 
-use \DOMNode;
 use \DOMElement;
+use \DOMNode;
 use \DOMNodeList;
 
 /**
- * PluginsAbstract
+ * AbstractPlugin
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   Release: @package_version@
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     Class available since  0.1.0
  */
-abstract class PluginsAbstract
+abstract class AbstractPlugin
 {
     /**
      * The name of the plugin.
@@ -79,9 +87,9 @@ abstract class PluginsAbstract
     public $pluginName;
 
     /**
-     * The IssueXml object
+     * The IssueXML object
      *
-     * @var IssueXml
+     * @var IssueXML
      */
     protected $issueXml;
 
@@ -132,10 +140,10 @@ abstract class PluginsAbstract
     /**
      * Default Constructor
      *
-     * @param IssueXml $issueXml The cc XML document.
-     * @param array      $options  Optional plugin-specific options.
+     * @param IssueXML $issueXml The cc XML document.
+     * @param array    $options  Optional plugin-specific options.
      */
-    public function __construct(IssueXml $issueXml, $options = array())
+    public function __construct(IssueXML $issueXml, array $options = [])
     {
         $this->issueXml = $issueXml;
         $this->options  = $options;
@@ -146,12 +154,13 @@ abstract class PluginsAbstract
      *
      * @return File[] List of files with issues.
      */
-    public function getFileList()
+    public function getFileList(): array
     {
-        $files = array();
+        $files = [];
         foreach ($this->getFilesWithIssues() as $name) {
             $files[] = new File($name, $this->getIssuesByFile($name));
         }
+
         return $files;
     }
 
@@ -159,19 +168,20 @@ abstract class PluginsAbstract
      * Parse the cc XML file for defined error type, e.g. "pmd" and map this
      * error to the Issue objects format.
      *
-     * @param string $filename  Name of the file to parse the errors for.
+     * @param string $filename Name of the file to parse the errors for.
      *
      * @return array
      */
-    public function getIssuesByFile($filename)
+    public function getIssuesByFile(string $filename): array
     {
-        $issues = array();
+        $issues = [];
         foreach ($this->getIssueNodes($filename) as $issueNode) {
             $issues = array_merge(
                 $issues,
                 $this->mapIssues($issueNode, $filename)
             );
         }
+
         return $issues;
     }
 
@@ -180,9 +190,9 @@ abstract class PluginsAbstract
      *
      * @return array
      */
-    public function getFilesWithIssues()
+    public function getFilesWithIssues(): array
     {
-        $fileNames  = array();
+        $fileNames  = [];
         $issueNodes = $this->issueXml->query(
             sprintf('/*/%s/file[@name]', $this->pluginName)
         );
@@ -199,14 +209,14 @@ abstract class PluginsAbstract
      * This method provides a default behaviour an can be overloaded to
      * implement special behavior for other plugins.
      *
-     * @param DomNode $element  The XML plugin node with its errors
+     * @param DOMNode $element  The XML plugin node with its errors
      * @param string  $filename Name of the file to return issues for.
      *
      * @return array            array of issue objects.
      */
-    public function mapIssues(DomNode $element, $filename)
+    public function mapIssues(DOMNode $element, string $filename): array
     {
-        $errorList = array();
+        $errorList = [];
         foreach ($element->childNodes as $child) {
             if (!($child instanceof DOMElement)) {
                 continue;
@@ -220,17 +230,18 @@ abstract class PluginsAbstract
                 $this->getSeverity($child)
             );
         }
+
         return $errorList;
     }
 
     /**
      * Get all DOMNodes that represent issues for a specific file.
      *
-     * @param string $filename      Name of the file to get nodes for.
+     * @param string $filename Name of the file to get nodes for.
      *
      * @return DOMNodeList
      */
-    protected function getIssueNodes($filename)
+    protected function getIssueNodes(string $filename): DOMNodeList
     {
         return $this->issueXml->query(
             sprintf('/*/%s/file[@name="%s"]', $this->pluginName, $filename)
@@ -243,9 +254,9 @@ abstract class PluginsAbstract
      *
      * @param DOMElement $element
      *
-     * @return Integer
+     * @return int
      */
-    protected function getLineStart(DOMElement $element)
+    protected function getLineStart(DOMElement $element): int
     {
         return (int) $element->getAttribute($this->lineStartAttr);
     }
@@ -256,9 +267,9 @@ abstract class PluginsAbstract
      *
      * @param DOMElement $element
      *
-     * @return Integer
+     * @return int
      */
-    protected function getLineEnd(DOMElement $element)
+    protected function getLineEnd(DOMElement $element): int
     {
         return (int) $element->getAttribute($this->lineEndAttr);
     }
@@ -269,7 +280,7 @@ abstract class PluginsAbstract
      *
      * @return string
      */
-    protected function getSource()
+    protected function getSource(): string
     {
         return $this->source;
     }
@@ -282,7 +293,7 @@ abstract class PluginsAbstract
      *
      * @return string
      */
-    protected function getDescription(DOMElement $element)
+    protected function getDescription(DOMElement $element): string
     {
         return htmlentities($element->getAttribute($this->descriptionAttr));
     }
@@ -295,7 +306,7 @@ abstract class PluginsAbstract
      *
      * @return string
      */
-    protected function getSeverity(DOMElement $element)
+    protected function getSeverity(DOMElement $element): string
     {
         return htmlentities($element->getAttribute($this->severityAttr));
     }

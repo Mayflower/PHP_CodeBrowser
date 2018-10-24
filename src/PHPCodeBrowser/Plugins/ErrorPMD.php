@@ -37,38 +37,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage Plugins
+ *
  * @author     Elger Thiele <elger.thiele@mayflower.de>
  * @author     Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Plugins;
 
-
 use DOMElement;
-use PHPCodeBrowser\PluginsAbstract;
+use PHPCodeBrowser\AbstractPlugin;
 
 /**
  * ErrorPMD
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage Plugins
+ *
  * @author     Elger Thiele <elger.thiele@mayflower.de>
  * @author     Christopher Weckerle <christopher.weckerle@mayflower.de>
  * @author     Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.1.0
  */
-class ErrorPMD extends PluginsAbstract
+class ErrorPMD extends AbstractPlugin
 {
     /**
      * Name of this plugin.
@@ -101,9 +107,10 @@ class ErrorPMD extends PluginsAbstract
      * Always return 'error'.
      *
      * @param DOMElement $element
+     *
      * @return string
      */
-    protected function getSeverity(DOMElement $element)
+    protected function getSeverity(DOMElement $element): string
     {
         return 'error';
     }
@@ -113,9 +120,10 @@ class ErrorPMD extends PluginsAbstract
      * Use the textContent of the element.
      *
      * @param DOMElement $element
+     *
      * @return string
      */
-    protected function getDescription(DOMElement $element)
+    protected function getDescription(DOMElement $element): string
     {
         return str_replace(
             '&#10;',

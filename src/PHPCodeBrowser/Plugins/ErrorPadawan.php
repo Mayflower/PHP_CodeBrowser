@@ -37,37 +37,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage Plugins
+ *
  * @author     Elger Thiele <elger.thiele@mayflower.de>
  * @author     Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright  2007-2009 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    SVN: $Id$
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Plugins;
 
-use PHPCodeBrowser\PluginsAbstract;
+use PHPCodeBrowser\AbstractPlugin;
 
 /**
  * ErrorPadawan
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage Plugins
+ *
  * @author     Elger Thiele <elger.thiele@mayflower.de>
  * @author     Christopher Weckerle <christopher.weckerle@mayflower.de>
  * @author     Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.1.0
  */
-class ErrorPadawan extends PluginsAbstract
+class ErrorPadawan extends AbstractPlugin
 {
     /**
      * The name of the plugin.

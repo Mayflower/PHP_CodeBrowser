@@ -87,7 +87,7 @@
         <file name="Issue.php" role="php">
           <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
-        <file name="IssueXml.php" role="php">
+        <file name="IssueXML.php" role="php">
           <tasks:replace from="@package_version@" to="version" type="package-info" />
         </file>
         <file name="PluginsAbstract.php" role="php">
@@ -303,7 +303,7 @@
       <install as="PHP_CodeBrowser/CLIController.php"           name="src/CLIController.php" />
       <install as="PHP_CodeBrowser/File.php"                    name="src/File.php" />
       <install as="PHP_CodeBrowser/Issue.php"                   name="src/Issue.php" />
-      <install as="PHP_CodeBrowser/IssueXml.php"                name="src/IssueXml.php" />
+      <install as="PHP_CodeBrowser/IssueXML.php"                name="src/IssueXML.php" />
       <install as="PHP_CodeBrowser/PluginsAbstract.php"         name="src/PluginsAbstract.php" />
       <install as="PHP_CodeBrowser/SourceHandler.php"           name="src/SourceHandler.php" />
       <install as="phpcb.bat"                                   name="bin/phpcb.bat" />
@@ -325,7 +325,7 @@
       <install as="PHP_CodeBrowser/CLIController.php"           name="src/CLIController.php" />
       <install as="PHP_CodeBrowser/File.php"                    name="src/File.php" />
       <install as="PHP_CodeBrowser/Issue.php"                   name="src/Issue.php" />
-      <install as="PHP_CodeBrowser/IssueXml.php"                name="src/IssueXml.php" />
+      <install as="PHP_CodeBrowser/IssueXML.php"                name="src/IssueXML.php" />
       <install as="PHP_CodeBrowser/PluginsAbstract.php"         name="src/PluginsAbstract.php" />
       <install as="PHP_CodeBrowser/SourceHandler.php"           name="src/SourceHandler.php" />
       <install as="phpcb"                                       name="bin/phpcb.php" />

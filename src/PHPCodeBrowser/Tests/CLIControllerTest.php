@@ -35,13 +35,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    SVN: $Id$
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.1.0
  */
 
@@ -56,13 +60,17 @@ use PHPCodeBrowser\Helper\IOHelper;
  * CLIControllerTest
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.1.0
  */
 class CLIControllerTest extends AbstractTestCase
@@ -73,35 +81,35 @@ class CLIControllerTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testMain()
+    public function testMain(): void
     {
         $controller = new CLIController(
             null,
-            array(PHPCB_SOURCE_DIR),
+            [PHPCB_SOURCE_DIR],
             PHPCB_TEST_OUTPUT,
-            array(),
-            array(),
-            array(),
+            [],
+            [],
+            [],
             new IOHelper(),
             new Logger('PHPCodeBrowser'),
-            array('php')
+            ['php']
         );
 
         $controller->addErrorPlugins(
-            array(
+            [
                 'ErrorCheckstyle',
                 'ErrorPMD',
                 'ErrorCPD',
                 'ErrorPadawan',
                 'ErrorCoverage',
-                'ErrorCRAP'
-            )
+                'ErrorCRAP',
+            ]
         );
 
         $controller->run();
 
-        $this->assertFileExists(PHPCB_TEST_OUTPUT . '/index.html');
-        $this->assertFileExists(PHPCB_TEST_OUTPUT . '/CLIController.php.html');
-        $this->assertFileExists(PHPCB_TEST_OUTPUT . '/css');
+        $this->assertFileExists(PHPCB_TEST_OUTPUT.'/index.html');
+        $this->assertFileExists(PHPCB_TEST_OUTPUT.'/CLIController.php.html');
+        $this->assertFileExists(PHPCB_TEST_OUTPUT.'/css');
     }
 }

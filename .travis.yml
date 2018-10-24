@@ -16,4 +16,5 @@ before_script:
   - if [ "${DEPENDENCIES}" = "highest" ]; then composer update --prefer-dist --no-interaction --no-progress; fi;
 
 script:
+    - vendor/bin/phpcs -s --standard=MO4 src/PHPCodeBrowser/
     - vendor/bin/phpunit

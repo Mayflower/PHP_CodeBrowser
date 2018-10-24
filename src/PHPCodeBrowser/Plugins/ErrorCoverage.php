@@ -37,41 +37,48 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage Plugins
+ *
  * @author     Elger Thiele <elger.thiele@mayflower.de>
  * @author     Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    SVN: $Id$
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Plugins;
 
-
 use DOMElement;
 use DOMNode;
 use DOMNodeList;
+use PHPCodeBrowser\AbstractPlugin;
 use PHPCodeBrowser\Issue;
-use PHPCodeBrowser\PluginsAbstract;
 
 /**
  * ErrorCoverage
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage Plugins
+ *
  * @author     Elger Thiele <elger.thiele@mayflower.de>
  * @author     Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.1.0
  */
-class ErrorCoverage extends PluginsAbstract
+class ErrorCoverage extends AbstractPlugin
 {
     /**
      * Name of this plugin.
@@ -106,64 +113,54 @@ class ErrorCoverage extends PluginsAbstract
      * This method provides a default behaviour an can be overloaded to
      * implement special behavior for other plugins.
      *
-     * @param DomNode $element  The XML plugin node with its errors
+     * @param DOMNode $element  The XML plugin node with its errors
      * @param string  $filename Name of the file to return issues for.
      *
      * @return array            array of issue objects.
      */
-    public function mapIssues(DomNode $element, $filename)
+    public function mapIssues(DOMNode $element, string $filename): array
     {
-        $errorList = array();
+        $errorList = [];
 
-        $children = $element->childNodes;
+        $children   = $element->childNodes;
         $childCount = $children->length;
 
-        for ($next = 0; $next < $childCount; $next++) {
+        for ($next = 0; $next < $childCount; ++$next) {
             $child = $children->item($next);
 
-            if ($this->representsUncoveredLOC($child)) {
-                $begin = $child->getAttribute('num');
-                $end   = $begin;
+            if (!$this->representsUncoveredLOC($child)) {
+                continue;
+            }
 
-                $next += 1;
-                while ($next < $childCount) {
-                    $child = $children->item($next);
-                    if (!$child instanceof DOMElement) {
-                        $next += 1;
-                        continue;
-                    }
-                    if (!$this->representsUncoveredLOC($child)) {
-                        break;
-                    }
+            $begin = $child->getAttribute('num');
+            $end   = $begin;
 
-                    $end = $child->getAttribute('num');
+            $next += 1;
+            while ($next < $childCount) {
+                $child = $children->item($next);
+                if (!$child instanceof DOMElement) {
                     $next += 1;
+                    continue;
+                }
+                if (!$this->representsUncoveredLOC($child)) {
+                    break;
                 }
 
-                $errorList[] = new Issue(
-                    $filename,
-                    $begin,
-                    $end,
-                    'Coverage',
-                    'Not covered',
-                    'Notice'
-                );
+                $end   = $child->getAttribute('num');
+                $next += 1;
             }
+
+            $errorList[] = new Issue(
+                $filename,
+                $begin,
+                $end,
+                'Coverage',
+                'Not covered',
+                'Notice'
+            );
         }
 
         return $errorList;
-    }
-
-    /**
-     * Check if the given object is a DOMElement representing an
-     * uncovered line of code.
-     */
-    private function representsUncoveredLOC($elem)
-    {
-        return ($elem instanceof DOMElement
-             && 0      === (int) $elem->getAttribute('count')
-             && 'line' ===       $elem->nodeName
-             && 'stmt' ===       $elem->getAttribute('type'));
     }
 
     /**
@@ -171,9 +168,9 @@ class ErrorCoverage extends PluginsAbstract
      *
      * @return array
      */
-    public function getFilesWithIssues()
+    public function getFilesWithIssues(): array
     {
-        $fileNames  = array();
+        $fileNames  = [];
         $issueNodes = $this->issueXml->query(
             '/*/'.$this->pluginName.'/*//file[@name]'
         );
@@ -189,12 +186,29 @@ class ErrorCoverage extends PluginsAbstract
      * Get all DOMNodes that represent issues for a specific file.
      *
      * @param string $filename Name of the file to get nodes for.
+     *
      * @return DOMNodeList
      */
-    protected function getIssueNodes($filename)
+    protected function getIssueNodes(string $filename): DOMNodeList
     {
         return $this->issueXml->query(
             '/*/'.$this->pluginName.'/*//file[@name="'.$filename.'"]'
         );
+    }
+
+    /**
+     * Check if the given object is a DOMElement representing an
+     * uncovered line of code.
+     *
+     * @param DOMNode $elem
+     *
+     * @return bool
+     */
+    private function representsUncoveredLOC(DOMNode $elem): bool
+    {
+        return ($elem instanceof DOMElement &&
+            0 === (int) $elem->getAttribute('count')
+            && 'line' === $elem->nodeName
+            && 'stmt' === $elem->getAttribute('type'));
     }
 }

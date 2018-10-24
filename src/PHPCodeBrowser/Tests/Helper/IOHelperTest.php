@@ -35,13 +35,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    SVN: $Id$
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.1.0
  */
 
@@ -55,13 +59,17 @@ use PHPCodeBrowser\Tests\AbstractTestCase;
  * IOHelperTest
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.1.0
  */
 class IOHelperTest extends AbstractTestCase
@@ -77,7 +85,7 @@ class IOHelperTest extends AbstractTestCase
      * (non-PHPDoc)
      * @see AbstractTestCase::setUp()
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -89,9 +97,9 @@ class IOHelperTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testFileCreation()
+    public function testFileCreation(): void
     {
-        $filename = PHPCB_TEST_OUTPUT . '/tmpfile';
+        $filename = PHPCB_TEST_OUTPUT.'/tmpfile';
         $content  = 'Lorem ipsum';
 
         if (file_exists($filename)) {
@@ -110,10 +118,10 @@ class IOHelperTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testCreationOfFileWithPath()
+    public function testCreationOfFileWithPath(): void
     {
-        $dirName = PHPCB_TEST_OUTPUT . '/tmpdir';
-        $filename = $dirName . '/tmpfile';
+        $dirName  = PHPCB_TEST_OUTPUT.'/tmpdir';
+        $filename = $dirName.'/tmpfile';
         $content  = 'Lorem ipsum';
 
         if (file_exists($filename)) {
@@ -137,9 +145,9 @@ class IOHelperTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testFileDeletion()
+    public function testFileDeletion(): void
     {
-        $filename = PHPCB_TEST_OUTPUT . '/tmpfile';
+        $filename = PHPCB_TEST_OUTPUT.'/tmpfile';
 
         if (!file_exists($filename)) {
             file_put_contents($filename, 'Lorem ipsum');
@@ -154,11 +162,11 @@ class IOHelperTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testDirectoryDeletion()
+    public function testDirectoryDeletion(): void
     {
-        $dir = PHPCB_TEST_OUTPUT . '/dir';
-        $file = $dir . '/file';
-        $subDir = $dir . '/subDir';
+        $dir    = PHPCB_TEST_OUTPUT.'/dir';
+        $file   = $dir.'/file';
+        $subDir = $dir.'/subDir';
 
         mkdir($dir);
         mkdir($subDir);
@@ -173,11 +181,11 @@ class IOHelperTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testCopyFile()
+    public function testCopyFile(): void
     {
-        $srcFile = PHPCB_TEST_OUTPUT . '/tmpfile';
-        $dstDir = PHPCB_TEST_OUTPUT . '/tmpdir';
-        $dstFile = $dstDir . '/tmpfile';
+        $srcFile = PHPCB_TEST_OUTPUT.'/tmpfile';
+        $dstDir  = PHPCB_TEST_OUTPUT.'/tmpdir';
+        $dstFile = $dstDir.'/tmpfile';
         $content = 'Lorem ipsum';
 
         if (file_exists($srcFile)) {
@@ -206,13 +214,13 @@ class IOHelperTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testLoadFileWithNonexistentFile()
+    public function testLoadFileWithNonexistentFile(): void
     {
         $this->expectException(\Exception::class);
 
-        $sourceFile = PHPCB_TEST_OUTPUT . '/doesNotExist';
+        $sourceFile = PHPCB_TEST_OUTPUT.'/doesNotExist';
         if (file_exists($sourceFile)) {
-            unlink(PHPCB_TEST_OUTPUT . '/doesNotExist');
+            unlink(PHPCB_TEST_OUTPUT.'/doesNotExist');
         }
         $this->ioHelper->loadFile($sourceFile);
     }
@@ -223,12 +231,12 @@ class IOHelperTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testCopyFileNonExisting()
+    public function testCopyFileNonExisting(): void
     {
         $this->expectException(\Exception::class);
 
-        $file = PHPCB_TEST_OUTPUT . '/tmpfile';
-        $dstDir = PHPCB_TEST_OUTPUT . '/tmpdir';
+        $file   = PHPCB_TEST_OUTPUT.'/tmpfile';
+        $dstDir = PHPCB_TEST_OUTPUT.'/tmpdir';
 
         if (file_exists($file)) {
             unlink($file);
@@ -242,11 +250,11 @@ class IOHelperTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testGetCommonPathPrefixForNoFiles()
+    public function testGetCommonPathPrefixForNoFiles(): void
     {
         $this->assertEquals(
             '/',
-            $this->ioHelper->getCommonPathPrefix(array())
+            $this->ioHelper->getCommonPathPrefix([])
         );
     }
 }

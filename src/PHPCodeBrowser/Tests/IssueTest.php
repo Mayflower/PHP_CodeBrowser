@@ -35,13 +35,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    SVN: $Id$
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.1.0
  */
 
@@ -53,13 +57,17 @@ use PHPCodeBrowser\Issue;
  * IssueTest
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.1.0
  */
 class IssueTest extends AbstractTestCase
@@ -75,7 +83,7 @@ class IssueTest extends AbstractTestCase
      * (non-PHPDoc)
      * @see tests/cbAbstractTests#setUp()
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->issue = new Issue(
@@ -92,7 +100,7 @@ class IssueTest extends AbstractTestCase
      * (non-PHPDoc)
      * @see tests/cbAbstractTests#tearDown()
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }
@@ -102,13 +110,13 @@ class IssueTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testInstantiation()
+    public function testInstantiation(): void
     {
-        $this->assertTrue($this->issue->fileName    === 'testFileName');
-        $this->assertTrue($this->issue->lineStart   === 23);
-        $this->assertTrue($this->issue->lineEnd     === 27);
-        $this->assertTrue($this->issue->foundBy     === 'testFinder');
+        $this->assertTrue($this->issue->fileName === 'testFileName');
+        $this->assertTrue($this->issue->lineStart === 23);
+        $this->assertTrue($this->issue->lineEnd === 27);
+        $this->assertTrue($this->issue->foundBy === 'testFinder');
         $this->assertTrue($this->issue->description === 'testDescription');
-        $this->assertTrue($this->issue->severity    === 'notice');
+        $this->assertTrue($this->issue->severity === 'notice');
     }
 }

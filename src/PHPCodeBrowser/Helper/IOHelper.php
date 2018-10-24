@@ -37,12 +37,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
+ *
  * @copyright 2007-2009 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   SVN: $Id$
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     File available since  0.1.0
  */
 
@@ -58,13 +63,18 @@ use DirectoryIterator;
  * reading files or directories.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Christopher Weckerle <christopher.weckerle@mayflower.de>
+ *
  * @copyright 2007-2009 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   Release: @package_version@
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     Class available since  0.1.0
  */
 class IOHelper
@@ -79,7 +89,7 @@ class IOHelper
      *
      * @return void
      */
-    public function createFile($fileName, $fileContent)
+    public function createFile(string $fileName, string $fileContent): void
     {
         $realName = basename($fileName);
         $path     = substr($fileName, 0, - 1 * (strlen($realName)));
@@ -87,7 +97,7 @@ class IOHelper
         if (!empty($path)) {
             self::createDirectory($path);
         }
-        file_put_contents(realpath($path) . '/' . $realName, $fileContent);
+        file_put_contents(realpath($path).'/'.$realName, $fileContent);
     }
 
     /**
@@ -99,11 +109,13 @@ class IOHelper
      *
      * @return void
      */
-    public function deleteFile($fileName)
+    public function deleteFile(string $fileName): void
     {
-        if (file_exists($fileName)) {
-            unlink($fileName);
+        if (!file_exists($fileName)) {
+            return;
         }
+
+        unlink($fileName);
     }
 
     /**
@@ -114,17 +126,18 @@ class IOHelper
      * @param string $sourceFolder The target folder
      *
      * @return void
+     *
      * @throws \Exception
      */
-    public function copyFile($fileSource, $sourceFolder)
+    public function copyFile(string $fileSource, string $sourceFolder): void
     {
         if (!file_exists($fileSource)) {
-            throw new \Exception('File ' . $fileSource . ' does not exists!');
+            throw new \Exception(sprintf('File %s does not exist!', $fileSource));
         }
 
         $fileName = basename($fileSource);
         self::createFile(
-            $sourceFolder . '/' . $fileName,
+            $sourceFolder.'/'.$fileName,
             self::loadFile($fileSource)
         );
     }
@@ -135,13 +148,15 @@ class IOHelper
      * @param string $fileName The file the content should be read in
      *
      * @return string
+     *
      * @throws \Exception
      */
-    public function loadFile($fileName)
+    public function loadFile(string $fileName): string
     {
         if (!file_exists($fileName)) {
-            throw new \Exception('File ' . $fileName . ' does not exist!');
+            throw new \Exception(sprintf('File %s does not exist!', $fileName));
         }
+
         return trim(file_get_contents($fileName));
     }
 
@@ -153,13 +168,16 @@ class IOHelper
      *
      * @return void
      */
-    public function createDirectory($target)
+    public function createDirectory(string $target): void
     {
         $target = rtrim($target, DIRECTORY_SEPARATOR);
 
-        if (!is_dir($target))
-        {
-            mkdir($target, 0777, true);
+        if (is_dir($target)) {
+            return;
+        }
+
+        if (!mkdir($target, 0777, true) && !is_dir($target)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $target));
         }
     }
 
@@ -170,14 +188,14 @@ class IOHelper
      * @param string $source The directory to delete.
      *
      * @throws \Exception
+     *
      * @return void
      */
-    public function deleteDirectory($source)
+    public function deleteDirectory(string $source): void
     {
         $iterator = new DirectoryIterator($source);
         while ($iterator->valid()) {
-
-            $src = realpath($source . '/' . $iterator->current());
+            $src = realpath($source.'/'.$iterator->current());
 
             // delete file
             if ($iterator->isFile()) {
@@ -195,7 +213,7 @@ class IOHelper
 
         // delete the source root folder as well
         if (!rmdir($source)) {
-            throw new \Exception('Could not delete directory ' . $source);
+            throw new \Exception(sprintf('Could not delete directory %s', $source));
         }
     }
 
@@ -208,18 +226,17 @@ class IOHelper
      *
      * @return void
      */
-    public function copyDirectory($source, $target, $exclude = array())
+    public function copyDirectory(string $source, string $target, array $exclude = []): void
     {
         // first check for target itself
         self::createDirectory($target);
         $iterator = new DirectoryIterator($source);
         while ($iterator->valid()) {
-
             $item = $iterator->current();
 
             // create new file
             if ($iterator->isFile()) {
-                self::copyFile($source . '/' . $item, $target);
+                self::copyFile($source.'/'.$item, $target);
             }
 
             // create folder recursive
@@ -228,8 +245,8 @@ class IOHelper
                 && !in_array($item, $exclude)
             ) {
                 self::copyDirectory(
-                    $source . '/' . $item,
-                    $target . '/' . $item
+                    $source.'/'.$item,
+                    $target.'/'.$item
                 );
             }
             $iterator->next();
@@ -239,9 +256,10 @@ class IOHelper
     /**
      * Get the prefix all paths in an array of paths have in common.
      * @param array $fileNames
+     *
      * @return string
      */
-    public static function getCommonPathPrefix(array $fileNames)
+    public static function getCommonPathPrefix(array $fileNames): string
     {
         if (empty($fileNames)) {
             return '/';
@@ -254,6 +272,7 @@ class IOHelper
         if (substr($prefix, -1, 1) !== DIRECTORY_SEPARATOR) {
             $prefix .= DIRECTORY_SEPARATOR;
         }
+
         return $prefix;
     }
 
@@ -261,17 +280,20 @@ class IOHelper
      * Get the part of currentPrefix that currentPrefix and path have in common.
      * @param string $currentPrefix
      * @param string $path
+     *
      * @return string
      */
-    protected static function getCurrentCommonPathPrefix($currentPrefix, $path)
+    protected static function getCurrentCommonPathPrefix(string $currentPrefix, string $path): string
     {
-        if (strpos($path, $currentPrefix . DIRECTORY_SEPARATOR) === 0
-                || $currentPrefix == DIRECTORY_SEPARATOR
-                || $currentPrefix == ''
-                || $currentPrefix == '.'
-                || preg_match('/^[A-Z]\:\\\\$/', $currentPrefix) === 1) {
+        if (0 === strpos($path, $currentPrefix.DIRECTORY_SEPARATOR)
+            || DIRECTORY_SEPARATOR === $currentPrefix
+            || '' === $currentPrefix
+            || '.' === $currentPrefix
+            || preg_match('/^[A-Z]\:\\\\$/', $currentPrefix) === 1
+        ) {
             return $currentPrefix;
         }
+
         return self::getCurrentCommonPathPrefix(dirname($currentPrefix), $path);
     }
 }

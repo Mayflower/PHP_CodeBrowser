@@ -35,13 +35,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    SVN: $Id$
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.1.0
  */
 
@@ -57,13 +61,17 @@ use PHPCodeBrowser\View\ViewReview;
  * ViewReviewTest
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.1.0
  */
 class ViewReviewTest extends AbstractTestCase
@@ -86,14 +94,14 @@ class ViewReviewTest extends AbstractTestCase
      * (non-PHPDoc)
      * @see tests/cbAbstractTests#setUp()
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->ioMock = $this->createMock('PHPCodeBrowser\Helper\IOHelper');
 
         $this->viewReview = new ViewReview(
-            PHPCB_ROOT_DIR . '/../templates/',
+            PHPCB_ROOT_DIR.'/../templates/',
             PHPCB_TEST_OUTPUT,
             $this->ioMock
         );
@@ -104,9 +112,9 @@ class ViewReviewTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testGenerateNoIssues()
+    public function testGenerateNoIssues(): void
     {
-        $expectedFile = PHPCB_TEST_OUTPUT . DIRECTORY_SEPARATOR . basename(__FILE__) . '.html';
+        $expectedFile = PHPCB_TEST_OUTPUT.DIRECTORY_SEPARATOR.basename(__FILE__).'.html';
 
         $this->ioMock->expects($this->once())
                       ->method('loadFile')
@@ -117,9 +125,9 @@ class ViewReviewTest extends AbstractTestCase
                       ->with($this->equalTo($expectedFile));
 
         $this->viewReview->generate(
-            array(),
+            [],
             __FILE__,
-            dirname(__FILE__) . DIRECTORY_SEPARATOR
+            dirname(__FILE__).DIRECTORY_SEPARATOR
         );
     }
 
@@ -128,9 +136,9 @@ class ViewReviewTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testGenerate()
+    public function testGenerate(): void
     {
-        $issueList = array(
+        $issueList = [
             new Issue(
                 __FILE__,
                 80,
@@ -138,10 +146,10 @@ class ViewReviewTest extends AbstractTestCase
                 'finder',
                 'description',
                 'severe'
-            )
-        );
+            ),
+        ];
 
-        $expectedFile = PHPCB_TEST_OUTPUT . DIRECTORY_SEPARATOR . basename(__FILE__) . '.html';
+        $expectedFile = PHPCB_TEST_OUTPUT.DIRECTORY_SEPARATOR.basename(__FILE__).'.html';
         $this->ioMock->expects($this->once())
                       ->method('loadFile')
                       ->with($this->equalTo(__FILE__))
@@ -153,7 +161,7 @@ class ViewReviewTest extends AbstractTestCase
         $this->viewReview->generate(
             $issueList,
             __FILE__,
-            dirname(__FILE__) . DIRECTORY_SEPARATOR
+            dirname(__FILE__).DIRECTORY_SEPARATOR
         );
     }
 
@@ -162,14 +170,14 @@ class ViewReviewTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testGenerateMultiple()
+    public function testGenerateMultiple(): void
     {
-        $issueList = array(
+        $issueList = [
             new Issue(__FILE__, 80, 80, 'finder', 'description', 'severe'),
-            new Issue(__FILE__, 80, 80, 'other finder', 'other description', 'more severe')
-        );
+            new Issue(__FILE__, 80, 80, 'other finder', 'other description', 'more severe'),
+        ];
 
-        $expectedFile = PHPCB_TEST_OUTPUT . DIRECTORY_SEPARATOR . basename(__FILE__) . '.html';
+        $expectedFile = PHPCB_TEST_OUTPUT.DIRECTORY_SEPARATOR.basename(__FILE__).'.html';
         $this->ioMock->expects($this->once())
                       ->method('loadFile')
                       ->with($this->equalTo(__FILE__))
@@ -181,7 +189,7 @@ class ViewReviewTest extends AbstractTestCase
         $this->viewReview->generate(
             $issueList,
             __FILE__,
-            dirname(__FILE__) . DIRECTORY_SEPARATOR
+            dirname(__FILE__).DIRECTORY_SEPARATOR
         );
     }
 
@@ -190,13 +198,13 @@ class ViewReviewTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testGenerateWithTextHighlighter()
+    public function testGenerateWithTextHighlighter(): void
     {
         if (!class_exists('Text_Highlighter')) {
             $this->markTestIncomplete();
         }
 
-        $html = <<< EOT
+        $html     = <<< EOT
 <html>
     <head>
         <title>Title</title>
@@ -206,10 +214,10 @@ class ViewReviewTest extends AbstractTestCase
     </body>
 </html>
 EOT;
-        $prefix = '/dir/';
-        $fileName = $prefix . 'file.html';
+        $prefix   = '/dir/';
+        $fileName = $prefix.'file.html';
 
-        $expectedFile = PHPCB_TEST_OUTPUT . '/file.html.html';
+        $expectedFile = PHPCB_TEST_OUTPUT.'/file.html.html';
         $this->ioMock->expects($this->once())
                       ->method('loadFile')
                       ->with($this->equalTo($fileName))
@@ -218,9 +226,9 @@ EOT;
                       ->method('createFile')
                       ->with($this->equalTo($expectedFile));
 
-        $issues = array(
-            new Issue($fileName, 5, 5, 'finder', 'description', 'severity')
-        );
+        $issues = [
+            new Issue($fileName, 5, 5, 'finder', 'description', 'severity'),
+        ];
 
         $this->viewReview->generate($issues, $fileName, $prefix);
     }
@@ -230,22 +238,22 @@ EOT;
      *
      * @return void
      */
-    public function testGenerateUnknownType()
+    public function testGenerateUnknownType(): void
     {
-        $expectedFile = PHPCB_TEST_OUTPUT . DIRECTORY_SEPARATOR . basename(self::$xmlBasic) . '.html';
+        $expectedFile = PHPCB_TEST_OUTPUT.DIRECTORY_SEPARATOR.basename(self::$xmlBasic).'.html';
 
         $this->ioMock->expects($this->once())
                       ->method('createFile')
                       ->with($this->equalTo($expectedFile));
 
-        $issueList = array(
-            new Issue(self::$xmlBasic, 5, 5, 'finder', 'description', 'severity')
-        );
+        $issueList = [
+            new Issue(self::$xmlBasic, 5, 5, 'finder', 'description', 'severity'),
+        ];
 
         $this->viewReview->generate(
             $issueList,
             self::$xmlBasic,
-            dirname(self::$xmlBasic) . DIRECTORY_SEPARATOR
+            dirname(self::$xmlBasic).DIRECTORY_SEPARATOR
         );
     }
 
@@ -254,13 +262,13 @@ EOT;
      *
      * @return void
      */
-    public function testCopyResourceFolders()
+    public function testCopyResourceFolders(): void
     {
         $this->ioMock->expects($this->exactly(3))
                       ->method('copyDirectory')
                       ->with(
                           $this->matchesRegularExpression(
-                              '|^' . realpath(dirname(__FILE__) . '/../../../templates/') . '|'
+                              '|^'.realpath(dirname(__FILE__).'/../../../templates/').'|'
                           )
                       );
         $this->viewReview->copyResourceFolders();
@@ -271,13 +279,13 @@ EOT;
      *
      * @return void
      */
-    public function testGenerateIndex()
+    public function testGenerateIndex(): void
     {
-        $files = array(
-            "s/A/somefile.php" => new File("s/A/somefile.php"),
-            "s/file.php" => new File("s/file.php"),
-            "s/B/anotherfile.php" => new File("s/B/anotherfile.php")
-        );
+        $files = [
+            's/A/somefile.php'    => new File('s/A/somefile.php'),
+            's/file.php'          => new File('s/file.php'),
+            's/B/anotherfile.php' => new File('s/B/anotherfile.php'),
+        ];
 
         $this->ioMock->expects($this->once())
                       ->method('createFile')

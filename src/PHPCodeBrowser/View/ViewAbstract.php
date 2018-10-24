@@ -37,14 +37,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Jan Mergler <jan.mergler@mayflower.de>
  * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   SVN: $Id$
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     File available since  0.1.0
  */
 
@@ -60,14 +65,19 @@ use PHPCodeBrowser\Helper\IOHelper;
  * This class is generating the highlighted and formatted html view for file.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Jan Mergler <jan.mergler@mayflower.de>
  * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   Release: @package_version@
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     Class available since  0.1.0
  */
 class ViewAbstract
@@ -91,7 +101,7 @@ class ViewAbstract
      *
      * @var array
      */
-    protected $resourceFolders = array('css', 'js', 'img');
+    protected $resourceFolders = ['css', 'js', 'img'];
 
     /**
      * IOHelper for filesystem interaction.
@@ -103,24 +113,25 @@ class ViewAbstract
     /**
      * Default Constructor
      *
-     * @param string $templateDir The directory containing the templates.
-     * @param string $outputDir The directory where the reviews should be.
-     * @param IOHelper $ioHelper The IOHelper object to use for I/O.
+     * @param string   $templateDir The directory containing the templates.
+     * @param string   $outputDir   The directory where the reviews should be.
+     * @param IOHelper $ioHelper    The IOHelper object to use for I/O.
+     *
      * @throws Exception
      */
-    public function __construct($templateDir, $outputDir, IOHelper $ioHelper)
+    public function __construct(string $templateDir, string $outputDir, IOHelper $ioHelper)
     {
         $this->templateDir = $templateDir;
         if (!$this->templateDir) {
             throw new Exception(
-                "Specified template directory '$templateDir' does not exist"
+                "Specified template directory '{$templateDir}' does not exist"
             );
         }
 
         $this->outputDir = $outputDir;
         if (!$this->outputDir) {
             throw new Exception(
-                "Specified output directory '$outputDir' does not exist"
+                "Specified output directory '{$outputDir}' does not exist"
             );
         }
         $this->outputDir .= DIRECTORY_SEPARATOR;
@@ -132,15 +143,17 @@ class ViewAbstract
      * Copy needed resources to output directory
      *
      * @return void
+     *
      * @throws Exception
+     *
      * @see IOHelper->copyFile
      */
-    public function copyResourceFolders()
+    public function copyResourceFolders(): void
     {
         foreach ($this->resourceFolders as $folder) {
             $this->ioHelper->copyDirectory(
-                $this->templateDir . DIRECTORY_SEPARATOR . $folder,
-                $this->outputDir . DIRECTORY_SEPARATOR . $folder
+                $this->templateDir.DIRECTORY_SEPARATOR.$folder,
+                $this->outputDir.DIRECTORY_SEPARATOR.$folder
             );
         }
     }
@@ -151,11 +164,11 @@ class ViewAbstract
      *
      * @return void
      */
-    public function copyNoErrorsIndex()
+    public function copyNoErrorsIndex(): void
     {
         $this->ioHelper->createFile(
-            $this->outputDir . '/index.html',
-            $this->render('noErrors', array())
+            $this->outputDir.'/index.html',
+            $this->render('noErrors', [])
         );
     }
 
@@ -163,22 +176,22 @@ class ViewAbstract
      * Creates a javascript-filled index.html
      *
      * @param array $fileList
-     * @param bool $excludeOK
+     * @param bool  $excludeOK
      *
      * @return void
      */
-    public function generateIndex(array $fileList, $excludeOK = false)
+    public function generateIndex(array $fileList, bool $excludeOK = false): void
     {
         //we want to exclude files without issues
         if ($excludeOK) {
-            $fileList = array_filter($fileList, array('PHPCodeBrowser\\View\\ViewAbstract', 'hasFileAnyIssues'));
+            $fileList = array_filter($fileList, ['PHPCodeBrowser\\View\\ViewAbstract', 'hasFileAnyIssues']);
         }
 
         $data['treeList'] = $this->getTreeListHtml($fileList);
         $data['fileList'] = $fileList;
 
         $this->ioHelper->createFile(
-            $this->outputDir . '/index.html',
+            $this->outputDir.'/index.html',
             $this->render('index', $data)
         );
     }
@@ -187,23 +200,25 @@ class ViewAbstract
      * Has the file any issues?
      *
      * @param File $file
-     * @return boolean
+     *
+     * @return bool
      */
-    public static function hasFileAnyIssues(File $file)
+    public static function hasFileAnyIssues(File $file): bool
     {
         $issues = $file->getIssues();
+
         return !empty($issues);
     }
 
     /**
      * Convert a list of files to a html fragment for jstree.
      *
-     * @param File[] $fileList       The files, format: array('name' => File).
-     * @param string $hrefPrefix    The prefix to put before all href= tags.
+     * @param File[] $fileList   The files, format: array('name' => File).
+     * @param string $hrefPrefix The prefix to put before all href= tags.
      *
      * @return string  The html fragment.
      */
-    protected function getTreeListHtml(array $fileList, $hrefPrefix = '')
+    protected function getTreeListHtml(array $fileList, string $hrefPrefix = ''): string
     {
         /*
          * In this method, all directories have a trailing DIRECTORY_SEPARATOR.
@@ -215,23 +230,23 @@ class ViewAbstract
 
         $indentStep = 4;
         $indent     = $indentStep;
-        $ret        = '<ul>' . PHP_EOL;
+        $ret        = '<ul>'.PHP_EOL;
         foreach ($fileList as $name => $file) {
-            $dir = dirname($name) . DIRECTORY_SEPARATOR;
+            $dir = dirname($name).DIRECTORY_SEPARATOR;
 
             // Go back until the file is somewhere below curDir
             while (strpos($dir, $curDir) !== 0) {
                 // chop off one subDir from $curDir
-                $curDir = substr(
+                $curDir  = substr(
                     $curDir,
                     0,
                     strrpos($curDir, DIRECTORY_SEPARATOR, -2) + 1
                 );
                 $ret    .= str_pad(' ', $indent);
-                $ret    .= '</ul>' . PHP_EOL;
+                $ret    .= '</ul>'.PHP_EOL;
                 $indent -= $indentStep;
                 $ret    .= str_pad(' ', $indent);
-                $ret    .= '</li>' . PHP_EOL;
+                $ret    .= '</li>'.PHP_EOL;
             }
 
             if ($dir !== $curDir) {
@@ -241,38 +256,39 @@ class ViewAbstract
                 $relDirs = explode(DIRECTORY_SEPARATOR, $relDir);
 
                 foreach ($relDirs as $dirName) {
-                    $curDir .= $dirName . DIRECTORY_SEPARATOR;
+                    $curDir .= $dirName.DIRECTORY_SEPARATOR;
                     // Check how many errors/warnings are in this dir.
                     //TODO: Optimize this. Counts get recalculated for subDirs.
                     $errors   = 0;
                     $warnings = 0;
                     foreach (array_keys($fileList) as $fName) {
-                        if (strncmp($fName, $curDir, strlen($curDir)) === 0) {
-                            $errors   += $fileList[$fName]->getErrorCount();
-                            $warnings += $fileList[$fName]->getWarningCount();
+                        if (strncmp($fName, $curDir, strlen($curDir)) !== 0) {
+                            continue;
                         }
+
+                        $errors   += $fileList[$fName]->getErrorCount();
+                        $warnings += $fileList[$fName]->getWarningCount();
                     }
                     $count = '';
-                    if ($errors != 0 || $warnings != 0) {
+                    if (0 !== $errors || 0 !== $warnings) {
                         $count .= '(<span class="errorCount">';
                         $count .= $errors;
                         $count .= '</span>|<span class="warningCount">';
-                        $count .= $warnings . '</span>)';
+                        $count .= $warnings.'</span>)';
                     }
                     $ret    .= str_pad(' ', $indent);
-                    $ret    .= "<li><a class='treeDir'>$dirName $count</a>"
-                        . PHP_EOL;
+                    $ret    .= "<li><a class='treeDir'>{$dirName} {$count}</a>".PHP_EOL;
                     $indent += $indentStep;
                     $ret    .= str_pad(' ', $indent);
-                    $ret    .= '<ul>' . PHP_EOL;
+                    $ret    .= '<ul>'.PHP_EOL;
                 }
             }
 
-            $name = str_replace('\\', '/', $name);
+            $name      = str_replace('\\', '/', $name);
             $shortName = substr($name, $preLen);
             $fileName  = basename($name);
-            $count = '';
-            if ($file->getErrorCount() != 0 || $file->getWarningCount() != 0) {
+            $count     = '';
+            if (0 !== $file->getErrorCount() || 0 !== $file->getWarningCount()) {
                 $count .= '(<span class="errorCount">';
                 $count .= $file->getErrorCount();
                 $count .= '</span>|<span class="warningCount">';
@@ -282,20 +298,21 @@ class ViewAbstract
 
             $ret .= str_pad(' ', $indent);
             $ret .= '<li class="php"><a class="fileLink" href="';
-            $ret .= $hrefPrefix . $shortName . '.html">';
-            $ret .= "$fileName $count</a></li>" . PHP_EOL;
+            $ret .= $hrefPrefix.$shortName.'.html">';
+            $ret .= "{$fileName} {$count}</a></li>".PHP_EOL;
         }
 
         while ($indent > $indentStep) {
             $indent -= $indentStep;
             $ret    .= str_pad(' ', $indent);
-            $ret    .= '</ul>' . PHP_EOL;
+            $ret    .= '</ul>'.PHP_EOL;
             $indent -= $indentStep;
             $ret    .= str_pad(' ', $indent);
-            $ret    .= '</li>' . PHP_EOL;
+            $ret    .= '</li>'.PHP_EOL;
         }
 
-        $ret .= '</ul>' . PHP_EOL;
+        $ret .= '</ul>'.PHP_EOL;
+
         return $ret;
     }
 
@@ -310,10 +327,9 @@ class ViewAbstract
      *
      * @return string              HTML files as string from output buffer
      */
-    protected function render($templateName, $data)
+    protected function render(string $templateName, array $data): string
     {
-        $filePath = $this->templateDir . DIRECTORY_SEPARATOR
-                  . $templateName . '.tpl';
+        $filePath = $this->templateDir.DIRECTORY_SEPARATOR.$templateName.'.tpl';
 
         extract($data, EXTR_SKIP);
 

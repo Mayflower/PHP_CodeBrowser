@@ -37,13 +37,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   SVN: $Id$
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     File available since  0.1.2
  */
 
@@ -56,13 +61,18 @@ namespace PHPCodeBrowser;
  * This object is used for working with common issues types.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   Release: @package_version@
+ *
  * @link      http://github.com/mayflowergmbh
+ *
  * @since     Class available since  0.1.2
  */
 class Issue
@@ -113,21 +123,15 @@ class Issue
     /**
      * Default constructor
      *
-     * @param string  $fileName    The source file name the issue was found in.
-     * @param Integer $lineStart   The starting line of the issue.
-     * @param Integer $lineEnd     The ending line of registered issue.
-     * @param string  $foundBy     The plugin name definition.
-     * @param string  $description The description of the issue.
-     * @param string  $severity
+     * @param string $fileName    The source file name the issue was found in.
+     * @param int    $lineStart   The starting line of the issue.
+     * @param int    $lineEnd     The ending line of registered issue.
+     * @param string $foundBy     The plugin name definition.
+     * @param string $description The description of the issue.
+     * @param string $severity
      */
-    public function __construct(
-        $fileName,
-        $lineStart,
-        $lineEnd,
-        $foundBy,
-        $description,
-        $severity
-    ) {
+    public function __construct(string $fileName, int $lineStart, int $lineEnd, string $foundBy, string $description, string $severity)
+    {
         $this->fileName    = $fileName;
         $this->lineStart   = $lineStart;
         $this->lineEnd     = $lineEnd;

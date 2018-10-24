@@ -35,30 +35,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Elger Thiele <elger.thiele@mayflower.de>
+ *
  * @copyright  2007-2009 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    SVN: $Id$
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Tests;
 
-
 /**
  * AbstractTests
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Elger Thiele <elger.thiele@mayflower.de>
+ *
  * @copyright  2007-2009 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.1.0
  */
 class AbstractTestCase extends \PHPUnit\Framework\TestCase
@@ -117,28 +124,28 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         if (!defined('PHPCB_SOURCE_DIR')) {
-            define('PHPCB_SOURCE_DIR', realpath(dirname(__FILE__) . '/../'));
+            define('PHPCB_SOURCE_DIR', realpath(dirname(__FILE__).'/../'));
         }
 
         if (!defined('PHPCB_TEST_DIR')) {
             define(
                 'PHPCB_TEST_DIR',
-                realpath(PHPCB_SOURCE_DIR) . DIRECTORY_SEPARATOR . 'Tests' . DIRECTORY_SEPARATOR . 'testData'
+                realpath(PHPCB_SOURCE_DIR).DIRECTORY_SEPARATOR.'Tests'.DIRECTORY_SEPARATOR.'testData'
             );
         }
         if (!defined('PHPCB_TEST_LOGS')) {
-            define('PHPCB_TEST_LOGS', PHPCB_TEST_DIR . '/logs');
+            define('PHPCB_TEST_LOGS', PHPCB_TEST_DIR.'/logs');
         }
         if (!defined('PHPCB_TEST_OUTPUT')) {
-            define('PHPCB_TEST_OUTPUT', PHPCB_TEST_DIR . DIRECTORY_SEPARATOR . 'output');
+            define('PHPCB_TEST_OUTPUT', PHPCB_TEST_DIR.DIRECTORY_SEPARATOR.'output');
         }
 
-        self::$xmlBasic = PHPCB_TEST_LOGS . '/basic.xml';
+        self::$xmlBasic = PHPCB_TEST_LOGS.'/basic.xml';
 
         if (is_dir(PHPCB_TEST_OUTPUT)) {
             $this->cleanUp(PHPCB_TEST_OUTPUT);
@@ -154,7 +161,7 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -167,7 +174,7 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
      *
      * @return array List of cb errors
      */
-    protected function getSerializedErrors()
+    protected function getSerializedErrors(): array
     {
         return unserialize(file_get_contents(self::$serializedErrors));
     }
@@ -179,20 +186,19 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function cleanUp($dir)
+    protected function cleanUp(string $dir): void
     {
         $iterator = new \DirectoryIterator($dir);
         while ($iterator->valid()) {
-
             // delete file
             if ($iterator->isFile()) {
-                unlink($dir . '/' . $iterator->current());
+                unlink($dir.'/'.$iterator->current());
             }
 
             // delete folder recursive
             if (! $iterator->isDot() && $iterator->isDir()) {
-                $this->cleanUp($dir . '/' . $iterator->current());
-                rmdir($dir . '/' . $iterator->current());
+                $this->cleanUp($dir.'/'.$iterator->current());
+                rmdir($dir.'/'.$iterator->current());
             }
             $iterator->next();
         }

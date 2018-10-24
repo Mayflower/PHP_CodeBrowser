@@ -35,23 +35,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    SVN: $Id$
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.9.0
  */
 
 namespace PHPCodeBrowser\Tests\Plugins;
 
-
 use DOMDocument;
 use PHPCodeBrowser\File;
 use PHPCodeBrowser\Issue;
-use PHPCodeBrowser\IssueXml;
+use PHPCodeBrowser\IssueXML;
 use PHPCodeBrowser\Plugins\ErrorCPD;
 use PHPCodeBrowser\Tests\AbstractTestCase;
 
@@ -59,13 +62,17 @@ use PHPCodeBrowser\Tests\AbstractTestCase;
  * ErrorCPDTest
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.9.0
  */
 class ErrorCPDTest extends AbstractTestCase
@@ -99,11 +106,11 @@ HERE;
      * (non-PHPDoc)
      * @see tests/cbAbstractTests#setUp()
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $issueXML = new IssueXML();
-        $xml = new DOMDocument('1.0', 'UTF-8');
+        $xml      = new DOMDocument('1.0', 'UTF-8');
         $xml->loadXML($this->testXml);
         $issueXML->addXMLFile($xml);
         $this->errorCPD = new ErrorCPD($issueXML);
@@ -114,12 +121,12 @@ HERE;
      *
      * @return  void
      */
-    public function testGettingFileList()
+    public function testGettingFileList(): void
     {
-        $expected = array(
+        $expected = [
             new File(
                 '/original/file',
-                array(
+                [
                     new Issue(
                         '/original/file',
                         23,
@@ -127,12 +134,12 @@ HERE;
                         'Duplication',
                         "Copy paste from:\n/copied/file (42)\n (0)",
                         'notice'
-                    )
-                )
+                    ),
+                ]
             ),
             new File(
                 '/copied/file',
-                array(
+                [
                     new Issue(
                         '/copied/file',
                         42,
@@ -140,11 +147,11 @@ HERE;
                         'Duplication',
                         "Copy paste from:\n/original/file (23)\n (0)",
                         'notice'
-                    )
-                )
-            )
-        );
-        $actual = $this->errorCPD->getFileList();
+                    ),
+                ]
+            ),
+        ];
+        $actual   = $this->errorCPD->getFileList();
         $this->assertEquals($expected, $actual);
     }
 }

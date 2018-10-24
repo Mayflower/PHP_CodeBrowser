@@ -37,43 +37,51 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage Plugins
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    SVN: $Id$
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.2.0
  */
 
 namespace PHPCodeBrowser\Plugins;
 
-
 use DOMElement;
 use DOMNode;
 use DOMNodeList;
+use PHPCodeBrowser\AbstractPlugin;
 use PHPCodeBrowser\Issue;
-use PHPCodeBrowser\PluginsAbstract;
 
 /**
  * ErrorCRAP
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage Plugins
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.2.0
  */
-class ErrorCRAP extends PluginsAbstract
+class ErrorCRAP extends AbstractPlugin
 {
     /**
      * Name of this plugin.
      * Used to read issues from XML.
+     *
      * @var string
      */
     public $pluginName = 'coverage';
@@ -81,6 +89,7 @@ class ErrorCRAP extends PluginsAbstract
     /**
      * Name of the attribute that holds the number of the first line
      * of the issue.
+     *
      * @var string
      */
     protected $lineStartAttr = 'num';
@@ -104,37 +113,42 @@ class ErrorCRAP extends PluginsAbstract
      * This method provides a default behaviour an can be overloaded to
      * implement special behavior for other plugins.
      *
-     * @param DomNode $element  The XML plugin node with its errors
+     * @param DOMNode $element  The XML plugin node with its errors
      * @param string  $filename Name of the file to return issues for.
      *
      * @return array            array of issue objects.
      */
-    public function mapIssues(DomNode $element, $filename)
+    public function mapIssues(DOMNode $element, string $filename): array
     {
-        $errorList = array();
+        $errorList = [];
 
         foreach ($element->childNodes as $child) {
-
-            if ($child instanceof DOMElement
-                    && 'line'   === $child->nodeName
-                    && 'method' === $child->getAttribute('type')) {
-                $crap = $child->getAttribute('crap');
-                if (!$crap) {
-                    continue;
-                }
-
-                if (!array_key_exists('threshold', $this->options)
-                        || $crap > $this->options['threshold']) {
-                    $errorList[] = new Issue(
-                        $filename,
-                        $this->getLineStart($child),
-                        $this->getLineEnd($child),
-                        $this->getSource(),
-                        $crap,
-                        $crap >= 30 ? 'Error' : 'Notice'
-                    );
-                }
+            if (!($child instanceof DOMElement)
+                || 'line' !== $child->nodeName
+                || 'method' !== $child->getAttribute('type')
+            ) {
+                continue;
             }
+
+            $crap = $child->getAttribute('crap');
+            if (!$crap) {
+                continue;
+            }
+
+            if (array_key_exists('threshold', $this->options)
+                && $crap <= $this->options['threshold']
+            ) {
+                continue;
+            }
+
+            $errorList[] = new Issue(
+                $filename,
+                $this->getLineStart($child),
+                $this->getLineEnd($child),
+                $this->getSource(),
+                $crap,
+                $crap >= 30 ? 'Error' : 'Notice'
+            );
         }
 
         return $errorList;
@@ -145,9 +159,9 @@ class ErrorCRAP extends PluginsAbstract
      *
      * @return array
      */
-    public function getFilesWithIssues()
+    public function getFilesWithIssues(): array
     {
-        $fileNames  = array();
+        $fileNames  = [];
         $issueNodes = $this->issueXml->query(
             '/*/'.$this->pluginName.'/*/file[@name]'
         );
@@ -163,9 +177,10 @@ class ErrorCRAP extends PluginsAbstract
      * Get all DOMNodes that represent issues for a specific file.
      *
      * @param string $filename Name of the file to get nodes for.
+     *
      * @return DOMNodeList
      */
-    protected function getIssueNodes($filename)
+    protected function getIssueNodes(string $filename): DOMNodeList
     {
         return $this->issueXml->query(
             '/*/'.$this->pluginName.'/*/file[@name="'.$filename.'"]'

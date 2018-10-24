@@ -35,18 +35,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    SVN: $Id$
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Tests;
-
 
 use PHPCodeBrowser\File;
 use PHPCodeBrowser\Issue;
@@ -55,13 +58,17 @@ use PHPCodeBrowser\Issue;
  * FileTest
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.1.0
  */
 class FileTest extends AbstractTestCase
@@ -86,18 +93,18 @@ class FileTest extends AbstractTestCase
     public function __construct()
     {
         parent::__construct();
-        $this->issues = array(
+        $this->issues = [
             new Issue('/some/file/name.php', 39, 39, 'Checkstyle', 'm3', 'error'),
             new Issue('/some/file/name.php', 50, 52, 'Checkstyle', 'm4', 'warning'),
-            new Issue('/some/file/name.php', 40, 40, 'Checkstyle', 'm4', 'error')
-        );
+            new Issue('/some/file/name.php', 40, 40, 'Checkstyle', 'm4', 'error'),
+        ];
     }
 
     /**
      * (non-PHPDoc)
      * @see AbstractTests#setUp()
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->file = new File('/some/file/name.php');
@@ -108,7 +115,7 @@ class FileTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testInstantiation()
+    public function testInstantiation(): void
     {
         $this->assertEquals('/some/file/name.php', $this->file->name());
 
@@ -123,11 +130,11 @@ class FileTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testIssueAdding()
+    public function testIssueAdding(): void
     {
         $this->file->addIssue($this->issues[0]);
         $this->assertEquals(
-            array($this->issues[0]),
+            [$this->issues[0]],
             $this->file->getIssues()
         );
     }
@@ -137,7 +144,7 @@ class FileTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testAddingIssueToWrongFile()
+    public function testAddingIssueToWrongFile(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -151,7 +158,7 @@ class FileTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testBasename()
+    public function testBasename(): void
     {
         $this->assertEquals('name.php', $this->file->basename());
     }
@@ -161,7 +168,7 @@ class FileTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testDirName()
+    public function testDirName(): void
     {
         $this->assertEquals('/some/file', $this->file->dirName());
     }
@@ -171,7 +178,7 @@ class FileTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testIssueCount()
+    public function testIssueCount(): void
     {
         $this->assertEquals(0, $this->file->getIssueCount());
 
@@ -180,7 +187,7 @@ class FileTest extends AbstractTestCase
 
         $this->file = new File(
             '/some/file/name.php',
-            array($this->issues[0])
+            [$this->issues[0]]
         );
         $this->assertEquals(1, $this->file->getIssueCount());
 
@@ -193,7 +200,7 @@ class FileTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testErrorCount()
+    public function testErrorCount(): void
     {
         $this->file = new File('/some/file/name.php', $this->issues);
         $this->assertEquals(2, $this->file->getErrorCount());
@@ -204,7 +211,7 @@ class FileTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testEarningCount()
+    public function testEarningCount(): void
     {
         $this->file = new File('/some/file/name.php', $this->issues);
         $this->assertEquals(1, $this->file->getWarningCount());
@@ -215,15 +222,15 @@ class FileTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testMergeWith()
+    public function testMergeWith(): void
     {
         $this->file = new File(
             '/some/file/name.php',
-            array($this->issues[0], $this->issues[1])
+            [$this->issues[0], $this->issues[1]]
         );
-        $otherFile = new File(
+        $otherFile  = new File(
             '/some/file/name.php',
-            array($this->issues[2])
+            [$this->issues[2]]
         );
         $this->file->mergeWith($otherFile);
 
@@ -240,7 +247,7 @@ class FileTest extends AbstractTestCase
      *
      * @return void
      */
-    public function testMergeWithDifferentFile()
+    public function testMergeWithDifferentFile(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -254,45 +261,45 @@ class FileTest extends AbstractTestCase
      */
     public function testSort()
     {
-        $sorted = array(
-            new File("src/Helper/IOHelper.php"),
-            new File("src/Plugins/ErrorCPD.php"),
-            new File("src/Plugins/ErrorCheckstyle.php"),
-            new File("src/Plugins/ErrorCoverage.php"),
-            new File("src/Plugins/ErrorPMD.php"),
-            new File("src/Plugins/ErrorPadawan.php"),
-            new File("src/Util/Autoloader.php"),
-            new File("src/Util/Logger.php"),
-            new File("src/View/ViewAbstract.php"),
-            new File("src/View/ViewReview.php"),
-            new File("src/CLIController.php"),
-            new File("src/File.php"),
-            new File("src/Issue.php"),
-            new File("src/IssueXml.php"),
-            new File("src/PluginsAbstract.php"),
-            new File("src/SourceHandler.php"),
-            new File("src/SourceIterator.php")
-        );
+        $sorted = [
+            new File('src/Helper/IOHelper.php'),
+            new File('src/Plugins/ErrorCPD.php'),
+            new File('src/Plugins/ErrorCheckstyle.php'),
+            new File('src/Plugins/ErrorCoverage.php'),
+            new File('src/Plugins/ErrorPMD.php'),
+            new File('src/Plugins/ErrorPadawan.php'),
+            new File('src/Util/Autoloader.php'),
+            new File('src/Util/Logger.php'),
+            new File('src/View/ViewAbstract.php'),
+            new File('src/View/ViewReview.php'),
+            new File('src/AbstractPlugin.php'),
+            new File('src/CLIController.php'),
+            new File('src/File.php'),
+            new File('src/Issue.php'),
+            new File('src/IssueXML.php'),
+            new File('src/SourceHandler.php'),
+            new File('src/SourceIterator.php'),
+        ];
 
-        $mixed = array(
-            new File("src/PluginsAbstract.php"),
-            new File("src/Plugins/ErrorCheckstyle.php"),
-            new File("src/CLIController.php"),
-            new File("src/Plugins/ErrorPadawan.php"),
-            new File("src/SourceIterator.php"),
-            new File("src/SourceHandler.php"),
-            new File("src/Issue.php"),
-            new File("src/View/ViewReview.php"),
-            new File("src/File.php"),
-            new File("src/Util/Autoloader.php"),
-            new File("src/Helper/IOHelper.php"),
-            new File("src/IssueXml.php"),
-            new File("src/Plugins/ErrorCoverage.php"),
-            new File("src/View/ViewAbstract.php"),
-            new File("src/Util/Logger.php"),
-            new File("src/Plugins/ErrorPMD.php"),
-            new File("src/Plugins/ErrorCPD.php"),
-        );
+        $mixed = [
+            new File('src/AbstractPlugin.php'),
+            new File('src/Plugins/ErrorCheckstyle.php'),
+            new File('src/CLIController.php'),
+            new File('src/Plugins/ErrorPadawan.php'),
+            new File('src/SourceIterator.php'),
+            new File('src/SourceHandler.php'),
+            new File('src/Issue.php'),
+            new File('src/View/ViewReview.php'),
+            new File('src/File.php'),
+            new File('src/Util/Autoloader.php'),
+            new File('src/Helper/IOHelper.php'),
+            new File('src/IssueXML.php'),
+            new File('src/Plugins/ErrorCoverage.php'),
+            new File('src/View/ViewAbstract.php'),
+            new File('src/Util/Logger.php'),
+            new File('src/Plugins/ErrorPMD.php'),
+            new File('src/Plugins/ErrorCPD.php'),
+        ];
 
         File::sort($mixed);
         $mixed = array_values($mixed);

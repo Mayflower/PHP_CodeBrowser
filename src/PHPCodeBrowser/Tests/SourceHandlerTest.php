@@ -35,13 +35,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    SVN: $Id$
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.1.0
  */
 
@@ -52,7 +56,7 @@ use Monolog\Handler\NullHandler;
 use Monolog\Logger;
 use PHPCodeBrowser\File;
 use PHPCodeBrowser\Issue;
-use PHPCodeBrowser\IssueXml;
+use PHPCodeBrowser\IssueXML;
 use PHPCodeBrowser\Plugins\ErrorCheckstyle;
 use PHPCodeBrowser\Plugins\ErrorPMD;
 use PHPCodeBrowser\SourceHandler;
@@ -62,13 +66,17 @@ use SplFileInfo;
  * SourceHandlerTest
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.1.0
  */
 class SourceHandlerTest extends AbstractTestCase
@@ -84,7 +92,7 @@ class SourceHandlerTest extends AbstractTestCase
      * Plugin array populated with example files.
      * TODO: Mock this
      *
-     * @var array of PluginsAbstract
+     * @var array of AbstractPlugin
      */
     protected $plugins;
 
@@ -99,7 +107,7 @@ class SourceHandlerTest extends AbstractTestCase
     public function __construct()
     {
         parent::__construct();
-        $xmlStrings = array(
+        $xmlStrings = [
             <<<HERE
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd version="0.2.6" timestamp="2010-08-12T00:00:00+02:000">
@@ -126,25 +134,26 @@ HERE
     </file>
 </checkstyle>
 HERE
-        );
-        $issueXML = new IssueXml();
+        ,
+        ];
+        $issueXML   = new IssueXML();
         foreach ($xmlStrings as $xmlString) {
-            $xml      = new \DOMDocument('1.0', 'UTF-8');
+            $xml                  = new \DOMDocument('1.0', 'UTF-8');
             $xml->validateOnParse = true;
             $xml->loadXML($xmlString);
             $issueXML->addXMLFile($xml);
         }
-        $this->plugins = array(
+        $this->plugins = [
             new ErrorCheckstyle($issueXML),
-            new ErrorPMD($issueXML)
-        );
+            new ErrorPMD($issueXML),
+        ];
     }
 
     /**
      * (non-PHPDoc)
      * @see AbstractTests#setUp()
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -154,7 +163,7 @@ HERE
         $this->sourceHandler = new SourceHandler($this->logger);
         array_walk(
             $this->plugins,
-            array($this->sourceHandler, 'addPlugin')
+            [$this->sourceHandler, 'addPlugin']
         );
     }
 
@@ -177,24 +186,24 @@ HERE
      *
      * @return void
      */
-    public function testGetFiles()
+    public function testGetFiles(): void
     {
-        $expected = array(
+        $expected = [
             '/a/nother/dir/src.php' => new File(
                 '/a/nother/dir/src.php',
-                array(
+                [
                     new Issue('/a/nother/dir/src.php', 39, 39, 'Checkstyle', 'm3', 'error'),
                     new Issue('/a/nother/dir/src.php', 40, 40, 'Checkstyle', 'm4', 'error'),
-                    new Issue('/a/nother/dir/src.php', 291, 291, 'PMD', 'descr', 'error')
-                )
+                    new Issue('/a/nother/dir/src.php', 291, 291, 'PMD', 'descr', 'error'),
+                ]
             ),
-            '/a/dir/source.php' => new File(
+            '/a/dir/source.php'     => new File(
                 '/a/dir/source.php',
-                array(
-                    new Issue('/a/dir/source.php', 37, 37, 'Checkstyle', 'm1', 'error')
-                )
-            )
-        );
+                [
+                    new Issue('/a/dir/source.php', 37, 37, 'Checkstyle', 'm1', 'error'),
+                ]
+            ),
+        ];
         File::sort($expected);
 
         $actual = $this->sourceHandler->getFiles();
@@ -206,13 +215,13 @@ HERE
      *
      * @return void
      */
-    public function testGetFilesWithIssues()
+    public function testGetFilesWithIssues(): void
     {
-        $expectedFiles = array (
+        $expectedFiles = [
             '/a/dir/source.php',
-            '/a/nother/dir/src.php'
-        );
-        $actualFiles = $this->sourceHandler->getFilesWithIssues();
+            '/a/nother/dir/src.php',
+        ];
+        $actualFiles   = $this->sourceHandler->getFilesWithIssues();
         $this->assertEquals($expectedFiles, $actualFiles);
     }
 
@@ -221,10 +230,10 @@ HERE
      *
      * @return void
      */
-    public function testAddSourceFiles()
+    public function testAddSourceFiles(): void
     {
         $this->sourceHandler->addSourceFiles(
-            array(new SplFileInfo(__FILE__), __FILE__)
+            [new SplFileInfo(__FILE__), __FILE__]
         );
         $this->assertContains(__FILE__, array_keys($this->sourceHandler->getFiles()));
     }
@@ -234,12 +243,12 @@ HERE
      *
      * @return void
      */
-    public function testAddSourceFilesWithNonExisting()
+    public function testAddSourceFilesWithNonExisting(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
 
         $this->sourceHandler->addSourceFiles(
-            array(new SplFileInfo('/i/do/not/exist'))
+            [new SplFileInfo('/i/do/not/exist')]
         );
     }
 
@@ -248,7 +257,7 @@ HERE
      *
      * @return void
      */
-    public function testGetCommonPathPrefix()
+    public function testGetCommonPathPrefix(): void
     {
         $expected = '/a/';
         $actual   = $this->sourceHandler->getCommonPathPrefix();
@@ -260,16 +269,16 @@ HERE
      *
      * @return void
      */
-    public function testExcludeMatchingPCRE()
+    public function testExcludeMatchingPCRE(): void
     {
-        $expected = array(
+        $expected = [
             '/a/dir/source.php' => new File(
                 '/a/dir/source.php',
-                array(
-                    new Issue('/a/dir/source.php', 37, 37, 'Checkstyle', 'm1', 'error')
-                )
-            )
-        );
+                [
+                    new Issue('/a/dir/source.php', 37, 37, 'Checkstyle', 'm1', 'error'),
+                ]
+            ),
+        ];
         $this->sourceHandler->excludeMatchingPCRE('/^\/a.*src\.php$/');
         $this->assertEquals($expected, $this->sourceHandler->getFiles());
     }
@@ -279,16 +288,16 @@ HERE
      *
      * @return void
      */
-    public function testExcludeMatchingPattern()
+    public function testExcludeMatchingPattern(): void
     {
-        $expected = array(
+        $expected = [
             '/a/dir/source.php' => new File(
                 '/a/dir/source.php',
-                array(
-                    new Issue('/a/dir/source.php', 37, 37, 'Checkstyle', 'm1', 'error')
-                )
-            )
-        );
+                [
+                    new Issue('/a/dir/source.php', 37, 37, 'Checkstyle', 'm1', 'error'),
+                ]
+            ),
+        ];
         $this->sourceHandler->excludeMatchingPattern('*src.php');
         $this->assertEquals($expected, $this->sourceHandler->getFiles());
     }

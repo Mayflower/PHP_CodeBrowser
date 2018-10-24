@@ -37,14 +37,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Michel Hartmann <michel.hartmann@mayflower.de>
  * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   SVN: $Id$
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     File available since  0.2.0
  */
 
@@ -59,18 +64,23 @@ use SplFileInfo;
  * SourceHandler
  *
  * This class manages lists of source files and their issues.
- * For providing these lists the prior generated IssueXml is parsed.
+ * For providing these lists the prior generated IssueXML is parsed.
  *
  * @category  PHP_CodeBrowser
- * @package   PHP_CodeBrowser
+ *
  * @author    Elger Thiele <elger.thiele@mayflower.de>
  * @author    Christopher Weckerle <christopher.weckerle@mayflower.de>
  * @author    Michel Hartmann <michel.hartmann@mayflower.de>
  * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright 2007-2010 Mayflower GmbH
+ *
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version   Release: @package_version@
+ *
  * @link      http://www.phpunit.de/
+ *
  * @since     Class available since  0.2.0
  */
 class SourceHandler
@@ -80,7 +90,7 @@ class SourceHandler
      *
      * @var File[]
      */
-    protected $files = array();
+    protected $files = [];
 
     /**
      * Pear Log object where debug output should go to.
@@ -93,20 +103,20 @@ class SourceHandler
      * Default constructor
      *
      * @param Logger $debugLog
-     * @param array  $plugins The plugins to get issues from.
+     * @param array  $plugins  The plugins to get issues from.
      */
-    public function __construct (Logger $debugLog, array $plugins = array())
+    public function __construct(Logger $debugLog, array $plugins = [])
     {
         $this->debugLog = $debugLog;
-        array_walk($plugins, array($this, 'addPlugin'));
+        array_walk($plugins, [$this, 'addPlugin']);
     }
 
     /**
      * Add a new plugin to the handler.
      *
-     * @param PluginsAbstract $plugin The plugin to add.
+     * @param AbstractPlugin $plugin The plugin to add.
      */
-    public function addPlugin(PluginsAbstract $plugin)
+    public function addPlugin(AbstractPlugin $plugin): void
     {
         foreach ($plugin->getFileList() as $file) {
             if (array_key_exists($file->name(), $this->files)) {
@@ -122,7 +132,7 @@ class SourceHandler
      *
      * @param SplFileInfo[]|string[]|\AppendIterator $files The files to add
      */
-    public function addSourceFiles($files)
+    public function addSourceFiles($files): void
     {
         foreach ($files as $f) {
             $this->addSourceFile($f);
@@ -133,9 +143,10 @@ class SourceHandler
      * Add a source file.
      *
      * @param string|SplFileInfo $file The file to add
-     * @throws \Exception
+     *
+     * @throws Exception
      */
-    public function addSourceFile($file)
+    public function addSourceFile($file): void
     {
         if (is_string($file)) {
             $filename = $file;
@@ -146,12 +157,14 @@ class SourceHandler
         }
 
         if (!$file) {
-            throw new Exception("$filename is no regular file");
+            throw new Exception("{$filename} is no regular file");
         }
 
-        if (!array_key_exists($file, $this->files)) {
-            $this->files[$file] = new File($file);
+        if (array_key_exists($file, $this->files)) {
+            return;
         }
+
+        $this->files[$file] = new File($file);
     }
 
     /**
@@ -159,7 +172,7 @@ class SourceHandler
      *
      * @return string
      */
-    public function getCommonPathPrefix()
+    public function getCommonPathPrefix(): string
     {
         return IOHelper::getCommonPathPrefix(array_keys($this->files));
     }
@@ -167,11 +180,12 @@ class SourceHandler
     /**
      * Returns a sorted array of the files that should be in the report.
      *
-     * @return File[] of File
+     * @return File[]
      */
-    public function getFiles()
+    public function getFiles(): array
     {
         File::sort($this->files);
+
         return $this->files;
     }
 
@@ -180,7 +194,7 @@ class SourceHandler
      *
      * @return array
      */
-    public function getFilesWithIssues()
+    public function getFilesWithIssues(): array
     {
         return array_keys($this->files);
     }
@@ -189,17 +203,20 @@ class SourceHandler
      * Remove all files that match the given PCRE.
      *
      * @param string $expr The PCRE specifying which files to remove.
+     *
      * @return void.
      */
-    public function excludeMatchingPCRE($expr)
+    public function excludeMatchingPCRE(string $expr)
     {
         foreach (array_keys($this->files) as $filename) {
-            if (preg_match($expr, $filename)) {
-                $this->debugLog->debug(
-                    "Excluding $filename, it matches PCRE $expr"
-                );
-                unset($this->files[$filename]);
+            if (!preg_match($expr, $filename)) {
+                continue;
             }
+
+            $this->debugLog->debug(
+                "Excluding {$filename}, it matches PCRE {$expr}"
+            );
+            unset($this->files[$filename]);
         }
     }
 
@@ -208,17 +225,20 @@ class SourceHandler
      * as accepted by fnmatch().
      *
      * @param string $pattern The pattern.
+     *
      * @return void.
      */
-    public function excludeMatchingPattern($pattern)
+    public function excludeMatchingPattern(string $pattern)
     {
         foreach (array_keys($this->files) as $filename) {
-            if (fnmatch($pattern, $filename)) {
-                $this->debugLog->debug(
-                    "Excluding $filename, it matches pattern $pattern"
-                );
-                unset($this->files[$filename]);
+            if (!fnmatch($pattern, $filename)) {
+                continue;
             }
+
+            $this->debugLog->debug(
+                "Excluding {$filename}, it matches pattern {$pattern}"
+            );
+            unset($this->files[$filename]);
         }
     }
 }

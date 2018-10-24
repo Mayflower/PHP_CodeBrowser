@@ -37,63 +37,72 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage Plugins
+ *
  * @author     Elger Thiele <elger.thiele@mayflower.de>
  * @author     Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    SVN: $Id$
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Plugins;
 
-
 use DOMElement;
 use DOMNode;
 use DOMNodeList;
-use Exception;
+use PHPCodeBrowser\AbstractPlugin;
 use PHPCodeBrowser\Issue;
-use PHPCodeBrowser\PluginsAbstract;
 
 /**
  * ErrorCPD
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage Plugins
+ *
  * @author     Elger Thiele <elger.thiele@mayflower.de>
  * @author     Michel Hartmann <michel.hartmann@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.1.0
  */
-class ErrorCPD extends PluginsAbstract
+class ErrorCPD extends AbstractPlugin
 {
+    /**
+     * @var string $pluginName
+     */
     public $pluginName = 'pmd-cpd';
 
     /**
      * Mapper method for this plugin.
      *
-     * @param DOMNode $element The XML plugin node with its errors
-     * @param string $filename
+     * @param DOMNode $element  The XML plugin node with its errors
+     * @param string  $filename
      *
      * @return array
      */
-    public function mapIssues(DOMNode $element, $filename)
+    public function mapIssues(DOMNode $element, string $filename): array
     {
         $parentNode = $element->parentNode;
         $files      = $this->issueXml->query(
             'file[@path="'.$filename.'"]',
             $parentNode
         );
-        $lineCount  = (int)$parentNode->getAttribute('lines');
+        $lineCount  = (int) $parentNode->getAttribute('lines');
 
-        $result = array();
+        $result = [];
         foreach ($files as $file) {
             $result[] = new Issue(
                 $file->getAttribute('path'),
@@ -106,16 +115,17 @@ class ErrorCPD extends PluginsAbstract
                 'notice'
             );
         }
+
         return $result;
     }
 
     /**
      * @return array
      */
-    public function getFilesWithIssues()
+    public function getFilesWithIssues(): array
     {
-        $fileNames = array();
-        $nodes = $this->issueXml->query(
+        $fileNames = [];
+        $nodes     = $this->issueXml->query(
             '/*/'.$this->pluginName.'/*/file[@path]'
         );
 
@@ -130,9 +140,10 @@ class ErrorCPD extends PluginsAbstract
      * Get all DOMNodes that represent issues for a specific file.
      *
      * @param string $filename Name of the file to get nodes for.
+     *
      * @return DOMNodeList
      */
-    protected function getIssueNodes($filename)
+    protected function getIssueNodes(string $filename): DOMNodeList
     {
         return $this->issueXml->query(
             '/*/'.$this->pluginName.'/*/file[@path="'.$filename.'"]'
@@ -142,31 +153,29 @@ class ErrorCPD extends PluginsAbstract
     /**
      * We need another version of getDescription, as we need $allNodes
      * to find duplicates.
+     *
+     * @param DOMNodeList $allNodes
+     * @param DOMNode     $currentNode
+     *
+     * @return string
      */
-    protected function getCpdDescription(DOMNodeList $allNodes, DOMNode $currentNode)
+    protected function getCpdDescription(DOMNodeList $allNodes, DOMNode $currentNode): string
     {
-        $source = array();
+        $source = [];
         foreach ($allNodes as $node) {
-            if ($node instanceof DOMElement
-                    && !$node->isSameNode($currentNode)) {
-                $source[] = sprintf(
-                    '%s (%d)',
-                    $node->getAttribute('path'),
-                    $node->getAttribute('line')
-                );
+            if (!($node instanceof DOMElement)
+                || $node->isSameNode($currentNode)
+            ) {
+                continue;
             }
+
+            $source[] = sprintf(
+                '%s (%d)',
+                $node->getAttribute('path'),
+                $node->getAttribute('line')
+            );
         }
+
         return "Copy paste from:\n".implode("\n", $source);
     }
-
-    /**
-     * Make sure this is never called.
-     * @codeCoverageIgnoreStart
-     * This cannot be called because of other overridden methods in this class.
-     */
-    protected function getDescription(DOMElement $element)
-    {
-        throw new Exception('ErrorCPD does not support getDescription()!');
-    }
-    //@codeCoverageIgnoreEnd
 }

@@ -35,23 +35,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    SVN: $Id$
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      File available since  0.9.0
  */
 
 namespace PHPCodeBrowser\Tests\Plugins;
 
-
 use DOMDocument;
 use PHPCodeBrowser\File;
 use PHPCodeBrowser\Issue;
-use PHPCodeBrowser\IssueXml;
+use PHPCodeBrowser\IssueXML;
 use PHPCodeBrowser\Plugins\ErrorCheckstyle;
 use PHPCodeBrowser\Tests\AbstractTestCase;
 
@@ -59,13 +62,17 @@ use PHPCodeBrowser\Tests\AbstractTestCase;
  * ErrorCheckstyleTest
  *
  * @category   PHP_CodeBrowser
- * @package    PHP_CodeBrowser
- * @subpackage PHPUnit
+ *
  * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ *
  * @copyright  2007-2010 Mayflower GmbH
+ *
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ *
  * @version    Release: @package_version@
+ *
  * @link       http://www.phpunit.de/
+ *
  * @since      Class available since  0.9.0
  */
 class ErrorCheckstyleTest extends AbstractTestCase
@@ -113,11 +120,11 @@ HERE;
      * (non-PHPDoc)
      * @see tests/cbAbstractTests#setUp()
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
-        $issueXML = new IssueXML();
-        $xml = new DOMDocument('1.0', 'UTF-8');
+        $issueXML             = new IssueXML();
+        $xml                  = new DOMDocument('1.0', 'UTF-8');
         $xml->validateOnParse = true;
         $xml->loadXML($this->testXml);
         $issueXML->addXMLFile($xml);
@@ -129,12 +136,12 @@ HERE;
      *
      * @return  void
      */
-    public function testGettingFileList()
+    public function testGettingFileList(): void
     {
-        $expected = array(
+        $expected = [
             new File(
                 '/some/file',
-                array(
+                [
                     new Issue(
                         '/some/file',
                         117,
@@ -150,12 +157,12 @@ HERE;
                         'Checkstyle',
                         'Message 2',
                         'warning'
-                    )
-                )
+                    ),
+                ]
             ),
             new File(
                 '/other/file',
-                array(
+                [
                     new Issue(
                         '/other/file',
                         48,
@@ -163,15 +170,15 @@ HERE;
                         'Checkstyle',
                         'Message 3',
                         'error'
-                    )
-                )
+                    ),
+                ]
             ),
             new File(
                 '/no/violations',
-                array()
-            )
-        );
-        $actual = $this->errorCheckstyle->getFileList();
+                []
+            ),
+        ];
+        $actual   = $this->errorCheckstyle->getFileList();
         $this->assertEquals($expected, $actual);
     }
 }

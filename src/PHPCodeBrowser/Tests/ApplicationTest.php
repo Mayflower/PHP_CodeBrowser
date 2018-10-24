@@ -6,7 +6,6 @@ use PHPCodeBrowser\Application;
 
 /**
  * Class ApplicationTest
- * @package PHPCodeBrowser\Tests
  */
 class ApplicationTest extends \PHPUnit\Framework\TestCase
 {
@@ -15,12 +14,18 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
      */
     private $application;
 
-    protected function setUp()
+    /**
+     *
+     */
+    protected function setUp(): void
     {
         $this->application = new Application();
     }
 
-    public function testCommand()
+    /**
+     *
+     */
+    public function testCommand(): void
     {
         $this->assertInstanceOf('PHPCodeBrowser\\Command\\RunCommand', $this->application->get('phpcb'));
     }
