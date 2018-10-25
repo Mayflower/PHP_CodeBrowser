@@ -4,6 +4,7 @@ namespace PHPCodeBrowser\Tests;
 
 use PHPCodeBrowser\Application;
 use PHPCodeBrowser\Command\RunCommand;
+use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Class ApplicationTest
@@ -29,5 +30,15 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
     public function testCommand(): void
     {
         $this->assertInstanceOf(RunCommand::class, $this->application->get('phpcb'));
+    }
+
+    /**
+     *
+     */
+    public function testGetDefinitionClearsArguments(): void
+    {
+        $this->application->getDefinition()->setArguments([new InputArgument('foo')]);
+
+        $this->assertEquals(0, $this->application->getDefinition()->getArgumentCount());
     }
 }
