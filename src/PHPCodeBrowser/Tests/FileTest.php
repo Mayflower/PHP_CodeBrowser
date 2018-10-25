@@ -257,9 +257,9 @@ class FileTest extends AbstractTestCase
     /**
      * Test the sort function.
      *
-     * @return void.
+     * @return void
      */
-    public function testSort()
+    public function testSort(): void
     {
         $sorted = [
             new File('src/Helper/IOHelper.php'),

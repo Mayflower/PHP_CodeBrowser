@@ -128,21 +128,21 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
     {
         parent::setUp();
 
-        if (!defined('PHPCB_SOURCE_DIR')) {
-            define('PHPCB_SOURCE_DIR', realpath(dirname(__FILE__).'/../'));
+        if (!\defined('PHPCB_SOURCE_DIR')) {
+            \define('PHPCB_SOURCE_DIR', realpath(__DIR__.'/../'));
         }
 
-        if (!defined('PHPCB_TEST_DIR')) {
-            define(
+        if (!\defined('PHPCB_TEST_DIR')) {
+            \define(
                 'PHPCB_TEST_DIR',
                 realpath(PHPCB_SOURCE_DIR).DIRECTORY_SEPARATOR.'Tests'.DIRECTORY_SEPARATOR.'testData'
             );
         }
-        if (!defined('PHPCB_TEST_LOGS')) {
-            define('PHPCB_TEST_LOGS', PHPCB_TEST_DIR.'/logs');
+        if (!\defined('PHPCB_TEST_LOGS')) {
+            \define('PHPCB_TEST_LOGS', PHPCB_TEST_DIR.'/logs');
         }
-        if (!defined('PHPCB_TEST_OUTPUT')) {
-            define('PHPCB_TEST_OUTPUT', PHPCB_TEST_DIR.DIRECTORY_SEPARATOR.'output');
+        if (!\defined('PHPCB_TEST_OUTPUT')) {
+            \define('PHPCB_TEST_OUTPUT', PHPCB_TEST_DIR.DIRECTORY_SEPARATOR.'output');
         }
 
         self::$xmlBasic = PHPCB_TEST_LOGS.'/basic.xml';

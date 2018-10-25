@@ -53,6 +53,7 @@
 namespace PHPCodeBrowser\Tests\View;
 
 use PHPCodeBrowser\File;
+use PHPCodeBrowser\Helper\IOHelper;
 use PHPCodeBrowser\Issue;
 use PHPCodeBrowser\Tests\AbstractTestCase;
 use PHPCodeBrowser\View\ViewReview;
@@ -98,7 +99,7 @@ class ViewReviewTest extends AbstractTestCase
     {
         parent::setUp();
 
-        $this->ioMock = $this->createMock('PHPCodeBrowser\Helper\IOHelper');
+        $this->ioMock = $this->createMock(IOHelper::class);
 
         $this->viewReview = new ViewReview(
             PHPCB_ROOT_DIR.'/../templates/',
@@ -127,7 +128,7 @@ class ViewReviewTest extends AbstractTestCase
         $this->viewReview->generate(
             [],
             __FILE__,
-            dirname(__FILE__).DIRECTORY_SEPARATOR
+            __DIR__.DIRECTORY_SEPARATOR
         );
     }
 
@@ -161,7 +162,7 @@ class ViewReviewTest extends AbstractTestCase
         $this->viewReview->generate(
             $issueList,
             __FILE__,
-            dirname(__FILE__).DIRECTORY_SEPARATOR
+            __DIR__.DIRECTORY_SEPARATOR
         );
     }
 
@@ -189,7 +190,7 @@ class ViewReviewTest extends AbstractTestCase
         $this->viewReview->generate(
             $issueList,
             __FILE__,
-            dirname(__FILE__).DIRECTORY_SEPARATOR
+            __DIR__.DIRECTORY_SEPARATOR
         );
     }
 
@@ -253,7 +254,7 @@ EOT;
         $this->viewReview->generate(
             $issueList,
             self::$xmlBasic,
-            dirname(self::$xmlBasic).DIRECTORY_SEPARATOR
+            \dirname(self::$xmlBasic).DIRECTORY_SEPARATOR
         );
     }
 
@@ -268,7 +269,7 @@ EOT;
                       ->method('copyDirectory')
                       ->with(
                           $this->matchesRegularExpression(
-                              '|^'.realpath(dirname(__FILE__).'/../../../templates/').'|'
+                              '|^'.realpath(__DIR__.'/../../../templates/').'|'
                           )
                       );
         $this->viewReview->copyResourceFolders();

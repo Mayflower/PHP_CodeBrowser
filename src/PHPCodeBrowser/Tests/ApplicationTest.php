@@ -3,6 +3,7 @@
 namespace PHPCodeBrowser\Tests;
 
 use PHPCodeBrowser\Application;
+use PHPCodeBrowser\Command\RunCommand;
 
 /**
  * Class ApplicationTest
@@ -27,6 +28,6 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
      */
     public function testCommand(): void
     {
-        $this->assertInstanceOf('PHPCodeBrowser\\Command\\RunCommand', $this->application->get('phpcb'));
+        $this->assertInstanceOf(RunCommand::class, $this->application->get('phpcb'));
     }
 }

@@ -58,6 +58,12 @@ use Monolog\Handler\NullHandler;
 use Monolog\Logger;
 use PHPCodeBrowser\CLIController;
 use PHPCodeBrowser\Helper\IOHelper;
+use PHPCodeBrowser\Plugins\ErrorCPD;
+use PHPCodeBrowser\Plugins\ErrorCRAP;
+use PHPCodeBrowser\Plugins\ErrorCheckstyle;
+use PHPCodeBrowser\Plugins\ErrorCoverage;
+use PHPCodeBrowser\Plugins\ErrorPMD;
+use PHPCodeBrowser\Plugins\ErrorPadawan;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -75,7 +81,7 @@ class RunCommand extends Command
     {
         $plugins = array_map(
             function ($class) {
-                return '"'.substr($class, strlen('Error')).'"';
+                return '"'.substr($class, \strlen('Error')).'"';
             },
             $this->getAvailablePlugins()
         );
@@ -244,12 +250,12 @@ HERE
     protected function getAvailablePlugins(): array
     {
         return [
-            'PHPCodeBrowser\\Plugins\\ErrorCheckstyle',
-            'PHPCodeBrowser\\Plugins\\ErrorPMD',
-            'PHPCodeBrowser\\Plugins\\ErrorCPD',
-            'PHPCodeBrowser\\Plugins\\ErrorPadawan',
-            'PHPCodeBrowser\\Plugins\\ErrorCoverage',
-            'PHPCodeBrowser\\Plugins\\ErrorCRAP',
+            ErrorCheckstyle::class,
+            ErrorPMD::class,
+            ErrorCPD::class,
+            ErrorPadawan::class,
+            ErrorCoverage::class,
+            ErrorCRAP::class,
         ];
     }
 
@@ -262,15 +268,13 @@ HERE
     protected function disablePlugins(array $disabledPlugins, array $plugins): array
     {
         $disabledPlugins = array_map(
-            function ($param) {
-                return strtolower($param);
-            },
+            'strtolower',
             $disabledPlugins
         );
 
         foreach ($plugins as $pluginKey => $plugin) {
-            $name = substr($plugin, strlen('Error'));
-            if (!in_array(strtolower($name), $disabledPlugins)) {
+            $name = substr($plugin, \strlen('Error'));
+            if (!\in_array(strtolower($name), $disabledPlugins)) {
                 continue;
             }
 

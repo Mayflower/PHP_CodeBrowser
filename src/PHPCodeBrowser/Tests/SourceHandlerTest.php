@@ -170,9 +170,9 @@ HERE
     /**
      * Test the constructor.
      *
-     * @return void.
+     * @return void
      */
-    public function testInstantiation()
+    public function testInstantiation(): void
     {
         $sourceHandler = new SourceHandler(
             $this->logger,

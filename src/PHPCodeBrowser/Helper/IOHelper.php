@@ -92,10 +92,10 @@ class IOHelper
     public function createFile(string $fileName, string $fileContent): void
     {
         $realName = basename($fileName);
-        $path     = substr($fileName, 0, - 1 * (strlen($realName)));
+        $path     = substr($fileName, 0, - 1 * (\strlen($realName)));
 
         if (!empty($path)) {
-            self::createDirectory($path);
+            $this->createDirectory($path);
         }
         file_put_contents(realpath($path).'/'.$realName, $fileContent);
     }
@@ -136,9 +136,9 @@ class IOHelper
         }
 
         $fileName = basename($fileSource);
-        self::createFile(
+        $this->createFile(
             $sourceFolder.'/'.$fileName,
-            self::loadFile($fileSource)
+            $this->loadFile($fileSource)
         );
     }
 
@@ -199,12 +199,12 @@ class IOHelper
 
             // delete file
             if ($iterator->isFile()) {
-                self::deleteFile($src);
+                $this->deleteFile($src);
             }
 
             // delete folder recursive
             if (! $iterator->isDot() && $iterator->isDir()) {
-                self::deleteDirectory($src);
+                $this->deleteDirectory($src);
             }
 
             $iterator->next();
@@ -229,22 +229,22 @@ class IOHelper
     public function copyDirectory(string $source, string $target, array $exclude = []): void
     {
         // first check for target itself
-        self::createDirectory($target);
+        $this->createDirectory($target);
         $iterator = new DirectoryIterator($source);
         while ($iterator->valid()) {
             $item = $iterator->current();
 
             // create new file
             if ($iterator->isFile()) {
-                self::copyFile($source.'/'.$item, $target);
+                $this->copyFile($source.'/'.$item, $target);
             }
 
             // create folder recursive
             if (!$iterator->isDot()
                 && $iterator->isDir()
-                && !in_array($item, $exclude)
+                && !\in_array($item, $exclude)
             ) {
-                self::copyDirectory(
+                $this->copyDirectory(
                     $source.'/'.$item,
                     $target.'/'.$item
                 );
@@ -264,7 +264,7 @@ class IOHelper
         if (empty($fileNames)) {
             return '/';
         }
-        $prefix = dirname(array_shift($fileNames));
+        $prefix = \dirname(array_shift($fileNames));
         foreach ($fileNames as $filename) {
             $prefix = self::getCurrentCommonPathPrefix($prefix, $filename);
         }
@@ -294,6 +294,6 @@ class IOHelper
             return $currentPrefix;
         }
 
-        return self::getCurrentCommonPathPrefix(dirname($currentPrefix), $path);
+        return self::getCurrentCommonPathPrefix(\dirname($currentPrefix), $path);
     }
 }

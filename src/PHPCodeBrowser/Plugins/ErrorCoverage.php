@@ -135,19 +135,19 @@ class ErrorCoverage extends AbstractPlugin
             $begin = $child->getAttribute('num');
             $end   = $begin;
 
-            $next += 1;
+            ++$next;
             while ($next < $childCount) {
                 $child = $children->item($next);
                 if (!$child instanceof DOMElement) {
-                    $next += 1;
+                    ++$next;
                     continue;
                 }
                 if (!$this->representsUncoveredLOC($child)) {
                     break;
                 }
 
-                $end   = $child->getAttribute('num');
-                $next += 1;
+                $end = $child->getAttribute('num');
+                ++$next;
             }
 
             $errorList[] = new Issue(

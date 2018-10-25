@@ -148,7 +148,7 @@ class SourceHandler
      */
     public function addSourceFile($file): void
     {
-        if (is_string($file)) {
+        if (\is_string($file)) {
             $filename = $file;
             $file     = realpath($file);
         } else {
@@ -204,9 +204,9 @@ class SourceHandler
      *
      * @param string $expr The PCRE specifying which files to remove.
      *
-     * @return void.
+     * @return void
      */
-    public function excludeMatchingPCRE(string $expr)
+    public function excludeMatchingPCRE(string $expr): void
     {
         foreach (array_keys($this->files) as $filename) {
             if (!preg_match($expr, $filename)) {
@@ -226,9 +226,9 @@ class SourceHandler
      *
      * @param string $pattern The pattern.
      *
-     * @return void.
+     * @return void
      */
-    public function excludeMatchingPattern(string $pattern)
+    public function excludeMatchingPattern(string $pattern): void
     {
         foreach (array_keys($this->files) as $filename) {
             if (!fnmatch($pattern, $filename)) {

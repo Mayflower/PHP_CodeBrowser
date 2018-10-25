@@ -58,6 +58,7 @@ namespace PHPCodeBrowser\View;
 use Exception;
 use PHPCodeBrowser\File;
 use PHPCodeBrowser\Helper\IOHelper;
+use PHPCodeBrowser\View\ViewAbstract;
 
 /**
  * ViewAbstract
@@ -184,8 +185,10 @@ class ViewAbstract
     {
         //we want to exclude files without issues
         if ($excludeOK) {
-            $fileList = array_filter($fileList, ['PHPCodeBrowser\\View\\ViewAbstract', 'hasFileAnyIssues']);
+            $fileList = array_filter($fileList, [ViewAbstract::class, 'hasFileAnyIssues']);
         }
+
+        $data = [];
 
         $data['treeList'] = $this->getTreeListHtml($fileList);
         $data['fileList'] = $fileList;
@@ -226,13 +229,13 @@ class ViewAbstract
          * up to the root directory ('/' on linux)
          */
         $curDir = IOHelper::getCommonPathPrefix(array_keys($fileList));
-        $preLen = strlen($curDir);
+        $preLen = \strlen($curDir);
 
         $indentStep = 4;
         $indent     = $indentStep;
         $ret        = '<ul>'.PHP_EOL;
         foreach ($fileList as $name => $file) {
-            $dir = dirname($name).DIRECTORY_SEPARATOR;
+            $dir = \dirname($name).DIRECTORY_SEPARATOR;
 
             // Go back until the file is somewhere below curDir
             while (strpos($dir, $curDir) !== 0) {
@@ -252,7 +255,7 @@ class ViewAbstract
             if ($dir !== $curDir) {
                 // File is in a subDir of current directory
                 // relDir has no leading or trailing slash.
-                $relDir  = substr($dir, strlen($curDir), -1);
+                $relDir  = substr($dir, \strlen($curDir), -1);
                 $relDirs = explode(DIRECTORY_SEPARATOR, $relDir);
 
                 foreach ($relDirs as $dirName) {
@@ -262,7 +265,7 @@ class ViewAbstract
                     $errors   = 0;
                     $warnings = 0;
                     foreach (array_keys($fileList) as $fName) {
-                        if (strncmp($fName, $curDir, strlen($curDir)) !== 0) {
+                        if (strncmp($fName, $curDir, \strlen($curDir)) !== 0) {
                             continue;
                         }
 

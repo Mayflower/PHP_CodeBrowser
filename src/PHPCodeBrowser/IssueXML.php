@@ -180,7 +180,7 @@ class IssueXML extends DOMDocument
      */
     public function query(string $expression, ?DOMNode $contextNode = null): DOMNodeList
     {
-        if (!isset($this->xpath)) {
+        if (null === $this->xpath) {
             $this->xpath = new DOMXPath($this);
         }
 

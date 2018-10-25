@@ -143,8 +143,11 @@ class ViewReview extends ViewAbstract
      */
     public function generate(array $issueList, string $fileName, string $commonPathPrefix, bool $excludeOK = false): void
     {
-        $issues           = $this->formatIssues($issueList);
-        $shortFilename    = substr($fileName, strlen($commonPathPrefix));
+        $issues        = $this->formatIssues($issueList);
+        $shortFilename = substr($fileName, \strlen($commonPathPrefix));
+
+        $data = [];
+
         $data['issues']   = $issueList;
         $data['filepath'] = $shortFilename;
         $data['source']   = $this->formatSourceCode($fileName, $issues);
@@ -204,22 +207,22 @@ class ViewReview extends ViewAbstract
         $targetNode->setAttribute('class', 'code');
         $targetDom->appendChild($targetNode);
 
-        $li = $targetDom->createElement('li');
-        $targetNode->appendChild($li);
+        $liElement = $targetDom->createElement('li');
+        $targetNode->appendChild($liElement);
 
         // iterate through all <span> elements
         foreach ($sourceElements as $sourceElement) {
             if (!$sourceElement instanceof DOMElement) {
                 $span            = $targetDom->createElement('span');
                 $span->nodeValue = htmlspecialchars($sourceElement->wholeText);
-                $li->appendChild($span);
+                $liElement->appendChild($span);
                 continue;
             }
 
             if ('br' === $sourceElement->tagName) {
                 // create new li and new line
-                $li = $targetDom->createElement('li');
-                $targetNode->appendChild($li);
+                $liElement = $targetDom->createElement('li');
+                $targetNode->appendChild($liElement);
                 continue;
             }
 
@@ -232,14 +235,14 @@ class ViewReview extends ViewAbstract
                     && 'br' === $sourceChildElement->tagName
                 ) {
                     // create new li and new line
-                    $li = $targetDom->createElement('li');
-                    $targetNode->appendChild($li);
+                    $liElement = $targetDom->createElement('li');
+                    $targetNode->appendChild($liElement);
                 } else {
                     // append content to current li element
                     $span            = $targetDom->createElement('span');
                     $span->nodeValue = htmlspecialchars($sourceChildElement->textContent);
                     $span->setAttribute('class', $elementClass);
-                    $li->appendChild($span);
+                    $liElement->appendChild($span);
                 }
             }
         }
@@ -277,7 +280,7 @@ class ViewReview extends ViewAbstract
         $sourceCode = $this->ioHelper->loadFile($file);
         $extension  = pathinfo($file, PATHINFO_EXTENSION);
 
-        if (in_array($extension, $this->phpSuffixes)) {
+        if (\in_array($extension, $this->phpSuffixes)) {
             return $this->highlightPhpCode($sourceCode);
         }
 
@@ -353,7 +356,7 @@ class ViewReview extends ViewAbstract
             // Add line number
             $nuSpan = $sourceDom->createElement('span');
             $nuSpan->setAttribute('class', 'lineNumber');
-            for ($i = 0; $i < $linePlaces - strlen($lineNumber); ++$i) {
+            for ($i = 0; $i < $linePlaces - \strlen($lineNumber); ++$i) {
                 $nuSpan->appendChild($sourceDom->createEntityReference('nbsp'));
             }
             $nuSpan->appendChild($sourceDom->createTextNode($lineNumber));
@@ -367,7 +370,7 @@ class ViewReview extends ViewAbstract
 
             // set li css class depending on line errors
             switch ($tmp = (isset($outputIssues[$lineNumber])
-                ? count($outputIssues[$lineNumber])
+                ? \count($outputIssues[$lineNumber])
                 : 0)) {
                 case 0:
                     break;
@@ -420,15 +423,15 @@ class ViewReview extends ViewAbstract
      */
     private function stripInvalidXml(string $value): string
     {
-        $ret     = '';
-        $current = null;
+        $ret = '';
+
         if (empty($value)) {
             return $ret;
         }
 
-        $length = strlen($value);
+        $length = \strlen($value);
         for ($i = 0; $i < $length; ++$i) {
-            $current = ord($value{$i});
+            $current = \ord($value{$i});
             if ((0x9 === $current)
                 || (0xA === $current)
                 || (0xD === $current)
@@ -436,7 +439,7 @@ class ViewReview extends ViewAbstract
                 || (($current >= 0xE000) && ($current <= 0xFFFD))
                 || (($current >= 0x10000) && ($current <= 0x10FFFF))
             ) {
-                $ret .= chr($current);
+                $ret .= \chr($current);
             } else {
                 $ret .= ' ';
             }

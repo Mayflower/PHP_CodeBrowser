@@ -60,10 +60,10 @@ use PHPCodeBrowser\View\ViewReview;
 use SebastianBergmann\FileIterator\Factory as FileIteratorFactory;
 
 if (!defined('PHPCB_ROOT_DIR')) {
-    define('PHPCB_ROOT_DIR', dirname(__FILE__).'/../');
+    define('PHPCB_ROOT_DIR', \dirname(__FILE__, 2).'/');
 }
 if (!defined('PHPCB_TEMPLATE_DIR')) {
-    define('PHPCB_TEMPLATE_DIR', dirname(__FILE__).'/../../templates');
+    define('PHPCB_TEMPLATE_DIR', \dirname(__FILE__, 3).'/templates');
 }
 
 /**
@@ -250,7 +250,7 @@ class CLIController
 
         $sourceHandler = new SourceHandler($this->debugLog);
 
-        if (isset($this->logDir)) {
+        if (null !== $this->logDir) {
             $issueXml = new IssueXML();
 
             // merge xml files
@@ -266,7 +266,7 @@ class CLIController
             }
         }
 
-        if (isset($this->projectSource)) {
+        if (null !== $this->projectSource) {
             foreach ($this->projectSource as $source) {
                 if (is_dir($source)) {
                     $factory = new FileIteratorFactory();

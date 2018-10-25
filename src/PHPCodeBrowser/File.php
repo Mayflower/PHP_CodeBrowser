@@ -161,7 +161,7 @@ class File
      */
     public function dirName(): string
     {
-        return dirname($this->name);
+        return \dirname($this->name);
     }
 
     /**
@@ -171,7 +171,7 @@ class File
      */
     public function getIssueCount(): int
     {
-        return count($this->issues);
+        return \count($this->issues);
     }
 
     /**
@@ -187,7 +187,7 @@ class File
                 continue;
             }
 
-            $count += 1;
+            ++$count;
         }
 
         return $count;
@@ -244,7 +244,7 @@ class File
         $secondName = $second->name();
 
         $prefix       = IOHelper::getCommonPathPrefix([$firstName, $secondName]);
-        $prefixLength = strlen($prefix);
+        $prefixLength = \strlen($prefix);
 
         $firstSubName  = substr($firstName, $prefixLength);
         $secondSubName = substr($secondName, $prefixLength);
