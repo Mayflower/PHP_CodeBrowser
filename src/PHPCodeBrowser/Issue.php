@@ -87,14 +87,14 @@ class Issue
     /**
      * Starting Line of the Issue.
      *
-     * @var string
+     * @var int
      */
     public $lineStart;
 
     /**
      * Ending Line of the Issue.
      *
-     * @var string
+     * @var int
      */
     public $lineEnd;
 

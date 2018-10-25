@@ -163,8 +163,8 @@ class RunCommand extends Command
         $extensions = $this->handleBackwardCompatibility($input->getOption('extensions'));
         $ignore     = $this->handleBackwardCompatibility($input->getOption('ignore'));
 
-        $excludePCRE = $input->getOption('excludePCRE');
-        $excludePCRE = $this->convertIgnores($ignore, $excludePCRE);
+        $excludePCREParam = (array) $input->getOption('excludePCRE');
+        $excludePCRE      = $this->convertIgnores($ignore, $excludePCREParam);
 
         $logger = new Logger('PHPCodeBrowser');
 
@@ -187,7 +187,7 @@ class RunCommand extends Command
         );
 
         $plugins = $this->getAvailablePlugins();
-        $plugins = $this->disablePlugins($input->getOption('disablePlugin'), $plugins);
+        $plugins = $this->disablePlugins((array) $input->getOption('disablePlugin'), $plugins);
         $controller->addErrorPlugins($plugins);
 
         try {
@@ -217,9 +217,9 @@ HERE
             if (!$input->getOption('source')) {
                 throw new \InvalidArgumentException('Missing log or source argument.');
             }
-        } elseif (!file_exists($input->getOption('log'))) {
+        } elseif (!file_exists((string) $input->getOption('log'))) {
             throw new \InvalidArgumentException('Log directory does not exist.');
-        } elseif (!is_dir($input->getOption('log'))) {
+        } elseif (!is_dir((string) $input->getOption('log'))) {
             throw new \InvalidArgumentException('Log argument must be a directory, a file was given.');
         }
 
@@ -235,7 +235,7 @@ HERE
             throw new \InvalidArgumentException('Missing output argument.');
         }
 
-        if (file_exists($input->getOption('output')) && !is_dir($input->getOption('output'))) {
+        if (file_exists((string) $input->getOption('output')) && !is_dir((string) $input->getOption('output'))) {
             throw new \InvalidArgumentException('Output argument must be a directory, a file was given.');
         }
     }

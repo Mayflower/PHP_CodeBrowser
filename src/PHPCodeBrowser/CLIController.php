@@ -90,7 +90,7 @@ class CLIController
     /**
      * Path to the Cruise Control input xml file
      *
-     * @var string
+     * @var string|null
      */
     private $logDir;
 
@@ -104,7 +104,7 @@ class CLIController
     /**
      * Path to the project source code files
      *
-     * @var string
+     * @var array|null
      */
     private $projectSource;
 

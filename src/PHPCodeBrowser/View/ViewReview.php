@@ -356,10 +356,10 @@ class ViewReview extends ViewAbstract
             // Add line number
             $nuSpan = $sourceDom->createElement('span');
             $nuSpan->setAttribute('class', 'lineNumber');
-            for ($i = 0; $i < $linePlaces - \strlen($lineNumber); ++$i) {
+            for ($i = 0; $i < $linePlaces - \strlen((string) $lineNumber); ++$i) {
                 $nuSpan->appendChild($sourceDom->createEntityReference('nbsp'));
             }
-            $nuSpan->appendChild($sourceDom->createTextNode($lineNumber));
+            $nuSpan->appendChild($sourceDom->createTextNode((string) $lineNumber));
             $nuSpan->appendChild($sourceDom->createEntityReference('nbsp'));
             $line->insertBefore($nuSpan, $line->firstChild);
 

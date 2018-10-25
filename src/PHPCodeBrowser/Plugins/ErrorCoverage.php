@@ -132,7 +132,7 @@ class ErrorCoverage extends AbstractPlugin
                 continue;
             }
 
-            $begin = $child->getAttribute('num');
+            $begin = (int) $child->getAttribute('num');
             $end   = $begin;
 
             ++$next;
@@ -146,7 +146,7 @@ class ErrorCoverage extends AbstractPlugin
                     break;
                 }
 
-                $end = $child->getAttribute('num');
+                $end = (int) $child->getAttribute('num');
                 ++$next;
             }
 
