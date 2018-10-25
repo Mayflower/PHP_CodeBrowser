@@ -55,6 +55,7 @@ namespace PHPCodeBrowser\Tests;
 use Monolog\Logger;
 use PHPCodeBrowser\CLIController;
 use PHPCodeBrowser\Helper\IOHelper;
+use PHPCodeBrowser\Plugins\ErrorCRAP;
 
 /**
  * CLIControllerTest
@@ -75,27 +76,31 @@ use PHPCodeBrowser\Helper\IOHelper;
  */
 class CLIControllerTest extends AbstractTestCase
 {
+    /**
+     * @var CLIController $controller
+     */
+    public $controller;
 
     /**
-     * Run a full system test based on phpcs output.
-     *
-     * @return void
+     * Create and configure a CLIController instance.
      */
-    public function testMain(): void
+    public function setUp(): void
     {
-        $controller = new CLIController(
+        parent::setUp();
+
+        $this->controller = new CLIController(
             null,
             [self::$phpcbSourceDir],
             self::$testOutputDir,
             [],
             [],
-            [],
+            [ErrorCRAP::class => ['threshold' => 1]],
             new IOHelper(),
             new Logger('PHPCodeBrowser'),
             ['php']
         );
 
-        $controller->addErrorPlugins(
+        $this->controller->addErrorPlugins(
             [
                 'ErrorCheckstyle',
                 'ErrorPMD',
@@ -105,11 +110,56 @@ class CLIControllerTest extends AbstractTestCase
                 'ErrorCRAP',
             ]
         );
+    }
 
-        $controller->run();
+    /**
+     * Assert a set of directories and files are present in output dir.
+     */
+    public function assertOutputIsPresent(): void
+    {
+        self::assertFileExists(self::$testOutputDir.'/index.html');
+        self::assertFileExists(self::$testOutputDir.'/CLIController.php.html');
+        self::assertDirectoryExists(self::$testOutputDir.'/css');
+        self::assertDirectoryExists(self::$testOutputDir.'/img');
+        self::assertDirectoryExists(self::$testOutputDir.'/js');
+    }
 
-        $this->assertFileExists(self::$testOutputDir.'/index.html');
-        $this->assertFileExists(self::$testOutputDir.'/CLIController.php.html');
-        $this->assertFileExists(self::$testOutputDir.'/css');
+    /**
+     * Run a full system test based on phpcs output.
+     */
+    public function testRunCreatesFilesAndDirs(): void
+    {
+        $this->controller->run();
+
+        $this->assertOutputIsPresent();
+    }
+
+    /**
+     * Assert existing files and directories within output dir are removed.
+     */
+    public function testRunCleansExistingOutputDir(): void
+    {
+        mkdir(self::$testOutputDir.'/clear-directory');
+        touch(self::$testOutputDir.'/clear-file');
+        touch(self::$testOutputDir.'/clear-directory/clear-file');
+
+        $this->controller->run();
+
+        $this->assertOutputIsPresent();
+        $this->assertDirectoryNotExists(self::$testOutputDir.'/clear-directory');
+        $this->assertFileNotExists(self::$testOutputDir.'/clear-file');
+    }
+
+    /**
+     * Assert that if there is a file with outputs name, it is replaced with a directory.
+     */
+    public function testRunCleansExistingOutputFile(): void
+    {
+        rmdir(self::$testOutputDir);
+        touch(self::$testOutputDir);
+
+        $this->controller->run();
+
+        $this->assertOutputIsPresent();
     }
 }
