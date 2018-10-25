@@ -58,7 +58,6 @@ namespace PHPCodeBrowser\View;
 use Exception;
 use PHPCodeBrowser\File;
 use PHPCodeBrowser\Helper\IOHelper;
-use PHPCodeBrowser\View\ViewAbstract;
 
 /**
  * ViewAbstract

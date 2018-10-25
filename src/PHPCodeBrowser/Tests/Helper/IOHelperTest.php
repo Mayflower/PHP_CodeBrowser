@@ -99,7 +99,7 @@ class IOHelperTest extends AbstractTestCase
      */
     public function testFileCreation(): void
     {
-        $filename = PHPCB_TEST_OUTPUT.'/tmpfile';
+        $filename = self::$testOutputDir.'/tmpfile';
         $content  = 'Lorem ipsum';
 
         if (file_exists($filename)) {
@@ -120,7 +120,7 @@ class IOHelperTest extends AbstractTestCase
      */
     public function testCreationOfFileWithPath(): void
     {
-        $dirName  = PHPCB_TEST_OUTPUT.'/tmpdir';
+        $dirName  = self::$testOutputDir.'/tmpdir';
         $filename = $dirName.'/tmpfile';
         $content  = 'Lorem ipsum';
 
@@ -147,7 +147,7 @@ class IOHelperTest extends AbstractTestCase
      */
     public function testFileDeletion(): void
     {
-        $filename = PHPCB_TEST_OUTPUT.'/tmpfile';
+        $filename = self::$testOutputDir.'/tmpfile';
 
         if (!file_exists($filename)) {
             file_put_contents($filename, 'Lorem ipsum');
@@ -164,7 +164,7 @@ class IOHelperTest extends AbstractTestCase
      */
     public function testDirectoryDeletion(): void
     {
-        $dir    = PHPCB_TEST_OUTPUT.'/dir';
+        $dir    = self::$testOutputDir.'/dir';
         $file   = $dir.'/file';
         $subDir = $dir.'/subDir';
 
@@ -183,8 +183,8 @@ class IOHelperTest extends AbstractTestCase
      */
     public function testCopyFile(): void
     {
-        $srcFile = PHPCB_TEST_OUTPUT.'/tmpfile';
-        $dstDir  = PHPCB_TEST_OUTPUT.'/tmpdir';
+        $srcFile = self::$testOutputDir.'/tmpfile';
+        $dstDir  = self::$testOutputDir.'/tmpdir';
         $dstFile = $dstDir.'/tmpfile';
         $content = 'Lorem ipsum';
 
@@ -218,9 +218,9 @@ class IOHelperTest extends AbstractTestCase
     {
         $this->expectException(\Exception::class);
 
-        $sourceFile = PHPCB_TEST_OUTPUT.'/doesNotExist';
+        $sourceFile = self::$testOutputDir.'/doesNotExist';
         if (file_exists($sourceFile)) {
-            unlink(PHPCB_TEST_OUTPUT.'/doesNotExist');
+            unlink(self::$testOutputDir.'/doesNotExist');
         }
         $this->ioHelper->loadFile($sourceFile);
     }
@@ -235,8 +235,8 @@ class IOHelperTest extends AbstractTestCase
     {
         $this->expectException(\Exception::class);
 
-        $file   = PHPCB_TEST_OUTPUT.'/tmpfile';
-        $dstDir = PHPCB_TEST_OUTPUT.'/tmpdir';
+        $file   = self::$testOutputDir.'/tmpfile';
+        $dstDir = self::$testOutputDir.'/tmpdir';
 
         if (file_exists($file)) {
             unlink($file);

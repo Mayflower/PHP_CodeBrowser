@@ -103,7 +103,7 @@ class ViewReviewTest extends AbstractTestCase
 
         $this->viewReview = new ViewReview(
             PHPCB_ROOT_DIR.'/../templates/',
-            PHPCB_TEST_OUTPUT,
+            self::$testOutputDir,
             $this->ioMock
         );
     }
@@ -115,7 +115,7 @@ class ViewReviewTest extends AbstractTestCase
      */
     public function testGenerateNoIssues(): void
     {
-        $expectedFile = PHPCB_TEST_OUTPUT.DIRECTORY_SEPARATOR.basename(__FILE__).'.html';
+        $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.basename(__FILE__).'.html';
 
         $this->ioMock->expects($this->once())
                       ->method('loadFile')
@@ -150,7 +150,7 @@ class ViewReviewTest extends AbstractTestCase
             ),
         ];
 
-        $expectedFile = PHPCB_TEST_OUTPUT.DIRECTORY_SEPARATOR.basename(__FILE__).'.html';
+        $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.basename(__FILE__).'.html';
         $this->ioMock->expects($this->once())
                       ->method('loadFile')
                       ->with($this->equalTo(__FILE__))
@@ -178,7 +178,7 @@ class ViewReviewTest extends AbstractTestCase
             new Issue(__FILE__, 80, 80, 'other finder', 'other description', 'more severe'),
         ];
 
-        $expectedFile = PHPCB_TEST_OUTPUT.DIRECTORY_SEPARATOR.basename(__FILE__).'.html';
+        $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.basename(__FILE__).'.html';
         $this->ioMock->expects($this->once())
                       ->method('loadFile')
                       ->with($this->equalTo(__FILE__))
@@ -218,7 +218,7 @@ EOT;
         $prefix   = '/dir/';
         $fileName = $prefix.'file.html';
 
-        $expectedFile = PHPCB_TEST_OUTPUT.'/file.html.html';
+        $expectedFile = self::$testOutputDir.'/file.html.html';
         $this->ioMock->expects($this->once())
                       ->method('loadFile')
                       ->with($this->equalTo($fileName))
@@ -241,7 +241,7 @@ EOT;
      */
     public function testGenerateUnknownType(): void
     {
-        $expectedFile = PHPCB_TEST_OUTPUT.DIRECTORY_SEPARATOR.basename(self::$xmlBasic).'.html';
+        $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.basename(self::$xmlBasic).'.html';
 
         $this->ioMock->expects($this->once())
                       ->method('createFile')

@@ -71,11 +71,18 @@ namespace PHPCodeBrowser\Tests;
 class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Merged cruisecontrol XML error file
+     * PHP_CodeBrowser test output dir
      *
      * @var string
      */
-    protected static $ccXMLFile;
+    protected static $testOutputDir;
+
+    /**
+     * PHP_CodeBrowser source root dir
+     *
+     * @var string
+     */
+    protected static $phpcbSourceDir;
 
     /**
      * PHP_CodeBrowser error file
@@ -92,32 +99,11 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
     protected static $xmlBasic;
 
     /**
-     * Path information for a dummy TXT file
-     *
-     * @var string
-     */
-    protected static $testFile;
-
-    /**
-     * Path information for a dummy XML file
-     *
-     * @var string
-     */
-    protected static $testXML;
-
-    /**
      * File of serialized error list
      *
      * @var string
      */
     protected static $serializedErrors;
-
-    /**
-     * Path information for generated XML test file
-     *
-     * @var string
-     */
-    protected static $generatedXMLTest;
 
     /**
      * Global setup method for all test cases. Basic variables are initialized.
@@ -141,18 +127,19 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
         if (!\defined('PHPCB_TEST_LOGS')) {
             \define('PHPCB_TEST_LOGS', PHPCB_TEST_DIR.'/logs');
         }
-        if (!\defined('PHPCB_TEST_OUTPUT')) {
-            \define('PHPCB_TEST_OUTPUT', PHPCB_TEST_DIR.DIRECTORY_SEPARATOR.'output');
-        }
 
         self::$xmlBasic = PHPCB_TEST_LOGS.'/basic.xml';
 
-        if (is_dir(PHPCB_TEST_OUTPUT)) {
-            $this->cleanUp(PHPCB_TEST_OUTPUT);
-            rmdir(PHPCB_TEST_OUTPUT);
+        self::$phpcbSourceDir = realpath(__DIR__.'/../');
+
+        self::$testOutputDir = PHPCB_TEST_DIR.DIRECTORY_SEPARATOR.'output';
+
+        if (is_dir(self::$testOutputDir)) {
+            $this->cleanUp(self::$testOutputDir);
+            rmdir(self::$testOutputDir);
         }
 
-        mkdir(PHPCB_TEST_OUTPUT);
+        mkdir(self::$testOutputDir);
     }
 
     /**
@@ -165,8 +152,8 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
     {
         parent::tearDown();
 
-        $this->cleanUp(PHPCB_TEST_OUTPUT);
-        rmdir(PHPCB_TEST_OUTPUT);
+        $this->cleanUp(self::$testOutputDir);
+        rmdir(self::$testOutputDir);
     }
 
     /**

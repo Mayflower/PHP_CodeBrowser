@@ -85,8 +85,8 @@ class CLIControllerTest extends AbstractTestCase
     {
         $controller = new CLIController(
             null,
-            [PHPCB_SOURCE_DIR],
-            PHPCB_TEST_OUTPUT,
+            [self::$phpcbSourceDir],
+            self::$testOutputDir,
             [],
             [],
             [],
@@ -108,8 +108,8 @@ class CLIControllerTest extends AbstractTestCase
 
         $controller->run();
 
-        $this->assertFileExists(PHPCB_TEST_OUTPUT.'/index.html');
-        $this->assertFileExists(PHPCB_TEST_OUTPUT.'/CLIController.php.html');
-        $this->assertFileExists(PHPCB_TEST_OUTPUT.'/css');
+        $this->assertFileExists(self::$testOutputDir.'/index.html');
+        $this->assertFileExists(self::$testOutputDir.'/CLIController.php.html');
+        $this->assertFileExists(self::$testOutputDir.'/css');
     }
 }
