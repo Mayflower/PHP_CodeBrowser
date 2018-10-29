@@ -163,4 +163,31 @@ class CLIControllerTest extends AbstractTestCase
 
         $this->assertOutputIsPresent();
     }
+
+    /**
+     * Assert only index.html is present if all source files are excluded.
+     */
+    public function testRunExcludingAllSources(): void
+    {
+        $this->controller = new CLIController(
+            null,
+            [self::$phpcbSourceDir],
+            self::$testOutputDir,
+            ['/Bad.php/'],
+            ['*Good.php'],
+            [ErrorCRAP::class => ['threshold' => 1]],
+            new IOHelper(),
+            new Logger('PHPCodeBrowser'),
+            ['php']
+        );
+
+        $this->controller->run();
+
+        $this->assertFileExists(self::$testOutputDir.'/index.html');
+        $this->assertFileNotExists(self::$testOutputDir.'/Bad.php.html');
+        $this->assertFileNotExists(self::$testOutputDir.'/Good.php.html');
+        $this->assertDirectoryNotExists(self::$testOutputDir.'/css');
+        $this->assertDirectoryNotExists(self::$testOutputDir.'/img');
+        $this->assertDirectoryNotExists(self::$testOutputDir.'/js');
+    }
 }
