@@ -118,7 +118,8 @@ class CLIControllerTest extends AbstractTestCase
     public function assertOutputIsPresent(): void
     {
         self::assertFileExists(self::$testOutputDir.'/index.html');
-        self::assertFileExists(self::$testOutputDir.'/CLIController.php.html');
+        self::assertFileExists(self::$testOutputDir.'/Bad.php.html');
+        self::assertFileExists(self::$testOutputDir.'/Good.php.html');
         self::assertDirectoryExists(self::$testOutputDir.'/css');
         self::assertDirectoryExists(self::$testOutputDir.'/img');
         self::assertDirectoryExists(self::$testOutputDir.'/js');

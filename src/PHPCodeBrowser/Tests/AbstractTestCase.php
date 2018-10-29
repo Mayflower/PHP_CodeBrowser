@@ -130,7 +130,7 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
 
         self::$xmlBasic = PHPCB_TEST_LOGS.'/basic.xml';
 
-        self::$phpcbSourceDir = realpath(__DIR__.'/../');
+        self::$phpcbSourceDir = realpath(__DIR__.'/Fixtures');
 
         self::$testOutputDir = PHPCB_TEST_DIR.DIRECTORY_SEPARATOR.'output';
 
