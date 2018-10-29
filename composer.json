@@ -50,6 +50,11 @@
             "phploc -q --log-xml=build/logs/phploc.xml src || true",
             "@browser"
         ],
+        "travis": [
+            "phpcs -s --standard=MO4 src/PHPCodeBrowser/",
+            "phpstan analyse --no-progress --level=1 src/PHPCodeBrowser/",
+            "phpunit"
+        ],
         "clean": "rm -rf build/logs/* build/code-browser",
         "browser": "bin/phpcb -l build/logs -o build/code-browser -s src",
         "phar": "php -d phar.readonly=0 vendor/bin/box build"
