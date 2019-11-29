@@ -325,8 +325,9 @@ class ViewReview extends ViewAbstract
         $lineNumber = 0;
         $linePlaces = floor(log($lines->length, 10)) + 1;
 
-        /** @var DOMElement:: $line */
         foreach ($lines as $line) {
+            /** @var DOMElement $line */
+            $line = $line;
             ++$lineNumber;
             $line->setAttribute('id', 'line_'.$lineNumber);
 

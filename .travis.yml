@@ -17,5 +17,5 @@ before_script:
 
 script:
     - vendor/bin/phpcs -s --standard=MO4 src/PHPCodeBrowser/
-    - vendor/bin/phpstan analyse --no-progress --level=1 src/PHPCodeBrowser/
+    - vendor/bin/phpstan analyse --no-progress
     - vendor/bin/phpunit

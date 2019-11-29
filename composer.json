@@ -27,7 +27,7 @@
         "mayflower/mo4-coding-standard": "^3.0",
         "phploc/phploc": "*",
         "phpmd/phpmd": "1.5.*|~2.6",
-        "phpstan/phpstan": "^0.10.5",
+        "phpstan/phpstan": "^0.12.5",
         "phpunit/phpunit": "~7.3",
         "sebastian/phpcpd": "*"
     },

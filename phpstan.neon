@@ -1,0 +1,7 @@
+parameters:
+    level: 4
+    paths:
+        - %rootDir%/../../../src/PHPCodeBrowser
+
+includes:
+    - phpstan_baseline.neon
