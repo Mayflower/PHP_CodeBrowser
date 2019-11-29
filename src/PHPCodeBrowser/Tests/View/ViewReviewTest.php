@@ -56,6 +56,7 @@ use PHPCodeBrowser\Helper\IOHelper;
 use PHPCodeBrowser\Issue;
 use PHPCodeBrowser\Tests\AbstractTestCase;
 use PHPCodeBrowser\View\ViewReview;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * ViewReviewTest
@@ -86,7 +87,7 @@ class ViewReviewTest extends AbstractTestCase
     /**
      * IOHelper mock to simulate filesystem interaction.
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $ioMock;
 
