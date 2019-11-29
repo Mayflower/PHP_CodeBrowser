@@ -120,7 +120,7 @@ class ViewReviewTest extends AbstractTestCase
         $this->ioMock->expects($this->once())
                       ->method('loadFile')
                       ->with($this->equalTo(__FILE__))
-                      ->will($this->returnValue(file_get_contents(__FILE__)));
+                      ->willReturn(file_get_contents(__FILE__));
         $this->ioMock->expects($this->once())
                       ->method('createFile')
                       ->with($this->equalTo($expectedFile));
@@ -154,7 +154,7 @@ class ViewReviewTest extends AbstractTestCase
         $this->ioMock->expects($this->once())
                       ->method('loadFile')
                       ->with($this->equalTo(__FILE__))
-                      ->will($this->returnValue(file_get_contents(__FILE__)));
+                      ->willReturn(file_get_contents(__FILE__));
         $this->ioMock->expects($this->once())
                       ->method('createFile')
                       ->with($this->equalTo($expectedFile));
@@ -182,7 +182,7 @@ class ViewReviewTest extends AbstractTestCase
         $this->ioMock->expects($this->once())
                       ->method('loadFile')
                       ->with($this->equalTo(__FILE__))
-                      ->will($this->returnValue(file_get_contents(__FILE__)));
+                      ->willReturn(file_get_contents(__FILE__));
         $this->ioMock->expects($this->once())
                       ->method('createFile')
                       ->with($this->equalTo($expectedFile));
@@ -222,7 +222,7 @@ EOT;
         $this->ioMock->expects($this->once())
                       ->method('loadFile')
                       ->with($this->equalTo($fileName))
-                      ->will($this->returnValue($html));
+                      ->willReturn($html);
         $this->ioMock->expects($this->once())
                       ->method('createFile')
                       ->with($this->equalTo($expectedFile));

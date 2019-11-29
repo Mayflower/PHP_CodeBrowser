@@ -80,7 +80,7 @@ class RunCommand extends Command
     protected function configure(): void
     {
         $plugins = array_map(
-            function ($class) {
+            static function ($class) {
                 return '"'.substr($class, \strlen('Error')).'"';
             },
             $this->getAvailablePlugins()
