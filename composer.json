@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "kherge/box": "~2.7",
-        "mayflower/mo4-coding-standard": "^3.0",
+        "mayflower/mo4-coding-standard": "^5.0",
         "phploc/phploc": "*",
         "phpmd/phpmd": "1.5.*|~2.6",
         "phpstan/phpstan": "^0.12.5",

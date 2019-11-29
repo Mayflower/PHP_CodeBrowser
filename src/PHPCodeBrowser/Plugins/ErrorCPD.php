@@ -103,6 +103,7 @@ class ErrorCPD extends AbstractPlugin
         $lineCount  = (int) $parentNode->getAttribute('lines');
 
         $result = [];
+
         foreach ($files as $file) {
             $result[] = new Issue(
                 $file->getAttribute('path'),
@@ -162,6 +163,7 @@ class ErrorCPD extends AbstractPlugin
     protected function getCpdDescription(DOMNodeList $allNodes, DOMNode $currentNode): string
     {
         $source = [];
+
         foreach ($allNodes as $node) {
             if (!($node instanceof DOMElement)
                 || $node->isSameNode($currentNode)

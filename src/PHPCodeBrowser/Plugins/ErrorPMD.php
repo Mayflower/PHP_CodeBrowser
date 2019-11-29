@@ -89,6 +89,7 @@ class ErrorPMD extends AbstractPlugin
      * @var string
      */
     protected $lineStartAttr = 'beginline';
+
     /**
      * Name of the attribute that holds the number of the last line
      * of the issue.

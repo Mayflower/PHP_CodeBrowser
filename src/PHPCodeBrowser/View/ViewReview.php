@@ -159,6 +159,7 @@ class ViewReview extends ViewAbstract
         if ($excludeOK && !$data['issues']) {
             return;
         }
+
         $this->ioHelper->createFile(
             $this->outputDir.$shortFilename.'.html',
             $this->render('review', $data)
@@ -179,14 +180,17 @@ class ViewReview extends ViewAbstract
     protected function highlightPhpCode(string $sourceCode): DOMDocument
     {
         $code = highlight_string($sourceCode, true);
+
         if (\extension_loaded('mbstring') && !mb_check_encoding($code, 'UTF-8')) {
             $detectOrder   = mb_detect_order();
             $detectOrder[] = 'iso-8859-1';
 
             $encoding = mb_detect_encoding($code, $detectOrder, true);
+
             if (false === $encoding) {
                 error_log('Error detecting file encoding');
             }
+
             $code = mb_convert_encoding(
                 $code,
                 'UTF-8',
@@ -216,6 +220,7 @@ class ViewReview extends ViewAbstract
                 $span            = $targetDom->createElement('span');
                 $span->nodeValue = htmlspecialchars($sourceElement->wholeText);
                 $liElement->appendChild($span);
+
                 continue;
             }
 
@@ -223,6 +228,7 @@ class ViewReview extends ViewAbstract
                 // create new li and new line
                 $liElement = $targetDom->createElement('li');
                 $targetNode->appendChild($liElement);
+
                 continue;
             }
 
@@ -338,6 +344,7 @@ class ViewReview extends ViewAbstract
             if (isset($outputIssues[$lineNumber])) {
                 $lineClasses[] = 'hasIssues';
                 $message       = '|';
+
                 foreach ($outputIssues[$lineNumber] as $issue) {
                     $message .= sprintf(
                         '
@@ -351,15 +358,18 @@ class ViewReview extends ViewAbstract
                         $issue->description
                     );
                 }
+
                 $line->setAttribute('title', utf8_encode($message));
             }
 
             // Add line number
             $nuSpan = $sourceDom->createElement('span');
             $nuSpan->setAttribute('class', 'lineNumber');
+
             for ($i = 0; $i < $linePlaces - \strlen((string) $lineNumber); ++$i) {
                 $nuSpan->appendChild($sourceDom->createEntityReference('nbsp'));
             }
+
             $nuSpan->appendChild($sourceDom->createTextNode((string) $lineNumber));
             $nuSpan->appendChild($sourceDom->createEntityReference('nbsp'));
             $line->insertBefore($nuSpan, $line->firstChild);
@@ -377,16 +387,21 @@ class ViewReview extends ViewAbstract
                     break;
                 case 1:
                     $lineClasses[] = $outputIssues[$lineNumber][0]->foundBy;
+
                     break;
                 case 1 < $tmp:
                     $lineClasses[] = 'moreErrors';
+
                     break;
+
                 // This can't happen, count always returns >= 0
                 // @codeCoverageIgnoreStart
                 default:
                     break;
+
                 // @codeCoverageIgnoreEnd
             }
+
             $line->setAttribute('class', implode(' ', $lineClasses));
         }
 
@@ -404,6 +419,7 @@ class ViewReview extends ViewAbstract
     private function formatIssues(array $issueList): array
     {
         $outputIssues = [];
+
         foreach ($issueList as $issue) {
             for ($i = $issue->lineStart; $i <= $issue->lineEnd; ++$i) {
                 $outputIssues[$i][] = $issue;
@@ -431,8 +447,10 @@ class ViewReview extends ViewAbstract
         }
 
         $length = \strlen($value);
+
         for ($i = 0; $i < $length; ++$i) {
             $current = \ord($value{$i});
+
             if ((0x9 === $current)
                 || (0xA === $current)
                 || (0xD === $current)

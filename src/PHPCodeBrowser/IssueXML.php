@@ -138,6 +138,7 @@ class IssueXML extends DOMDocument
             $realFileName         = realpath($current);
             $xml                  = new DOMDocument('1.0', 'UTF-8');
             $xml->validateOnParse = true;
+
             if (@$xml->load(realpath($current))) {
                 $this->addXMLFile($xml);
             } else {
@@ -145,6 +146,7 @@ class IssueXML extends DOMDocument
                     "[Warning] Could not read file '{$realFileName}'. ".'Make sure it contains valid xml.'
                 );
             }
+
             unset($xml);
         }
 

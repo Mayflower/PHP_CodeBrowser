@@ -131,6 +131,7 @@ class ErrorCRAP extends AbstractPlugin
             }
 
             $crap = $child->getAttribute('crap');
+
             if (!$crap) {
                 continue;
             }

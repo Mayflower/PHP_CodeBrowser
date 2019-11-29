@@ -122,6 +122,7 @@ class ViewAbstract
     public function __construct(string $templateDir, string $outputDir, IOHelper $ioHelper)
     {
         $this->templateDir = $templateDir;
+
         if (!$this->templateDir) {
             throw new Exception(
                 "Specified template directory '{$templateDir}' does not exist"
@@ -129,11 +130,13 @@ class ViewAbstract
         }
 
         $this->outputDir = $outputDir;
+
         if (!$this->outputDir) {
             throw new Exception(
                 "Specified output directory '{$outputDir}' does not exist"
             );
         }
+
         $this->outputDir .= DIRECTORY_SEPARATOR;
 
         $this->ioHelper = $ioHelper;
@@ -215,8 +218,8 @@ class ViewAbstract
     /**
      * Convert a list of files to a html fragment for jstree.
      *
-     * @param File[] $fileList   The files, format: array('name' => File).
-     * @param string $hrefPrefix The prefix to put before all href= tags.
+     * @param array<File> $fileList   The files, format: array('name' => File).
+     * @param string      $hrefPrefix The prefix to put before all href= tags.
      *
      * @return string  The html fragment.
      */
@@ -233,6 +236,7 @@ class ViewAbstract
         $indentStep = 4;
         $indent     = $indentStep;
         $ret        = '<ul>'.PHP_EOL;
+
         foreach ($fileList as $name => $file) {
             $dir = \dirname($name).DIRECTORY_SEPARATOR;
 
@@ -263,6 +267,7 @@ class ViewAbstract
                     //TODO: Optimize this. Counts get recalculated for subDirs.
                     $errors   = 0;
                     $warnings = 0;
+
                     foreach (array_keys($fileList) as $fName) {
                         if (strncmp($fName, $curDir, \strlen($curDir)) !== 0) {
                             continue;
@@ -271,13 +276,16 @@ class ViewAbstract
                         $errors   += $fileList[$fName]->getErrorCount();
                         $warnings += $fileList[$fName]->getWarningCount();
                     }
+
                     $count = '';
+
                     if (0 !== $errors || 0 !== $warnings) {
                         $count .= '(<span class="errorCount">';
                         $count .= $errors;
                         $count .= '</span>|<span class="warningCount">';
                         $count .= $warnings.'</span>)';
                     }
+
                     $ret    .= str_pad(' ', $indent);
                     $ret    .= "<li><a class='treeDir'>{$dirName} {$count}</a>".PHP_EOL;
                     $indent += $indentStep;
@@ -290,6 +298,7 @@ class ViewAbstract
             $shortName = substr($name, $preLen);
             $fileName  = basename($name);
             $count     = '';
+
             if (0 !== $file->getErrorCount() || 0 !== $file->getWarningCount()) {
                 $count .= '(<span class="errorCount">';
                 $count .= $file->getErrorCount();

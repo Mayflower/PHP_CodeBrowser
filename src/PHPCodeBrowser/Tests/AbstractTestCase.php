@@ -124,6 +124,7 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
                 realpath(PHPCB_SOURCE_DIR).DIRECTORY_SEPARATOR.'Tests'.DIRECTORY_SEPARATOR.'testData'
             );
         }
+
         if (!\defined('PHPCB_TEST_LOGS')) {
             \define('PHPCB_TEST_LOGS', PHPCB_TEST_DIR.'/logs');
         }
@@ -176,6 +177,7 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
     protected function cleanUp(string $dir): void
     {
         $iterator = new \DirectoryIterator($dir);
+
         while ($iterator->valid()) {
             // delete file
             if ($iterator->isFile()) {
@@ -187,8 +189,10 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
                 $this->cleanUp($dir.'/'.$iterator->current());
                 rmdir($dir.'/'.$iterator->current());
             }
+
             $iterator->next();
         }
+
         unset($iterator);
     }
 }

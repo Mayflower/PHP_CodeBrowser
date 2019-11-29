@@ -205,7 +205,6 @@ HERE
         return 0;
     }
 
-
     /**
      * @param InputInterface $input
      *
@@ -245,7 +244,7 @@ HERE
      *
      * Currently hard-coded.
      *
-     * @return string[] Class names of error plugins
+     * @return array<string> Class names of error plugins
      */
     protected function getAvailablePlugins(): array
     {
@@ -274,6 +273,7 @@ HERE
 
         foreach ($plugins as $pluginKey => $plugin) {
             $name = substr($plugin, \strlen('Error'));
+
             if (!\in_array(strtolower($name), $disabledPlugins)) {
                 continue;
             }
@@ -296,8 +296,10 @@ HERE
     protected function convertIgnores(array $ignored, array $excludePCRE): array
     {
         $dirSep = preg_quote(DIRECTORY_SEPARATOR, '/');
+
         foreach ($ignored as $ignore) {
             $ig = realpath($ignore);
+
             if (!$ig) {
                 error_log("[Warning] {$ignore} does not exists");
             } else {

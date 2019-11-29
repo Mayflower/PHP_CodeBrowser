@@ -62,6 +62,7 @@ use SebastianBergmann\FileIterator\Factory as FileIteratorFactory;
 if (!defined('PHPCB_ROOT_DIR')) {
     define('PHPCB_ROOT_DIR', \dirname(__FILE__, 2).'/');
 }
+
 if (!defined('PHPCB_TEMPLATE_DIR')) {
     define('PHPCB_TEMPLATE_DIR', \dirname(__FILE__, 3).'/templates');
 }
@@ -192,9 +193,11 @@ class CLIController
         $this->htmlOutputDir      = $htmlOutputDir;
         $this->excludeExpressions = $excludeExpressions;
         $this->excludePatterns    = $excludePatterns;
+
         foreach ($pluginOptions as $plugin => $options) {
             $this->pluginOptions["Error{$plugin}"] = $options;
         }
+
         $this->ioHelper          = $ioHelper;
         $this->debugLog          = $debugLog;
         $this->registeredPlugins = [];
@@ -238,6 +241,7 @@ class CLIController
         } elseif (is_file($this->htmlOutputDir)) {
             $this->ioHelper->deleteFile($this->htmlOutputDir);
         }
+
         $this->ioHelper->createDirectory($this->htmlOutputDir);
 
         // init needed classes

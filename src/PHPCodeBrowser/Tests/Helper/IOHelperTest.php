@@ -49,7 +49,6 @@
  * @since      File available since  0.1.0
  */
 
-
 namespace PHPCodeBrowser\Tests\Helper;
 
 use PHPCodeBrowser\Helper\IOHelper;
@@ -191,6 +190,7 @@ class IOHelperTest extends AbstractTestCase
         if (file_exists($srcFile)) {
             unlink($srcFile);
         }
+
         if (file_exists($dstFile)) {
             rmdir($dstFile);
         }
@@ -219,12 +219,13 @@ class IOHelperTest extends AbstractTestCase
         $this->expectException(\Exception::class);
 
         $sourceFile = self::$testOutputDir.'/doesNotExist';
+
         if (file_exists($sourceFile)) {
             unlink(self::$testOutputDir.'/doesNotExist');
         }
+
         $this->ioHelper->loadFile($sourceFile);
     }
-
 
     /**
      * Test copyFile function for non-existent source file

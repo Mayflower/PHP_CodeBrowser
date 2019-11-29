@@ -88,7 +88,7 @@ class SourceHandler
     /**
      * Files to be included in the report
      *
-     * @var File[]
+     * @var array<File>
      */
     protected $files = [];
 
@@ -130,7 +130,7 @@ class SourceHandler
     /**
      * Add source files to the list.
      *
-     * @param SplFileInfo[]|string[]|\AppendIterator $files The files to add
+     * @param array<SplFileInfo>|array<string>|\AppendIterator $files The files to add
      */
     public function addSourceFiles($files): void
     {
@@ -180,7 +180,7 @@ class SourceHandler
     /**
      * Returns a sorted array of the files that should be in the report.
      *
-     * @return File[]
+     * @return array<File>
      */
     public function getFiles(): array
     {

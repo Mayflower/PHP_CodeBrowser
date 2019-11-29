@@ -51,6 +51,7 @@
  *
  * @since     File available since  0.1.0
  */
+
 namespace PHPCodeBrowser;
 
 use \DOMElement;
@@ -152,11 +153,12 @@ abstract class AbstractPlugin
     /**
      * Gets a list of File objects, including their issues.
      *
-     * @return File[] List of files with issues.
+     * @return array<File> List of files with issues.
      */
     public function getFileList(): array
     {
         $files = [];
+
         foreach ($this->getFilesWithIssues() as $name) {
             $files[] = new File($name, $this->getIssuesByFile($name));
         }
@@ -175,6 +177,7 @@ abstract class AbstractPlugin
     public function getIssuesByFile(string $filename): array
     {
         $issues = [];
+
         foreach ($this->getIssueNodes($filename) as $issueNode) {
             $issues = array_merge(
                 $issues,
@@ -196,6 +199,7 @@ abstract class AbstractPlugin
         $issueNodes = $this->issueXml->query(
             sprintf('/*/%s/file[@name]', $this->pluginName)
         );
+
         foreach ($issueNodes as $node) {
             $fileNames[] = $node->getAttribute('name');
         }
@@ -217,10 +221,12 @@ abstract class AbstractPlugin
     public function mapIssues(DOMNode $element, string $filename): array
     {
         $errorList = [];
+
         foreach ($element->childNodes as $child) {
             if (!($child instanceof DOMElement)) {
                 continue;
             }
+
             $errorList[] = new Issue(
                 $filename,
                 $this->getLineStart($child),

@@ -87,15 +87,15 @@ class File
     /**
      * Issues associated with this file.
      *
-     * @var Issue[]
+     * @var array<Issue>
      */
     private $issues;
 
     /**
      * Default constructor.
      *
-     * @param string  $name   The name of the file.
-     * @param Issue[] $issues
+     * @param string       $name   The name of the file.
+     * @param array<Issue> $issues
      */
     public function __construct(string $name, array $issues = [])
     {
@@ -121,13 +121,14 @@ class File
                 'Tried to add issue to wrong file.'
             );
         }
+
         $this->issues[] = $issue;
     }
 
     /**
      * Gets an array containing the issues for this file.
      *
-     * @return Issue[] The issues.
+     * @return array<Issue> The issues.
      */
     public function getIssues(): array
     {
@@ -182,6 +183,7 @@ class File
     public function getErrorCount(): int
     {
         $count = 0;
+
         foreach ($this->issues as $issue) {
             if (strcasecmp($issue->severity, 'error') !== 0) {
                 continue;
@@ -217,13 +219,14 @@ class File
                 'Tried to merge different files'
             );
         }
+
         $this->issues = array_merge($this->issues, $file->issues);
     }
 
     /**
      * Sorts an array of Files. Key value association will be preserved.
      *
-     * @param File[] $files The files to sort.
+     * @param array<File> $files The files to sort.
      */
     public static function sort(array &$files): void
     {

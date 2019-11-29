@@ -50,6 +50,7 @@
  *
  * @since     File available since 1.1
  */
+
 namespace PHPCodeBrowser;
 
 use PHPCodeBrowser\Command\RunCommand;
@@ -92,7 +93,7 @@ class Application extends BaseApplication
     /**
      * Gets the default commands that should always be available.
      *
-     * @return Command[] An array of default Command instances
+     * @return array<Command> An array of default Command instances
      */
     protected function getDefaultCommands(): array
     {

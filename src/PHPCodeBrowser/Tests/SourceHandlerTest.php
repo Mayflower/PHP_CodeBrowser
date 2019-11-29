@@ -137,12 +137,14 @@ HERE
         ,
         ];
         $issueXML   = new IssueXML();
+
         foreach ($xmlStrings as $xmlString) {
             $xml                  = new \DOMDocument('1.0', 'UTF-8');
             $xml->validateOnParse = true;
             $xml->loadXML($xmlString);
             $issueXML->addXMLFile($xml);
         }
+
         $this->plugins = [
             new ErrorCheckstyle($issueXML),
             new ErrorPMD($issueXML),

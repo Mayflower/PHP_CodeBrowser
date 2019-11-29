@@ -83,7 +83,7 @@ class FileTest extends AbstractTestCase
     /**
      * Some issues to work with.
      *
-     * @var Issue[]
+     * @var array<Issue>
      */
     protected $issues;
 
@@ -151,7 +151,6 @@ class FileTest extends AbstractTestCase
         $issue = new Issue('/the/wrong/file/name.php', 39, 39, 'Checkstyle', 'm3', 'error');
         $this->file->addIssue($issue);
     }
-
 
     /**
      * Test the basename function

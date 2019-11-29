@@ -49,7 +49,6 @@
  * @since      File available since  0.1.0
  */
 
-
 namespace PHPCodeBrowser\Tests\View;
 
 use PHPCodeBrowser\File;

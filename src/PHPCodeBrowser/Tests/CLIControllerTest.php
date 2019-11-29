@@ -49,7 +49,6 @@
  * @since      File available since  0.1.0
  */
 
-
 namespace PHPCodeBrowser\Tests;
 
 use Monolog\Logger;

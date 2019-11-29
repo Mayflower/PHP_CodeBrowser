@@ -51,7 +51,6 @@
  * @since     File available since  0.1.0
  */
 
-
 namespace PHPCodeBrowser\Helper;
 
 use DirectoryIterator;
@@ -79,7 +78,6 @@ use DirectoryIterator;
  */
 class IOHelper
 {
-
     /**
      * Creates a file with given name and content.
      * If directories to file do not exists they will be created.
@@ -97,6 +95,7 @@ class IOHelper
         if (!empty($path)) {
             $this->createDirectory($path);
         }
+
         file_put_contents(realpath($path).'/'.$realName, $fileContent);
     }
 
@@ -194,6 +193,7 @@ class IOHelper
     public function deleteDirectory(string $source): void
     {
         $iterator = new DirectoryIterator($source);
+
         while ($iterator->valid()) {
             $src = realpath($source.'/'.$iterator->current());
 
@@ -209,6 +209,7 @@ class IOHelper
 
             $iterator->next();
         }
+
         unset($iterator);
 
         // delete the source root folder as well
@@ -231,6 +232,7 @@ class IOHelper
         // first check for target itself
         $this->createDirectory($target);
         $iterator = new DirectoryIterator($source);
+
         while ($iterator->valid()) {
             $item = $iterator->current();
 
@@ -249,6 +251,7 @@ class IOHelper
                     $target.'/'.$item
                 );
             }
+
             $iterator->next();
         }
     }
@@ -264,7 +267,9 @@ class IOHelper
         if (empty($fileNames)) {
             return '/';
         }
+
         $prefix = \dirname(array_shift($fileNames));
+
         foreach ($fileNames as $filename) {
             $prefix = self::getCurrentCommonPathPrefix($prefix, $filename);
         }

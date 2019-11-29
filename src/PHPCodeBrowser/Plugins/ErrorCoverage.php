@@ -136,12 +136,16 @@ class ErrorCoverage extends AbstractPlugin
             $end   = $begin;
 
             ++$next;
+
             while ($next < $childCount) {
                 $child = $children->item($next);
+
                 if (!$child instanceof DOMElement) {
                     ++$next;
+
                     continue;
                 }
+
                 if (!$this->representsUncoveredLOC($child)) {
                     break;
                 }
