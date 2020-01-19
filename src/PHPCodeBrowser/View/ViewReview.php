@@ -449,7 +449,7 @@ class ViewReview extends ViewAbstract
         $length = \strlen($value);
 
         for ($i = 0; $i < $length; ++$i) {
-            $current = \ord($value{$i});
+            $current = \ord($value[$i]);
 
             if ((0x9 === $current)
                 || (0xA === $current)
