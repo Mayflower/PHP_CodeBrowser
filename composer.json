@@ -23,7 +23,7 @@
         "symfony/console": "~3.4|~4.0|~5.0"
     },
     "require-dev": {
-        "kherge/box": "~2.7",
+        "humbug/box": "^3.8.3",
         "mayflower/mo4-coding-standard": "^5.0",
         "phploc/phploc": "*",
         "phpmd/phpmd": "1.5.*|~2.6",
