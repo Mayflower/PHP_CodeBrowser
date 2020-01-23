@@ -57,6 +57,6 @@
         ],
         "clean": "rm -rf build/logs/* build/code-browser",
         "browser": "bin/phpcb -l build/logs -o build/code-browser -s src",
-        "phar": "php -d phar.readonly=0 vendor/bin/box build"
+        "phar": "php vendor/bin/box compile"
     }
 }
