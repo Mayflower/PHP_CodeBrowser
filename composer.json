@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "ext-dom": "*",
         "monolog/monolog": "~1.7||~2.0",
         "phpunit/php-file-iterator": "~2.0||^3.0",
@@ -50,9 +50,12 @@
             "phploc -q --log-xml=build/logs/phploc.xml src || true",
             "@browser"
         ],
-        "travis": [
+        "ci-prepare": [
+            "composer update --prefer-dist --no-interaction --no-progress"
+        ],
+        "ci": [
             "phpcs -s --standard=MO4 src/PHPCodeBrowser/",
-            "phpstan analyse --no-progress --level=1 src/PHPCodeBrowser/",
+            "phpstan analyse --no-progress",
             "phpunit"
         ],
         "clean": "rm -rf build/logs/* build/code-browser",
