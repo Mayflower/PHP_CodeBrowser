@@ -59,14 +59,6 @@ use PHPCodeBrowser\Helper\IOHelper;
 use PHPCodeBrowser\View\ViewReview;
 use SebastianBergmann\FileIterator\Factory as FileIteratorFactory;
 
-if (!defined('PHPCB_ROOT_DIR')) {
-    define('PHPCB_ROOT_DIR', \dirname(__FILE__, 2).'/');
-}
-
-if (!defined('PHPCB_TEMPLATE_DIR')) {
-    define('PHPCB_TEMPLATE_DIR', \dirname(__FILE__, 3).'/templates');
-}
-
 /**
  * CLIController
  *
@@ -246,7 +238,7 @@ class CLIController
 
         // init needed classes
         $viewReview = new ViewReview(
-            PHPCB_TEMPLATE_DIR,
+            \getenv('PHPCB_TEMPLATE_DIR') ?: \dirname(__FILE__, 3).'/templates',
             $this->htmlOutputDir,
             $this->ioHelper,
             $this->phpSuffixes

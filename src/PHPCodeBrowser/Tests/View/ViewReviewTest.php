@@ -102,7 +102,7 @@ class ViewReviewTest extends AbstractTestCase
         $this->ioMock = $this->createMock(IOHelper::class);
 
         $this->viewReview = new ViewReview(
-            PHPCB_ROOT_DIR.'/../templates/',
+            \getenv('PHPCB_TEMPLATE_DIR') ?: \dirname(__FILE__, 5).'/templates',
             self::$testOutputDir,
             $this->ioMock
         );
