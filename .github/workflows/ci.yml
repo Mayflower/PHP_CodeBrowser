@@ -24,11 +24,9 @@ jobs:
           experimental-features = nix-command flakes
 
     - name: Get Composer cache dir
-      env:
-        COMPOSER_BIN: nix shell .github#env-${{ matrix.php }} --command composer
       id: composer-cache
       run: |
-        echo "::set-output name=dir::$(${{ COMPOSER_BIN }} config cache-dir)"
+        echo "::set-output name=dir::$(nix shell .github#env-${{ matrix.php }} --command composer config cache-dir)"
       shell: bash
 
     - name: Cache Composer dependencies
@@ -39,9 +37,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-composer-
 
-    - env:
-        COMPOSER_BIN: nix shell .github#env-${{ matrix.php }} --command composer
-      run: |
+    - run: |
         rm -fr vendor
-        ${{ COMPOSER_BIN }} ci-prepare
-        ${{ COMPOSER_BIN }} ci
+        nix shell .github#env-${{ matrix.php }} --command composer ci-prepare
+        nix shell .github#env-${{ matrix.php }} --command composer ci
