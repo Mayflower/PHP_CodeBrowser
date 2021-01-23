@@ -12,7 +12,7 @@ jobs:
           php: [php73, php74]
 
     env:
-      COMPOSER_BIN: nix shell .github#env-${{ matrix.php }} --command composer
+      COMPOSER_BIN: "nix shell .github#env-${{ matrix.php }} --command composer"
 
     steps:
     - uses: actions/checkout@v2
