@@ -11,9 +11,6 @@ jobs:
       matrix:
           php: [php73, php74]
 
-    env:
-      COMPOSER_BIN: "nix shell .github#env-${{ matrix.php }} --command composer"
-
     steps:
     - uses: actions/checkout@v2
       with:
@@ -27,6 +24,8 @@ jobs:
           experimental-features = nix-command flakes
 
     - name: Get Composer cache dir
+      env:
+        COMPOSER_BIN: nix shell .github#env-${{ matrix.php }} --command composer
       id: composer-cache
       run: |
         echo "::set-output name=dir::$(${{ COMPOSER_BIN }} config cache-dir)"
@@ -40,7 +39,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-composer-
 
-    - run: |
+    - env:
+        COMPOSER_BIN: nix shell .github#env-${{ matrix.php }} --command composer
+      run: |
         rm -fr vendor
         ${{ COMPOSER_BIN }} ci-prepare
         ${{ COMPOSER_BIN }} ci
