@@ -23,16 +23,10 @@ jobs:
         extra_nix_config: |
           experimental-features = nix-command flakes
 
-    - name: Get Composer cache dir
-      id: composer-cache
-      run: |
-        echo "::set-output name=dir::$(nix shell .github#env-${{ matrix.php }} --command composer config cache-dir)"
-      shell: bash
-
     - name: Cache Composer dependencies
       uses: actions/cache@v2
       with:
-        path: ${{ steps.composer-cache.outputs.dir }}
+        path: /home/runner/.cache/composer
         key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
           ${{ runner.os }}-composer-

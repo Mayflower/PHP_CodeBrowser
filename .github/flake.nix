@@ -8,14 +8,13 @@
 
       phpEnv = phpPackage: (phpPackage.buildEnv {
         extensions = { enabled, all }: (enabled ++ [ all.xdebug ]);
-        extraConfig = "" +
-          pkgs.lib.optionalString (pkgs.lib.versionOlder phpPackage.version "8.0") ''
-            xdebug.coverage_enable=1
-            xdebug.mode=coverage
-          '' +
-          pkgs.lib.optionalString (pkgs.lib.versionAtLeast phpPackage.version "8.0") ''
-            xdebug.mode=coverage
-          '';
+        extraConfig = ''
+          memory_limit=-1
+          xdebug.mode=coverage
+        '' +
+        pkgs.lib.optionalString (pkgs.lib.versionOlder phpPackage.version "8.0") ''
+          xdebug.coverage_enable=1
+        '';
       });
 
       phpVersions = [
