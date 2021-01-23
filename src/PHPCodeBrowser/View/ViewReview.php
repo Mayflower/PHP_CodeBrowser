@@ -1,4 +1,5 @@
 <?php
+
 /**
  * View Review
  *
@@ -36,21 +37,21 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Jan Mergler <jan.mergler@mayflower.de>
- * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Jan Mergler <jan.mergler@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     File available since  0.1.0
+ * @since File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\View;
@@ -65,21 +66,21 @@ use PHPCodeBrowser\Helper\IOHelper;
  *
  * This class is generating the highlighted and formatted html view for file.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Jan Mergler <jan.mergler@mayflower.de>
- * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Jan Mergler <jan.mergler@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     Class available since  0.1.0
+ * @since Class available since  0.1.0
  */
 class ViewReview extends ViewAbstract
 {
@@ -112,11 +113,11 @@ class ViewReview extends ViewAbstract
         parent::__construct($templateDir, $outputDir, $ioHelper);
 
         $this->phpHighlightColorMap = [
-            ini_get('highlight.string')  => 'string',
-            ini_get('highlight.comment') => 'comment',
-            ini_get('highlight.keyword') => 'keyword',
-            ini_get('highlight.default') => 'default',
-            ini_get('highlight.html')    => 'html',
+            \ini_get('highlight.string')  => 'string',
+            \ini_get('highlight.comment') => 'comment',
+            \ini_get('highlight.keyword') => 'keyword',
+            \ini_get('highlight.default') => 'default',
+            \ini_get('highlight.html')    => 'html',
         ];
 
         $this->phpSuffixes = $phpSuffixes;
@@ -144,7 +145,7 @@ class ViewReview extends ViewAbstract
     public function generate(array $issueList, string $fileName, string $commonPathPrefix, bool $excludeOK = false): void
     {
         $issues        = $this->formatIssues($issueList);
-        $shortFilename = substr($fileName, \strlen($commonPathPrefix));
+        $shortFilename = \substr($fileName, \strlen($commonPathPrefix));
 
         $data = [];
 
@@ -152,8 +153,8 @@ class ViewReview extends ViewAbstract
         $data['filepath'] = $shortFilename;
         $data['source']   = $this->formatSourceCode($fileName, $issues);
 
-        $depth           = substr_count($shortFilename, DIRECTORY_SEPARATOR);
-        $data['csspath'] = str_repeat('../', $depth - 1 >= 0 ? $depth - 1 : 0);
+        $depth           = \substr_count($shortFilename, DIRECTORY_SEPARATOR);
+        $data['csspath'] = \str_repeat('../', $depth - 1 >= 0 ? $depth - 1 : 0);
 
         //we want to exclude files without issues and there are no issues in this one
         if ($excludeOK && !$data['issues']) {
@@ -179,19 +180,19 @@ class ViewReview extends ViewAbstract
      */
     protected function highlightPhpCode(string $sourceCode): DOMDocument
     {
-        $code = highlight_string($sourceCode, true);
+        $code = \highlight_string($sourceCode, true);
 
-        if (\extension_loaded('mbstring') && !mb_check_encoding($code, 'UTF-8')) {
-            $detectOrder   = mb_detect_order();
+        if (\extension_loaded('mbstring') && !\mb_check_encoding($code, 'UTF-8')) {
+            $detectOrder   = \mb_detect_order();
             $detectOrder[] = 'iso-8859-1';
 
-            $encoding = mb_detect_encoding($code, $detectOrder, true);
+            $encoding = \mb_detect_encoding($code, $detectOrder, true);
 
             if (false === $encoding) {
-                error_log('Error detecting file encoding');
+                \error_log('Error detecting file encoding');
             }
 
-            $code = mb_convert_encoding(
+            $code = \mb_convert_encoding(
                 $code,
                 'UTF-8',
                 $encoding
@@ -203,7 +204,7 @@ class ViewReview extends ViewAbstract
 
         //fetch <code>-><span>->children from php generated html
         $sourceElements = $sourceDom->getElementsByTagname('code')->item(0)
-                                    ->childNodes->item(0)->childNodes;
+            ->childNodes->item(0)->childNodes;
 
         //create target dom
         $targetDom  = new DOMDocument();
@@ -218,7 +219,7 @@ class ViewReview extends ViewAbstract
         foreach ($sourceElements as $sourceElement) {
             if (!$sourceElement instanceof DOMElement) {
                 $span            = $targetDom->createElement('span');
-                $span->nodeValue = htmlspecialchars($sourceElement->wholeText);
+                $span->nodeValue = \htmlspecialchars($sourceElement->wholeText);
                 $liElement->appendChild($span);
 
                 continue;
@@ -246,7 +247,7 @@ class ViewReview extends ViewAbstract
                 } else {
                     // append content to current li element
                     $span            = $targetDom->createElement('span');
-                    $span->nodeValue = htmlspecialchars($sourceChildElement->textContent);
+                    $span->nodeValue = \htmlspecialchars($sourceChildElement->textContent);
                     $span->setAttribute('class', $elementClass);
                     $liElement->appendChild($span);
                 }
@@ -265,7 +266,7 @@ class ViewReview extends ViewAbstract
      */
     protected function mapPhpColors(string $style): string
     {
-        $color = substr($style, 7);
+        $color = \substr($style, 7);
 
         return $this->phpHighlightColorMap[$color];
     }
@@ -284,18 +285,18 @@ class ViewReview extends ViewAbstract
     protected function highlightCode(string $file): DOMDocument
     {
         $sourceCode = $this->ioHelper->loadFile($file);
-        $extension  = pathinfo($file, PATHINFO_EXTENSION);
+        $extension  = \pathinfo($file, PATHINFO_EXTENSION);
 
         if (\in_array($extension, $this->phpSuffixes)) {
             return $this->highlightPhpCode($sourceCode);
         }
 
-        $sourceCode = preg_replace(
+        $sourceCode = \preg_replace(
             '/^.*$/m',
             '<li>$0</li>',
-            htmlentities($sourceCode)
+            \htmlentities($sourceCode)
         );
-        $sourceCode = preg_replace('/ /', '&nbsp;', $sourceCode);
+        $sourceCode = \preg_replace('/ /', '&nbsp;', $sourceCode);
         $sourceCode = '<div class="code"><ol class="code">'.$sourceCode.'</ol></div>';
         $sourceCode = $this->stripInvalidXml($sourceCode);
 
@@ -329,10 +330,12 @@ class ViewReview extends ViewAbstract
         }
 
         $lineNumber = 0;
-        $linePlaces = floor(log($lines->length, 10)) + 1;
+        $linePlaces = \floor(\log($lines->length, 10)) + 1;
 
         foreach ($lines as $line) {
-            /** @var DOMElement $line */
+            /**
+ * @var DOMElement $line
+*/
             $line = $line;
             ++$lineNumber;
             $line->setAttribute('id', 'line_'.$lineNumber);
@@ -346,7 +349,7 @@ class ViewReview extends ViewAbstract
                 $message       = '|';
 
                 foreach ($outputIssues[$lineNumber] as $issue) {
-                    $message .= sprintf(
+                    $message .= \sprintf(
                         '
                         <div class="tooltip">
                             <div class="title %s">%s</div>
@@ -359,7 +362,7 @@ class ViewReview extends ViewAbstract
                     );
                 }
 
-                $line->setAttribute('title', utf8_encode($message));
+                $line->setAttribute('title', \utf8_encode($message));
             }
 
             // Add line number
@@ -402,7 +405,7 @@ class ViewReview extends ViewAbstract
                 // @codeCoverageIgnoreEnd
             }
 
-            $line->setAttribute('class', implode(' ', $lineClasses));
+            $line->setAttribute('class', \implode(' ', $lineClasses));
         }
 
         return $sourceDom->saveHTML();

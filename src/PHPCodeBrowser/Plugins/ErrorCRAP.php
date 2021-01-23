@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CRAP
  *
@@ -36,19 +37,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      File available since  0.2.0
+ * @since File available since  0.2.0
  */
 
 namespace PHPCodeBrowser\Plugins;
@@ -62,19 +63,19 @@ use PHPCodeBrowser\Issue;
 /**
  * ErrorCRAP
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      Class available since  0.2.0
+ * @since Class available since  0.2.0
  */
 class ErrorCRAP extends AbstractPlugin
 {
@@ -97,12 +98,14 @@ class ErrorCRAP extends AbstractPlugin
     /**
      * Name of the attribute that holds the number of the last line
      * of the issue.
+     *
      * @var string
      */
     protected $lineEndAttr = 'num';
 
     /**
      * Default string to use as source for issue.
+     *
      * @var string
      */
     protected $source = 'CRAP';
@@ -136,7 +139,7 @@ class ErrorCRAP extends AbstractPlugin
                 continue;
             }
 
-            if (array_key_exists('threshold', $this->options)
+            if (\array_key_exists('threshold', $this->options)
                 && $crap <= $this->options['threshold']
             ) {
                 continue;
@@ -171,7 +174,7 @@ class ErrorCRAP extends AbstractPlugin
             $fileNames[] = $node->getAttribute('name');
         }
 
-        return array_unique($fileNames);
+        return \array_unique($fileNames);
     }
 
     /**

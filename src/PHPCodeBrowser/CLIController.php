@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Cli controller
  *
@@ -36,20 +37,20 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     File available since  0.1.0
+ * @since File available since  0.1.0
  */
 
 namespace PHPCodeBrowser;
@@ -62,21 +63,21 @@ use SebastianBergmann\FileIterator\Factory as FileIteratorFactory;
 /**
  * CLIController
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Michel Hartmann <michel.hartmann@mayflower.de>
- * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Michel Hartmann <michel.hartmann@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     Class available since  0.1.0
+ * @since Class available since  0.1.0
  */
 class CLIController
 {
@@ -228,9 +229,9 @@ class CLIController
     public function run(): void
     {
         // clear and create output directory
-        if (is_dir($this->htmlOutputDir)) {
+        if (\is_dir($this->htmlOutputDir)) {
             $this->ioHelper->deleteDirectory($this->htmlOutputDir);
-        } elseif (is_file($this->htmlOutputDir)) {
+        } elseif (\is_file($this->htmlOutputDir)) {
             $this->ioHelper->deleteFile($this->htmlOutputDir);
         }
 
@@ -254,7 +255,7 @@ class CLIController
 
             // conversion of XML file cc to cb format
             foreach ($this->registeredPlugins as $className) {
-                $plugin = array_key_exists($className, $this->pluginOptions) ? new $className(
+                $plugin = \array_key_exists($className, $this->pluginOptions) ? new $className(
                     $issueXml,
                     $this->pluginOptions[$className]
                 ) : new $className($issueXml);
@@ -264,10 +265,10 @@ class CLIController
 
         if (null !== $this->projectSource) {
             foreach ($this->projectSource as $source) {
-                if (is_dir($source)) {
+                if (\is_dir($source)) {
                     $factory = new FileIteratorFactory();
 
-                    $suffixes = array_merge(
+                    $suffixes = \array_merge(
                         $this->phpSuffixes,
                         ['php', 'js', 'css', 'html']
                     );
@@ -284,11 +285,11 @@ class CLIController
             }
         }
 
-        array_walk(
+        \array_walk(
             $this->excludeExpressions,
             [$sourceHandler, 'excludeMatchingPCRE']
         );
-        array_walk(
+        \array_walk(
             $this->excludePatterns,
             [$sourceHandler, 'excludeMatchingPattern']
         );

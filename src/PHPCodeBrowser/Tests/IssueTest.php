@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test case
  *
@@ -34,19 +35,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      File available since  0.1.0
+ * @since File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Tests;
@@ -56,19 +57,19 @@ use PHPCodeBrowser\Issue;
 /**
  * IssueTest
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      Class available since  0.1.0
+ * @since Class available since  0.1.0
  */
 class IssueTest extends AbstractTestCase
 {
@@ -81,6 +82,7 @@ class IssueTest extends AbstractTestCase
 
     /**
      * (non-PHPDoc)
+     *
      * @see tests/cbAbstractTests#setUp()
      */
     protected function setUp(): void
@@ -98,6 +100,7 @@ class IssueTest extends AbstractTestCase
 
     /**
      * (non-PHPDoc)
+     *
      * @see tests/cbAbstractTests#tearDown()
      */
     protected function tearDown(): void

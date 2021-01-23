@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Input and output helper
  *
@@ -36,19 +37,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
  *
  * @copyright 2007-2009 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     File available since  0.1.0
+ * @since File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Helper;
@@ -61,20 +62,20 @@ use DirectoryIterator;
  * Input output helper class provides several methods for writing and
  * reading files or directories.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Christopher Weckerle <christopher.weckerle@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Christopher Weckerle <christopher.weckerle@mayflower.de>
  *
  * @copyright 2007-2009 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     Class available since  0.1.0
+ * @since Class available since  0.1.0
  */
 class IOHelper
 {
@@ -89,14 +90,14 @@ class IOHelper
      */
     public function createFile(string $fileName, string $fileContent): void
     {
-        $realName = basename($fileName);
-        $path     = substr($fileName, 0, - 1 * (\strlen($realName)));
+        $realName = \basename($fileName);
+        $path     = \substr($fileName, 0, - 1 * (\strlen($realName)));
 
         if (!empty($path)) {
             $this->createDirectory($path);
         }
 
-        file_put_contents(realpath($path).'/'.$realName, $fileContent);
+        \file_put_contents(\realpath($path).'/'.$realName, $fileContent);
     }
 
     /**
@@ -110,11 +111,11 @@ class IOHelper
      */
     public function deleteFile(string $fileName): void
     {
-        if (!file_exists($fileName)) {
+        if (!\file_exists($fileName)) {
             return;
         }
 
-        unlink($fileName);
+        \unlink($fileName);
     }
 
     /**
@@ -130,11 +131,11 @@ class IOHelper
      */
     public function copyFile(string $fileSource, string $sourceFolder): void
     {
-        if (!file_exists($fileSource)) {
-            throw new \Exception(sprintf('File %s does not exist!', $fileSource));
+        if (!\file_exists($fileSource)) {
+            throw new \Exception(\sprintf('File %s does not exist!', $fileSource));
         }
 
-        $fileName = basename($fileSource);
+        $fileName = \basename($fileSource);
         $this->createFile(
             $sourceFolder.'/'.$fileName,
             $this->loadFile($fileSource)
@@ -152,11 +153,11 @@ class IOHelper
      */
     public function loadFile(string $fileName): string
     {
-        if (!file_exists($fileName)) {
-            throw new \Exception(sprintf('File %s does not exist!', $fileName));
+        if (!\file_exists($fileName)) {
+            throw new \Exception(\sprintf('File %s does not exist!', $fileName));
         }
 
-        return trim(file_get_contents($fileName));
+        return \trim(\file_get_contents($fileName));
     }
 
     /**
@@ -169,14 +170,14 @@ class IOHelper
      */
     public function createDirectory(string $target): void
     {
-        $target = rtrim($target, DIRECTORY_SEPARATOR);
+        $target = \rtrim($target, DIRECTORY_SEPARATOR);
 
-        if (is_dir($target)) {
+        if (\is_dir($target)) {
             return;
         }
 
-        if (!mkdir($target, 0777, true) && !is_dir($target)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $target));
+        if (!\mkdir($target, 0777, true) && !\is_dir($target)) {
+            throw new \RuntimeException(\sprintf('Directory "%s" was not created', $target));
         }
     }
 
@@ -195,7 +196,7 @@ class IOHelper
         $iterator = new DirectoryIterator($source);
 
         while ($iterator->valid()) {
-            $src = realpath($source.'/'.$iterator->current());
+            $src = \realpath($source.'/'.$iterator->current());
 
             // delete file
             if ($iterator->isFile()) {
@@ -213,8 +214,8 @@ class IOHelper
         unset($iterator);
 
         // delete the source root folder as well
-        if (!rmdir($source)) {
-            throw new \Exception(sprintf('Could not delete directory %s', $source));
+        if (!\rmdir($source)) {
+            throw new \Exception(\sprintf('Could not delete directory %s', $source));
         }
     }
 
@@ -258,6 +259,7 @@ class IOHelper
 
     /**
      * Get the prefix all paths in an array of paths have in common.
+     *
      * @param array $fileNames
      *
      * @return string
@@ -268,13 +270,13 @@ class IOHelper
             return '/';
         }
 
-        $prefix = \dirname(array_shift($fileNames));
+        $prefix = \dirname(\array_shift($fileNames));
 
         foreach ($fileNames as $filename) {
             $prefix = self::getCurrentCommonPathPrefix($prefix, $filename);
         }
 
-        if (substr($prefix, -1, 1) !== DIRECTORY_SEPARATOR) {
+        if (\substr($prefix, -1, 1) !== DIRECTORY_SEPARATOR) {
             $prefix .= DIRECTORY_SEPARATOR;
         }
 
@@ -283,6 +285,7 @@ class IOHelper
 
     /**
      * Get the part of currentPrefix that currentPrefix and path have in common.
+     *
      * @param string $currentPrefix
      * @param string $path
      *
@@ -290,11 +293,11 @@ class IOHelper
      */
     protected static function getCurrentCommonPathPrefix(string $currentPrefix, string $path): string
     {
-        if (0 === strpos($path, $currentPrefix.DIRECTORY_SEPARATOR)
+        if (0 === \strpos($path, $currentPrefix.DIRECTORY_SEPARATOR)
             || DIRECTORY_SEPARATOR === $currentPrefix
             || '' === $currentPrefix
             || '.' === $currentPrefix
-            || preg_match('/^[A-Z]\:\\\\$/', $currentPrefix) === 1
+            || \preg_match('/^[A-Z]\:\\\\$/', $currentPrefix) === 1
         ) {
             return $currentPrefix;
         }

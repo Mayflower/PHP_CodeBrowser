@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application
  *
@@ -36,19 +37,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Robin Gloster <robin.gloster@mayflower.de>
+ * @author Robin Gloster <robin.gloster@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     File available since 1.1
+ * @since File available since 1.1
  */
 
 namespace PHPCodeBrowser;

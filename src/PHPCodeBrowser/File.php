@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File
  *
@@ -36,19 +37,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     File available since 0.2.0
+ * @since File available since 0.2.0
  */
 
 namespace PHPCodeBrowser;
@@ -61,19 +62,19 @@ use PHPCodeBrowser\Helper\IOHelper;
  * An object of this class represents a single source file
  * with it's issues, if any.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link      http://github.com/mayflowergmbh
+ * @link http://github.com/mayflowergmbh
  *
- * @since     Class available since 0.2.0
+ * @since Class available since 0.2.0
  */
 class File
 {
@@ -100,7 +101,7 @@ class File
     public function __construct(string $name, array $issues = [])
     {
         if (DIRECTORY_SEPARATOR !== '/') {
-            $name = str_replace('/', DIRECTORY_SEPARATOR, $name);
+            $name = \str_replace('/', DIRECTORY_SEPARATOR, $name);
         }
 
         $this->name   = $name;
@@ -152,7 +153,7 @@ class File
      */
     public function basename(): string
     {
-        return basename($this->name);
+        return \basename($this->name);
     }
 
     /**
@@ -185,7 +186,7 @@ class File
         $count = 0;
 
         foreach ($this->issues as $issue) {
-            if (strcasecmp($issue->severity, 'error') !== 0) {
+            if (\strcasecmp($issue->severity, 'error') !== 0) {
                 continue;
             }
 
@@ -220,7 +221,7 @@ class File
             );
         }
 
-        $this->issues = array_merge($this->issues, $file->issues);
+        $this->issues = \array_merge($this->issues, $file->issues);
     }
 
     /**
@@ -230,7 +231,7 @@ class File
      */
     public static function sort(array &$files): void
     {
-        uasort($files, 'PHPCodeBrowser\File::internalSort');
+        \uasort($files, 'PHPCodeBrowser\File::internalSort');
     }
 
     /**
@@ -249,16 +250,16 @@ class File
         $prefix       = IOHelper::getCommonPathPrefix([$firstName, $secondName]);
         $prefixLength = \strlen($prefix);
 
-        $firstSubName  = substr($firstName, $prefixLength);
-        $secondSubName = substr($secondName, $prefixLength);
+        $firstSubName  = \substr($firstName, $prefixLength);
+        $secondSubName = \substr($secondName, $prefixLength);
 
-        $firstIsInSubDir  = (substr_count($firstSubName, DIRECTORY_SEPARATOR) !== 0);
-        $secondIsInSubDir = (substr_count($secondSubName, DIRECTORY_SEPARATOR) !== 0);
+        $firstIsInSubDir  = (\substr_count($firstSubName, DIRECTORY_SEPARATOR) !== 0);
+        $secondIsInSubDir = (\substr_count($secondSubName, DIRECTORY_SEPARATOR) !== 0);
 
         if ($firstIsInSubDir) {
-            return $secondIsInSubDir ? strcmp($firstSubName, $secondSubName) : -1;
+            return $secondIsInSubDir ? \strcmp($firstSubName, $secondSubName) : -1;
         }
 
-        return $secondIsInSubDir ? 1 : strcmp($firstSubName, $secondSubName);
+        return $secondIsInSubDir ? 1 : \strcmp($firstSubName, $secondSubName);
     }
 }

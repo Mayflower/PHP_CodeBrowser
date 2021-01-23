@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test case
  *
@@ -34,19 +35,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      File available since  0.1.0
+ * @since File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Tests\Helper;
@@ -57,19 +58,19 @@ use PHPCodeBrowser\Tests\AbstractTestCase;
 /**
  * IOHelperTest
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      Class available since  0.1.0
+ * @since Class available since  0.1.0
  */
 class IOHelperTest extends AbstractTestCase
 {
@@ -82,6 +83,7 @@ class IOHelperTest extends AbstractTestCase
 
     /**
      * (non-PHPDoc)
+     *
      * @see AbstractTestCase::setUp()
      */
     protected function setUp(): void
@@ -101,15 +103,15 @@ class IOHelperTest extends AbstractTestCase
         $filename = self::$testOutputDir.'/tmpfile';
         $content  = 'Lorem ipsum';
 
-        if (file_exists($filename)) {
-            unlink($filename);
+        if (\file_exists($filename)) {
+            \unlink($filename);
         }
 
         $this->ioHelper->createFile($filename, $content);
         $this->assertFileExists($filename);
-        $this->assertEquals($content, file_get_contents($filename));
+        $this->assertEquals($content, \file_get_contents($filename));
 
-        unlink($filename);
+        \unlink($filename);
     }
 
     /**
@@ -123,20 +125,20 @@ class IOHelperTest extends AbstractTestCase
         $filename = $dirName.'/tmpfile';
         $content  = 'Lorem ipsum';
 
-        if (file_exists($filename)) {
-            unlink($filename);
-            rmdir($dirName);
-        } elseif (file_exists($dirName)) {
-            rmdir($dirName);
+        if (\file_exists($filename)) {
+            \unlink($filename);
+            \rmdir($dirName);
+        } elseif (\file_exists($dirName)) {
+            \rmdir($dirName);
         }
 
         $this->ioHelper->createFile($filename, $content);
         $this->assertFileExists($dirName);
         $this->assertFileExists($filename);
-        $this->assertEquals($content, file_get_contents($filename));
+        $this->assertEquals($content, \file_get_contents($filename));
 
-        unlink($filename);
-        rmdir($dirName);
+        \unlink($filename);
+        \rmdir($dirName);
     }
 
     /**
@@ -148,8 +150,8 @@ class IOHelperTest extends AbstractTestCase
     {
         $filename = self::$testOutputDir.'/tmpfile';
 
-        if (!file_exists($filename)) {
-            file_put_contents($filename, 'Lorem ipsum');
+        if (!\file_exists($filename)) {
+            \file_put_contents($filename, 'Lorem ipsum');
         }
 
         $this->ioHelper->deleteFile($filename);
@@ -167,9 +169,9 @@ class IOHelperTest extends AbstractTestCase
         $file   = $dir.'/file';
         $subDir = $dir.'/subDir';
 
-        mkdir($dir);
-        mkdir($subDir);
-        touch($file);
+        \mkdir($dir);
+        \mkdir($subDir);
+        \touch($file);
 
         $this->ioHelper->deleteDirectory($dir);
         $this->assertFileNotExists($dir);
@@ -187,26 +189,26 @@ class IOHelperTest extends AbstractTestCase
         $dstFile = $dstDir.'/tmpfile';
         $content = 'Lorem ipsum';
 
-        if (file_exists($srcFile)) {
-            unlink($srcFile);
+        if (\file_exists($srcFile)) {
+            \unlink($srcFile);
         }
 
-        if (file_exists($dstFile)) {
-            rmdir($dstFile);
+        if (\file_exists($dstFile)) {
+            \rmdir($dstFile);
         }
 
-        file_put_contents($srcFile, $content);
+        \file_put_contents($srcFile, $content);
 
         $this->ioHelper->copyFile($srcFile, $dstDir);
         $this->assertFileExists($srcFile);
         $this->assertFileExists($dstDir);
         $this->assertFileExists($dstFile);
-        $this->assertEquals($content, file_get_contents($dstFile));
-        $this->assertEquals($content, file_get_contents($srcFile));
+        $this->assertEquals($content, \file_get_contents($dstFile));
+        $this->assertEquals($content, \file_get_contents($srcFile));
 
-        unlink($dstFile);
-        rmdir($dstDir);
-        unlink($srcFile);
+        \unlink($dstFile);
+        \rmdir($dstDir);
+        \unlink($srcFile);
     }
 
     /**
@@ -220,8 +222,8 @@ class IOHelperTest extends AbstractTestCase
 
         $sourceFile = self::$testOutputDir.'/doesNotExist';
 
-        if (file_exists($sourceFile)) {
-            unlink(self::$testOutputDir.'/doesNotExist');
+        if (\file_exists($sourceFile)) {
+            \unlink(self::$testOutputDir.'/doesNotExist');
         }
 
         $this->ioHelper->loadFile($sourceFile);
@@ -239,8 +241,8 @@ class IOHelperTest extends AbstractTestCase
         $file   = self::$testOutputDir.'/tmpfile';
         $dstDir = self::$testOutputDir.'/tmpdir';
 
-        if (file_exists($file)) {
-            unlink($file);
+        if (\file_exists($file)) {
+            \unlink($file);
         }
 
         $this->ioHelper->copyFile($file, $dstDir);

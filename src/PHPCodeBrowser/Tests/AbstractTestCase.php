@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test case
  *
@@ -34,19 +35,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Elger Thiele <elger.thiele@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
  *
- * @copyright  2007-2009 Mayflower GmbH
+ * @copyright 2007-2009 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      File available since  0.1.0
+ * @since File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Tests;
@@ -54,19 +55,19 @@ namespace PHPCodeBrowser\Tests;
 /**
  * AbstractTests
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Elger Thiele <elger.thiele@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
  *
- * @copyright  2007-2009 Mayflower GmbH
+ * @copyright 2007-2009 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      Class available since  0.1.0
+ * @since Class available since  0.1.0
  */
 class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
@@ -115,13 +116,13 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
         parent::setUp();
 
         if (!\defined('PHPCB_SOURCE_DIR')) {
-            \define('PHPCB_SOURCE_DIR', realpath(__DIR__.'/../'));
+            \define('PHPCB_SOURCE_DIR', \realpath(__DIR__.'/../'));
         }
 
         if (!\defined('PHPCB_TEST_DIR')) {
             \define(
                 'PHPCB_TEST_DIR',
-                realpath(PHPCB_SOURCE_DIR).DIRECTORY_SEPARATOR.'Tests'.DIRECTORY_SEPARATOR.'testData'
+                \realpath(PHPCB_SOURCE_DIR).DIRECTORY_SEPARATOR.'Tests'.DIRECTORY_SEPARATOR.'testData'
             );
         }
 
@@ -131,16 +132,16 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
 
         self::$xmlBasic = PHPCB_TEST_LOGS.'/basic.xml';
 
-        self::$phpcbSourceDir = realpath(__DIR__.'/Fixtures');
+        self::$phpcbSourceDir = \realpath(__DIR__.'/Fixtures');
 
         self::$testOutputDir = PHPCB_TEST_DIR.DIRECTORY_SEPARATOR.'output';
 
-        if (is_dir(self::$testOutputDir)) {
+        if (\is_dir(self::$testOutputDir)) {
             $this->cleanUp(self::$testOutputDir);
-            rmdir(self::$testOutputDir);
+            \rmdir(self::$testOutputDir);
         }
 
-        mkdir(self::$testOutputDir);
+        \mkdir(self::$testOutputDir);
     }
 
     /**
@@ -154,7 +155,7 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
         parent::tearDown();
 
         $this->cleanUp(self::$testOutputDir);
-        rmdir(self::$testOutputDir);
+        \rmdir(self::$testOutputDir);
     }
 
     /**
@@ -164,7 +165,7 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
      */
     protected function getSerializedErrors(): array
     {
-        return unserialize(file_get_contents(self::$serializedErrors));
+        return \unserialize(\file_get_contents(self::$serializedErrors));
     }
 
     /**
@@ -181,13 +182,13 @@ class AbstractTestCase extends \PHPUnit\Framework\TestCase
         while ($iterator->valid()) {
             // delete file
             if ($iterator->isFile()) {
-                unlink($dir.'/'.$iterator->current());
+                \unlink($dir.'/'.$iterator->current());
             }
 
             // delete folder recursive
             if (!$iterator->isDot() && $iterator->isDir()) {
                 $this->cleanUp($dir.'/'.$iterator->current());
-                rmdir($dir.'/'.$iterator->current());
+                \rmdir($dir.'/'.$iterator->current());
             }
 
             $iterator->next();

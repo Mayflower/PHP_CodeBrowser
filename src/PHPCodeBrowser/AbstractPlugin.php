@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Abstract Plugin
  *
@@ -36,45 +37,45 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Michel Hartmann <michel.hartmann@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Michel Hartmann <michel.hartmann@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     File available since  0.1.0
+ * @since File available since  0.1.0
  */
 
 namespace PHPCodeBrowser;
 
-use \DOMElement;
-use \DOMNode;
-use \DOMNodeList;
+use DOMElement;
+use DOMNode;
+use DOMNodeList;
 
 /**
  * AbstractPlugin
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Michel Hartmann <michel.hartmann@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Michel Hartmann <michel.hartmann@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     Class available since  0.1.0
+ * @since Class available since  0.1.0
  */
 abstract class AbstractPlugin
 {
@@ -179,7 +180,7 @@ abstract class AbstractPlugin
         $issues = [];
 
         foreach ($this->getIssueNodes($filename) as $issueNode) {
-            $issues = array_merge(
+            $issues = \array_merge(
                 $issues,
                 $this->mapIssues($issueNode, $filename)
             );
@@ -197,14 +198,14 @@ abstract class AbstractPlugin
     {
         $fileNames  = [];
         $issueNodes = $this->issueXml->query(
-            sprintf('/*/%s/file[@name]', $this->pluginName)
+            \sprintf('/*/%s/file[@name]', $this->pluginName)
         );
 
         foreach ($issueNodes as $node) {
             $fileNames[] = $node->getAttribute('name');
         }
 
-        return array_unique($fileNames);
+        return \array_unique($fileNames);
     }
 
     /**
@@ -250,12 +251,13 @@ abstract class AbstractPlugin
     protected function getIssueNodes(string $filename): DOMNodeList
     {
         return $this->issueXml->query(
-            sprintf('/*/%s/file[@name="%s"]', $this->pluginName, $filename)
+            \sprintf('/*/%s/file[@name="%s"]', $this->pluginName, $filename)
         );
     }
 
     /**
      * Default method for retrieving the first line of an issue.
+     *
      * @see self::mapIssues
      *
      * @param DOMElement $element
@@ -269,6 +271,7 @@ abstract class AbstractPlugin
 
     /**
      * Default method for retrieving the last line of an issue.
+     *
      * @see self::mapIssues
      *
      * @param DOMElement $element
@@ -282,6 +285,7 @@ abstract class AbstractPlugin
 
     /**
      * Default method for retrieving the source of an issue.
+     *
      * @see self::mapIssues
      *
      * @return string
@@ -293,6 +297,7 @@ abstract class AbstractPlugin
 
     /**
      * Default method for retrieving the description of an issue.
+     *
      * @see self::mapIssues
      *
      * @param DOMElement $element
@@ -301,11 +306,12 @@ abstract class AbstractPlugin
      */
     protected function getDescription(DOMElement $element): string
     {
-        return htmlentities($element->getAttribute($this->descriptionAttr));
+        return \htmlentities($element->getAttribute($this->descriptionAttr));
     }
 
     /**
      * Default method for retrieving the severity of an issue.
+     *
      * @see self::mapIssues
      *
      * @param DOMElement $element
@@ -314,6 +320,6 @@ abstract class AbstractPlugin
      */
     protected function getSeverity(DOMElement $element): string
     {
-        return htmlentities($element->getAttribute($this->severityAttr));
+        return \htmlentities($element->getAttribute($this->severityAttr));
     }
 }

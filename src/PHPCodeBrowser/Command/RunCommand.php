@@ -1,4 +1,5 @@
 <?php
+
 /**
  * RunCommand
  *
@@ -36,19 +37,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Robin Gloster <robin.gloster@mayflower.de>
+ * @author Robin Gloster <robin.gloster@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     File available since 1.1
+ * @since File available since 1.1
  */
 
 namespace PHPCodeBrowser\Command;
@@ -79,9 +80,9 @@ class RunCommand extends Command
      */
     protected function configure(): void
     {
-        $plugins = array_map(
+        $plugins = \array_map(
             static function ($class) {
-                return '"'.substr($class, \strlen('Error')).'"';
+                return '"'.\substr($class, \strlen('Error')).'"';
             },
             $this->getAvailablePlugins()
         );
@@ -139,7 +140,7 @@ class RunCommand extends Command
                 'disablePlugin',
                 null,
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'Disable single Plugins. Can be one of '.implode(', ', $plugins)
+                'Disable single Plugins. Can be one of '.\implode(', ', $plugins)
             )->addOption(
                 'crapThreshold',
                 null,
@@ -182,7 +183,7 @@ class RunCommand extends Command
             ['CRAP' => ['threshold' => $input->getOption('crapThreshold')]],
             new IOHelper(),
             $logger,
-            array_merge($extensions, ['php']),
+            \array_merge($extensions, ['php']),
             (bool) $input->getOption('excludeOK')
         );
 
@@ -193,7 +194,7 @@ class RunCommand extends Command
         try {
             $controller->run();
         } catch (Exception $e) {
-            error_log(
+            \error_log(
                 <<<HERE
                 [Error] {$e->getMessage()}
 
@@ -216,15 +217,15 @@ HERE
             if (!$input->getOption('source')) {
                 throw new \InvalidArgumentException('Missing log or source argument.');
             }
-        } elseif (!file_exists((string) $input->getOption('log'))) {
+        } elseif (!\file_exists((string) $input->getOption('log'))) {
             throw new \InvalidArgumentException('Log directory does not exist.');
-        } elseif (!is_dir((string) $input->getOption('log'))) {
+        } elseif (!\is_dir((string) $input->getOption('log'))) {
             throw new \InvalidArgumentException('Log argument must be a directory, a file was given.');
         }
 
         if ($input->getOption('source')) {
             foreach ($input->getOption('source') as $s) {
-                if (!file_exists($s)) {
+                if (!\file_exists($s)) {
                     throw new \InvalidArgumentException("Source '{$s}' does not exist");
                 }
             }
@@ -234,7 +235,7 @@ HERE
             throw new \InvalidArgumentException('Missing output argument.');
         }
 
-        if (file_exists((string) $input->getOption('output')) && !is_dir((string) $input->getOption('output'))) {
+        if (\file_exists((string) $input->getOption('output')) && !\is_dir((string) $input->getOption('output'))) {
             throw new \InvalidArgumentException('Output argument must be a directory, a file was given.');
         }
     }
@@ -266,15 +267,15 @@ HERE
      */
     protected function disablePlugins(array $disabledPlugins, array $plugins): array
     {
-        $disabledPlugins = array_map(
+        $disabledPlugins = \array_map(
             'strtolower',
             $disabledPlugins
         );
 
         foreach ($plugins as $pluginKey => $plugin) {
-            $name = substr($plugin, \strlen('Error'));
+            $name = \substr($plugin, \strlen('Error'));
 
-            if (!\in_array(strtolower($name), $disabledPlugins)) {
+            if (!\in_array(\strtolower($name), $disabledPlugins)) {
                 continue;
             }
 
@@ -295,15 +296,15 @@ HERE
      */
     protected function convertIgnores(array $ignored, array $excludePCRE): array
     {
-        $dirSep = preg_quote(DIRECTORY_SEPARATOR, '/');
+        $dirSep = \preg_quote(DIRECTORY_SEPARATOR, '/');
 
         foreach ($ignored as $ignore) {
-            $ig = realpath($ignore);
+            $ig = \realpath($ignore);
 
             if (!$ig) {
-                error_log("[Warning] {$ignore} does not exists");
+                \error_log("[Warning] {$ignore} does not exists");
             } else {
-                $ig            = preg_quote($ig, '/');
+                $ig            = \preg_quote($ig, '/');
                 $excludePCRE[] = "/^{$ig}({$dirSep}|$)/";
             }
         }
@@ -320,9 +321,9 @@ HERE
      */
     private function handleBackwardCompatibility(array $option): array
     {
-        if (\count($option) === 1 && strpos($option[0], ',') !== false) {
-            $option = explode(',', $option[0]);
-            error_log('Usage of comma-separated options is deprecated, specify them one-by-one.', E_DEPRECATED);
+        if (\count($option) === 1 && \strpos($option[0], ',') !== false) {
+            $option = \explode(',', $option[0]);
+            \error_log('Usage of comma-separated options is deprecated, specify them one-by-one.', E_DEPRECATED);
         }
 
         return $option;

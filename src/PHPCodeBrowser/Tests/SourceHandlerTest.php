@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test case
  *
@@ -34,19 +35,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      File available since  0.1.0
+ * @since File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Tests;
@@ -65,19 +66,19 @@ use SplFileInfo;
 /**
  * SourceHandlerTest
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      Class available since  0.1.0
+ * @since Class available since  0.1.0
  */
 class SourceHandlerTest extends AbstractTestCase
 {
@@ -153,6 +154,7 @@ HERE
 
     /**
      * (non-PHPDoc)
+     *
      * @see AbstractTests#setUp()
      */
     protected function setUp(): void
@@ -163,7 +165,7 @@ HERE
         $this->logger->pushHandler(new NullHandler());
 
         $this->sourceHandler = new SourceHandler($this->logger);
-        array_walk(
+        \array_walk(
             $this->plugins,
             [$this->sourceHandler, 'addPlugin']
         );
@@ -237,7 +239,7 @@ HERE
         $this->sourceHandler->addSourceFiles(
             [new SplFileInfo(__FILE__), __FILE__]
         );
-        $this->assertContains(__FILE__, array_keys($this->sourceHandler->getFiles()));
+        $this->assertContains(__FILE__, \array_keys($this->sourceHandler->getFiles()));
     }
 
     /**

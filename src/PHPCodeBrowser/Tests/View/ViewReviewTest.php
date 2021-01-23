@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test case
  *
@@ -34,19 +35,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      File available since  0.1.0
+ * @since File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Tests\View;
@@ -61,19 +62,19 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * ViewReviewTest
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      Class available since  0.1.0
+ * @since Class available since  0.1.0
  */
 class ViewReviewTest extends AbstractTestCase
 {
@@ -93,6 +94,7 @@ class ViewReviewTest extends AbstractTestCase
 
     /**
      * (non-PHPDoc)
+     *
      * @see tests/cbAbstractTests#setUp()
      */
     protected function setUp(): void
@@ -115,15 +117,15 @@ class ViewReviewTest extends AbstractTestCase
      */
     public function testGenerateNoIssues(): void
     {
-        $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.basename(__FILE__).'.html';
+        $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.\basename(__FILE__).'.html';
 
         $this->ioMock->expects($this->once())
-                      ->method('loadFile')
-                      ->with($this->equalTo(__FILE__))
-                      ->willReturn(file_get_contents(__FILE__));
+            ->method('loadFile')
+            ->with($this->equalTo(__FILE__))
+            ->willReturn(\file_get_contents(__FILE__));
         $this->ioMock->expects($this->once())
-                      ->method('createFile')
-                      ->with($this->equalTo($expectedFile));
+            ->method('createFile')
+            ->with($this->equalTo($expectedFile));
 
         $this->viewReview->generate(
             [],
@@ -150,14 +152,14 @@ class ViewReviewTest extends AbstractTestCase
             ),
         ];
 
-        $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.basename(__FILE__).'.html';
+        $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.\basename(__FILE__).'.html';
         $this->ioMock->expects($this->once())
-                      ->method('loadFile')
-                      ->with($this->equalTo(__FILE__))
-                      ->willReturn(file_get_contents(__FILE__));
+            ->method('loadFile')
+            ->with($this->equalTo(__FILE__))
+            ->willReturn(\file_get_contents(__FILE__));
         $this->ioMock->expects($this->once())
-                      ->method('createFile')
-                      ->with($this->equalTo($expectedFile));
+            ->method('createFile')
+            ->with($this->equalTo($expectedFile));
 
         $this->viewReview->generate(
             $issueList,
@@ -178,14 +180,14 @@ class ViewReviewTest extends AbstractTestCase
             new Issue(__FILE__, 80, 80, 'other finder', 'other description', 'more severe'),
         ];
 
-        $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.basename(__FILE__).'.html';
+        $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.\basename(__FILE__).'.html';
         $this->ioMock->expects($this->once())
-                      ->method('loadFile')
-                      ->with($this->equalTo(__FILE__))
-                      ->willReturn(file_get_contents(__FILE__));
+            ->method('loadFile')
+            ->with($this->equalTo(__FILE__))
+            ->willReturn(\file_get_contents(__FILE__));
         $this->ioMock->expects($this->once())
-                      ->method('createFile')
-                      ->with($this->equalTo($expectedFile));
+            ->method('createFile')
+            ->with($this->equalTo($expectedFile));
 
         $this->viewReview->generate(
             $issueList,
@@ -201,7 +203,7 @@ class ViewReviewTest extends AbstractTestCase
      */
     public function testGenerateWithTextHighlighter(): void
     {
-        if (!class_exists('Text_Highlighter')) {
+        if (!\class_exists('Text_Highlighter')) {
             $this->markTestIncomplete();
         }
 
@@ -220,12 +222,12 @@ EOT;
 
         $expectedFile = self::$testOutputDir.'/file.html.html';
         $this->ioMock->expects($this->once())
-                      ->method('loadFile')
-                      ->with($this->equalTo($fileName))
-                      ->willReturn($html);
+            ->method('loadFile')
+            ->with($this->equalTo($fileName))
+            ->willReturn($html);
         $this->ioMock->expects($this->once())
-                      ->method('createFile')
-                      ->with($this->equalTo($expectedFile));
+            ->method('createFile')
+            ->with($this->equalTo($expectedFile));
 
         $issues = [
             new Issue($fileName, 5, 5, 'finder', 'description', 'severity'),
@@ -241,11 +243,11 @@ EOT;
      */
     public function testGenerateUnknownType(): void
     {
-        $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.basename(self::$xmlBasic).'.html';
+        $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.\basename(self::$xmlBasic).'.html';
 
         $this->ioMock->expects($this->once())
-                      ->method('createFile')
-                      ->with($this->equalTo($expectedFile));
+            ->method('createFile')
+            ->with($this->equalTo($expectedFile));
 
         $issueList = [
             new Issue(self::$xmlBasic, 5, 5, 'finder', 'description', 'severity'),
@@ -266,12 +268,12 @@ EOT;
     public function testCopyResourceFolders(): void
     {
         $this->ioMock->expects($this->exactly(3))
-                      ->method('copyDirectory')
-                      ->with(
-                          $this->matchesRegularExpression(
-                              '|^'.realpath(__DIR__.'/../../../templates/').'|'
-                          )
-                      );
+            ->method('copyDirectory')
+            ->with(
+                $this->matchesRegularExpression(
+                    '|^'.\realpath(__DIR__.'/../../../templates/').'|'
+                )
+            );
         $this->viewReview->copyResourceFolders();
     }
 
@@ -289,12 +291,12 @@ EOT;
         ];
 
         $this->ioMock->expects($this->once())
-                      ->method('createFile')
-                      ->with(
-                          $this->logicalAnd(
-                              $this->stringEndsWith('index.html')
-                          )
-                      );
+            ->method('createFile')
+            ->with(
+                $this->logicalAnd(
+                    $this->stringEndsWith('index.html')
+                )
+            );
         $this->viewReview->generateIndex($files);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * View Abstract
  *
@@ -36,21 +37,21 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Jan Mergler <jan.mergler@mayflower.de>
- * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Jan Mergler <jan.mergler@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     File available since  0.1.0
+ * @since File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\View;
@@ -64,21 +65,21 @@ use PHPCodeBrowser\Helper\IOHelper;
  *
  * This class is generating the highlighted and formatted html view for file.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Jan Mergler <jan.mergler@mayflower.de>
- * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Jan Mergler <jan.mergler@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     Class available since  0.1.0
+ * @since Class available since  0.1.0
  */
 class ViewAbstract
 {
@@ -187,7 +188,7 @@ class ViewAbstract
     {
         //we want to exclude files without issues
         if ($excludeOK) {
-            $fileList = array_filter($fileList, [ViewAbstract::class, 'hasFileAnyIssues']);
+            $fileList = \array_filter($fileList, [ViewAbstract::class, 'hasFileAnyIssues']);
         }
 
         $data = [];
@@ -230,7 +231,7 @@ class ViewAbstract
          * This is important so that $curDir doesn't become empty if we go
          * up to the root directory ('/' on linux)
          */
-        $curDir = IOHelper::getCommonPathPrefix(array_keys($fileList));
+        $curDir = IOHelper::getCommonPathPrefix(\array_keys($fileList));
         $preLen = \strlen($curDir);
 
         $indentStep = 4;
@@ -241,25 +242,25 @@ class ViewAbstract
             $dir = \dirname($name).DIRECTORY_SEPARATOR;
 
             // Go back until the file is somewhere below curDir
-            while (strpos($dir, $curDir) !== 0) {
+            while (\strpos($dir, $curDir) !== 0) {
                 // chop off one subDir from $curDir
-                $curDir  = substr(
+                $curDir  = \substr(
                     $curDir,
                     0,
-                    strrpos($curDir, DIRECTORY_SEPARATOR, -2) + 1
+                    \strrpos($curDir, DIRECTORY_SEPARATOR, -2) + 1
                 );
-                $ret    .= str_pad(' ', $indent);
+                $ret    .= \str_pad(' ', $indent);
                 $ret    .= '</ul>'.PHP_EOL;
                 $indent -= $indentStep;
-                $ret    .= str_pad(' ', $indent);
+                $ret    .= \str_pad(' ', $indent);
                 $ret    .= '</li>'.PHP_EOL;
             }
 
             if ($dir !== $curDir) {
                 // File is in a subDir of current directory
                 // relDir has no leading or trailing slash.
-                $relDir  = substr($dir, \strlen($curDir), -1);
-                $relDirs = explode(DIRECTORY_SEPARATOR, $relDir);
+                $relDir  = \substr($dir, \strlen($curDir), -1);
+                $relDirs = \explode(DIRECTORY_SEPARATOR, $relDir);
 
                 foreach ($relDirs as $dirName) {
                     $curDir .= $dirName.DIRECTORY_SEPARATOR;
@@ -268,8 +269,8 @@ class ViewAbstract
                     $errors   = 0;
                     $warnings = 0;
 
-                    foreach (array_keys($fileList) as $fName) {
-                        if (strncmp($fName, $curDir, \strlen($curDir)) !== 0) {
+                    foreach (\array_keys($fileList) as $fName) {
+                        if (\strncmp($fName, $curDir, \strlen($curDir)) !== 0) {
                             continue;
                         }
 
@@ -286,17 +287,17 @@ class ViewAbstract
                         $count .= $warnings.'</span>)';
                     }
 
-                    $ret    .= str_pad(' ', $indent);
+                    $ret    .= \str_pad(' ', $indent);
                     $ret    .= "<li><a class='treeDir'>{$dirName} {$count}</a>".PHP_EOL;
                     $indent += $indentStep;
-                    $ret    .= str_pad(' ', $indent);
+                    $ret    .= \str_pad(' ', $indent);
                     $ret    .= '<ul>'.PHP_EOL;
                 }
             }
 
-            $name      = str_replace('\\', '/', $name);
-            $shortName = substr($name, $preLen);
-            $fileName  = basename($name);
+            $name      = \str_replace('\\', '/', $name);
+            $shortName = \substr($name, $preLen);
+            $fileName  = \basename($name);
             $count     = '';
 
             if (0 !== $file->getErrorCount() || 0 !== $file->getWarningCount()) {
@@ -307,7 +308,7 @@ class ViewAbstract
                 $count .= '</span>)';
             }
 
-            $ret .= str_pad(' ', $indent);
+            $ret .= \str_pad(' ', $indent);
             $ret .= '<li class="php"><a class="fileLink" href="';
             $ret .= $hrefPrefix.$shortName.'.html">';
             $ret .= "{$fileName} {$count}</a></li>".PHP_EOL;
@@ -315,10 +316,10 @@ class ViewAbstract
 
         while ($indent > $indentStep) {
             $indent -= $indentStep;
-            $ret    .= str_pad(' ', $indent);
+            $ret    .= \str_pad(' ', $indent);
             $ret    .= '</ul>'.PHP_EOL;
             $indent -= $indentStep;
-            $ret    .= str_pad(' ', $indent);
+            $ret    .= \str_pad(' ', $indent);
             $ret    .= '</li>'.PHP_EOL;
         }
 
@@ -342,12 +343,12 @@ class ViewAbstract
     {
         $filePath = $this->templateDir.DIRECTORY_SEPARATOR.$templateName.'.tpl';
 
-        extract($data, EXTR_SKIP);
+        \extract($data, EXTR_SKIP);
 
-        ob_start();
-        include($filePath);
-        $contents = ob_get_contents();
-        ob_end_clean();
+        \ob_start();
+        include $filePath;
+        $contents = \ob_get_contents();
+        \ob_end_clean();
 
         return $contents;
     }

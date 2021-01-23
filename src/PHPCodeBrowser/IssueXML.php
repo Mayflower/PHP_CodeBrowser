@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Issue XML Document
  *
@@ -36,28 +37,28 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Michel Hartmann <michel.hartmann@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Michel Hartmann <michel.hartmann@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     File available since 0.1.0
+ * @since File available since 0.1.0
  */
 
 namespace PHPCodeBrowser;
 
-use \DOMDocument;
-use \DOMNode;
-use \DOMNodeList;
-use \DOMXPath;
+use DOMDocument;
+use DOMNode;
+use DOMNodeList;
+use DOMXPath;
 use SebastianBergmann\FileIterator\Factory as FileIteratorFactory;
 
 /**
@@ -68,20 +69,20 @@ use SebastianBergmann\FileIterator\Factory as FileIteratorFactory;
  * It is used to merge issue XML files and execute plugins
  * against it to retrieve the issues from them.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Michel Hartmann <michel.hartmann@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Michel Hartmann <michel.hartmann@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     Class available since 0.1.0
+ * @since Class available since 0.1.0
  */
 class IssueXML extends DOMDocument
 {
@@ -94,6 +95,7 @@ class IssueXML extends DOMDocument
 
     /**
      * Do not preserve white spaces.
+     *
      * @see DOMDocument
      *
      * @var bool
@@ -135,14 +137,14 @@ class IssueXML extends DOMDocument
         $iterator = $factory->getFileIterator($directory, 'xml');
 
         foreach ($iterator as $current) {
-            $realFileName         = realpath($current);
+            $realFileName         = \realpath($current);
             $xml                  = new DOMDocument('1.0', 'UTF-8');
             $xml->validateOnParse = true;
 
-            if (@$xml->load(realpath($current))) {
+            if (@$xml->load(\realpath($current))) {
                 $this->addXMLFile($xml);
             } else {
-                error_log(
+                \error_log(
                     "[Warning] Could not read file '{$realFileName}'. ".'Make sure it contains valid xml.'
                 );
             }
@@ -151,7 +153,7 @@ class IssueXML extends DOMDocument
         }
 
         if (!$this->documentElement->hasChildNodes()) {
-            error_log("[Warning] No valid log files found in '{$directory}'");
+            \error_log("[Warning] No valid log files found in '{$directory}'");
         }
 
         return $this;
@@ -173,6 +175,7 @@ class IssueXML extends DOMDocument
 
     /**
      * Perform a XPath-Query on the document.
+     *
      * @see DOMXPath::query
      *
      * @param string  $expression  Xpath expression to query for.

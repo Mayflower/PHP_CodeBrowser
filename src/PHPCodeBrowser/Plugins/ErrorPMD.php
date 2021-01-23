@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PMD
  *
@@ -36,18 +37,18 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Elger Thiele <elger.thiele@mayflower.de>
- * @author     Michel Hartmann <michel.hartmann@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Michel Hartmann <michel.hartmann@mayflower.de>
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      File available since  0.1.0
+ * @since File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Plugins;
@@ -58,27 +59,28 @@ use PHPCodeBrowser\AbstractPlugin;
 /**
  * ErrorPMD
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Elger Thiele <elger.thiele@mayflower.de>
- * @author     Christopher Weckerle <christopher.weckerle@mayflower.de>
- * @author     Michel Hartmann <michel.hartmann@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Christopher Weckerle <christopher.weckerle@mayflower.de>
+ * @author Michel Hartmann <michel.hartmann@mayflower.de>
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      Class available since  0.1.0
+ * @since Class available since  0.1.0
  */
 class ErrorPMD extends AbstractPlugin
 {
     /**
      * Name of this plugin.
      * Used to read issues from XML.
+     *
      * @var string
      */
     public $pluginName = 'pmd';
@@ -86,6 +88,7 @@ class ErrorPMD extends AbstractPlugin
     /**
      * Name of the attribute that holds the number of the first line
      * of the issue.
+     *
      * @var string
      */
     protected $lineStartAttr = 'beginline';
@@ -93,12 +96,14 @@ class ErrorPMD extends AbstractPlugin
     /**
      * Name of the attribute that holds the number of the last line
      * of the issue.
+     *
      * @var string
      */
     protected $lineEndAttr = 'endline';
 
     /**
      * Default string to use as source for issue.
+     *
      * @var string
      */
     protected $source = 'PMD';
@@ -126,10 +131,10 @@ class ErrorPMD extends AbstractPlugin
      */
     protected function getDescription(DOMElement $element): string
     {
-        return str_replace(
+        return \str_replace(
             '&#10;',
             '',
-            htmlentities($element->textContent)
+            \htmlentities($element->textContent)
         );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Abstract
  *
@@ -36,20 +37,20 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Michel Hartmann <michel.hartmann@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Michel Hartmann <michel.hartmann@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     File available since  0.1.2
+ * @since File available since  0.1.2
  */
 
 namespace PHPCodeBrowser;
@@ -60,20 +61,20 @@ namespace PHPCodeBrowser;
  * Object Model for issues.
  * This object is used for working with common issues types.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Michel Hartmann <michel.hartmann@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Michel Hartmann <michel.hartmann@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link      http://github.com/mayflowergmbh
+ * @link http://github.com/mayflowergmbh
  *
- * @since     Class available since  0.1.2
+ * @since Class available since  0.1.2
  */
 class Issue
 {

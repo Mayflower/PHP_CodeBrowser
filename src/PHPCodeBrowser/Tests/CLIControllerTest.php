@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test case
  *
@@ -34,19 +35,19 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      File available since  0.1.0
+ * @since File available since  0.1.0
  */
 
 namespace PHPCodeBrowser\Tests;
@@ -59,19 +60,19 @@ use PHPCodeBrowser\Plugins\ErrorCRAP;
 /**
  * CLIControllerTest
  *
- * @category   PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author     Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
- * @copyright  2007-2010 Mayflower GmbH
+ * @copyright 2007-2010 Mayflower GmbH
  *
- * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version    Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link       http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since      Class available since  0.1.0
+ * @since Class available since  0.1.0
  */
 class CLIControllerTest extends AbstractTestCase
 {
@@ -139,9 +140,9 @@ class CLIControllerTest extends AbstractTestCase
      */
     public function testRunCleansExistingOutputDir(): void
     {
-        mkdir(self::$testOutputDir.'/clear-directory');
-        touch(self::$testOutputDir.'/clear-file');
-        touch(self::$testOutputDir.'/clear-directory/clear-file');
+        \mkdir(self::$testOutputDir.'/clear-directory');
+        \touch(self::$testOutputDir.'/clear-file');
+        \touch(self::$testOutputDir.'/clear-directory/clear-file');
 
         $this->controller->run();
 
@@ -155,8 +156,8 @@ class CLIControllerTest extends AbstractTestCase
      */
     public function testRunCleansExistingOutputFile(): void
     {
-        rmdir(self::$testOutputDir);
-        touch(self::$testOutputDir);
+        \rmdir(self::$testOutputDir);
+        \touch(self::$testOutputDir);
 
         $this->controller->run();
 

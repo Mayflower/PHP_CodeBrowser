@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Source handler
  *
@@ -36,21 +37,21 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Michel Hartmann <michel.hartmann@mayflower.de>
- * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Michel Hartmann <michel.hartmann@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   SVN: $Id$
+ * @version SVN: $Id$
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     File available since  0.2.0
+ * @since File available since  0.2.0
  */
 
 namespace PHPCodeBrowser;
@@ -66,22 +67,22 @@ use SplFileInfo;
  * This class manages lists of source files and their issues.
  * For providing these lists the prior generated IssueXML is parsed.
  *
- * @category  PHP_CodeBrowser
+ * @category PHP_CodeBrowser
  *
- * @author    Elger Thiele <elger.thiele@mayflower.de>
- * @author    Christopher Weckerle <christopher.weckerle@mayflower.de>
- * @author    Michel Hartmann <michel.hartmann@mayflower.de>
- * @author    Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
+ * @author Elger Thiele <elger.thiele@mayflower.de>
+ * @author Christopher Weckerle <christopher.weckerle@mayflower.de>
+ * @author Michel Hartmann <michel.hartmann@mayflower.de>
+ * @author Simon Kohlmeyer <simon.kohlmeyer@mayflower.de>
  *
  * @copyright 2007-2010 Mayflower GmbH
  *
- * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
+ * @license http://www.opensource.org/licenses/bsd-license.php  BSD License
  *
- * @version   Release: @package_version@
+ * @version Release: @package_version@
  *
- * @link      http://www.phpunit.de/
+ * @link http://www.phpunit.de/
  *
- * @since     Class available since  0.2.0
+ * @since Class available since  0.2.0
  */
 class SourceHandler
 {
@@ -108,7 +109,7 @@ class SourceHandler
     public function __construct(Logger $debugLog, array $plugins = [])
     {
         $this->debugLog = $debugLog;
-        array_walk($plugins, [$this, 'addPlugin']);
+        \array_walk($plugins, [$this, 'addPlugin']);
     }
 
     /**
@@ -119,7 +120,7 @@ class SourceHandler
     public function addPlugin(AbstractPlugin $plugin): void
     {
         foreach ($plugin->getFileList() as $file) {
-            if (array_key_exists($file->name(), $this->files)) {
+            if (\array_key_exists($file->name(), $this->files)) {
                 $this->files[$file->name()]->mergeWith($file);
             } else {
                 $this->files[$file->name()] = $file;
@@ -150,7 +151,7 @@ class SourceHandler
     {
         if (\is_string($file)) {
             $filename = $file;
-            $file     = realpath($file);
+            $file     = \realpath($file);
         } else {
             $filename = $file->getPathName();
             $file     = $file->getRealPath();
@@ -160,7 +161,7 @@ class SourceHandler
             throw new Exception("{$filename} is no regular file");
         }
 
-        if (array_key_exists($file, $this->files)) {
+        if (\array_key_exists($file, $this->files)) {
             return;
         }
 
@@ -174,7 +175,7 @@ class SourceHandler
      */
     public function getCommonPathPrefix(): string
     {
-        return IOHelper::getCommonPathPrefix(array_keys($this->files));
+        return IOHelper::getCommonPathPrefix(\array_keys($this->files));
     }
 
     /**
@@ -196,7 +197,7 @@ class SourceHandler
      */
     public function getFilesWithIssues(): array
     {
-        return array_keys($this->files);
+        return \array_keys($this->files);
     }
 
     /**
@@ -208,8 +209,8 @@ class SourceHandler
      */
     public function excludeMatchingPCRE(string $expr): void
     {
-        foreach (array_keys($this->files) as $filename) {
-            if (!preg_match($expr, $filename)) {
+        foreach (\array_keys($this->files) as $filename) {
+            if (!\preg_match($expr, $filename)) {
                 continue;
             }
 
@@ -230,8 +231,8 @@ class SourceHandler
      */
     public function excludeMatchingPattern(string $pattern): void
     {
-        foreach (array_keys($this->files) as $filename) {
-            if (!fnmatch($pattern, $filename)) {
+        foreach (\array_keys($this->files) as $filename) {
+            if (!\fnmatch($pattern, $filename)) {
                 continue;
             }
 
