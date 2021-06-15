@@ -178,10 +178,10 @@ class IssueXML extends DOMDocument
      *
      * @see DOMXPath::query
      *
-     * @param string  $expression  Xpath expression to query for.
-     * @param DOMNode $contextNode Node to use as context (optional)
+     * @param string       $expression  Xpath expression to query for.
+     * @param DOMNode|null $contextNode Node to use as context (optional)
      *
-     * @return DOMNodeList         List of all matching nodes.
+     * @return DOMNodeList List of all matching nodes.
      */
     public function query(string $expression, ?DOMNode $contextNode = null): DOMNodeList
     {

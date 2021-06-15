@@ -337,8 +337,8 @@ class ViewReview extends ViewAbstract
 
         foreach ($lines as $line) {
             /**
- * @var DOMElement $line
-*/
+             * @var DOMElement $line
+             */
             $line = $line;
             ++$lineNumber;
             $line->setAttribute('id', 'line_'.$lineNumber);
