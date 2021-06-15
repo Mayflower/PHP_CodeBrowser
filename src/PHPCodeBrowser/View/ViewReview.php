@@ -382,17 +382,19 @@ class ViewReview extends ViewAbstract
             $anchor->setAttribute('name', 'line_'.$lineNumber);
             $line->appendChild($anchor);
 
+            $lineErrorCount = (isset($outputIssues[$lineNumber])
+                               ? \count($outputIssues[$lineNumber])
+                               : 0);
+
             // set li css class depending on line errors
-            switch ($tmp = (isset($outputIssues[$lineNumber])
-                ? \count($outputIssues[$lineNumber])
-                : 0)) {
+            switch ($lineErrorCount) {
                 case 0:
                     break;
                 case 1:
                     $lineClasses[] = $outputIssues[$lineNumber][0]->foundBy;
 
                     break;
-                case 1 < $tmp:
+                case 1 < $lineErrorCount:
                     $lineClasses[] = 'moreErrors';
 
                     break;
