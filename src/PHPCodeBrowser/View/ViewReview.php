@@ -58,6 +58,7 @@ namespace PHPCodeBrowser\View;
 
 use DOMDocument;
 use DOMElement;
+use DOMText;
 use DOMXPath;
 use PHPCodeBrowser\Helper\IOHelper;
 
@@ -217,11 +218,13 @@ class ViewReview extends ViewAbstract
 
         // iterate through all <span> elements
         foreach ($sourceElements as $sourceElement) {
-            if (!$sourceElement instanceof DOMElement) {
+            if ($sourceElement instanceof DOMText) {
                 $span            = $targetDom->createElement('span');
                 $span->nodeValue = \htmlspecialchars($sourceElement->wholeText);
                 $liElement->appendChild($span);
+            }
 
+            if (!$sourceElement instanceof DOMElement) {
                 continue;
             }
 

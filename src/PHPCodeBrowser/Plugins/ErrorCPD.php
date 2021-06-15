@@ -56,7 +56,6 @@
 namespace PHPCodeBrowser\Plugins;
 
 use DOMElement;
-use DOMNode;
 use DOMNodeList;
 use PHPCodeBrowser\AbstractPlugin;
 use PHPCodeBrowser\Issue;
@@ -89,12 +88,12 @@ class ErrorCPD extends AbstractPlugin
     /**
      * Mapper method for this plugin.
      *
-     * @param DOMNode $element  The XML plugin node with its errors
-     * @param string  $filename
+     * @param DOMElement $element  The XML plugin node with its errors
+     * @param string     $filename
      *
      * @return array
      */
-    public function mapIssues(DOMNode $element, string $filename): array
+    public function mapIssues(DOMElement $element, string $filename): array
     {
         $parentNode = $element->parentNode;
         $files      = $this->issueXml->query(
@@ -106,6 +105,10 @@ class ErrorCPD extends AbstractPlugin
         $result = [];
 
         foreach ($files as $file) {
+            if (!($file instanceof DOMElement)) {
+                continue;
+            }
+
             $result[] = new Issue(
                 $file->getAttribute('path'),
                 (int) $file->getAttribute('line'),
@@ -132,6 +135,10 @@ class ErrorCPD extends AbstractPlugin
         );
 
         foreach ($nodes as $node) {
+            if (!($node instanceof DOMElement)) {
+                continue;
+            }
+
             $fileNames[] = $node->getAttribute('path');
         }
 
@@ -157,11 +164,11 @@ class ErrorCPD extends AbstractPlugin
      * to find duplicates.
      *
      * @param DOMNodeList $allNodes
-     * @param DOMNode     $currentNode
+     * @param DOMElement  $currentNode
      *
      * @return string
      */
-    protected function getCpdDescription(DOMNodeList $allNodes, DOMNode $currentNode): string
+    protected function getCpdDescription(DOMNodeList $allNodes, DOMElement $currentNode): string
     {
         $source = [];
 

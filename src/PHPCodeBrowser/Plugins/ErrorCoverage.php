@@ -118,12 +118,12 @@ class ErrorCoverage extends AbstractPlugin
      * This method provides a default behaviour an can be overloaded to
      * implement special behavior for other plugins.
      *
-     * @param DOMNode $element  The XML plugin node with its errors
-     * @param string  $filename Name of the file to return issues for.
+     * @param DOMElement $element  The XML plugin node with its errors
+     * @param string     $filename Name of the file to return issues for.
      *
      * @return array            array of issue objects.
      */
-    public function mapIssues(DOMNode $element, string $filename): array
+    public function mapIssues(DOMElement $element, string $filename): array
     {
         $errorList = [];
 
@@ -185,6 +185,10 @@ class ErrorCoverage extends AbstractPlugin
         );
 
         foreach ($issueNodes as $node) {
+            if (!($node instanceof DOMElement)) {
+                continue;
+            }
+
             $fileNames[] = $node->getAttribute('name');
         }
 
