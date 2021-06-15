@@ -155,6 +155,8 @@ class RunCommand extends Command
      * @param InputInterface  $input  An InputInterface instance
      * @param OutputInterface $output
      *
+     * @phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+     *
      * @return int|null null or 0 if everything went fine, or an error code
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int

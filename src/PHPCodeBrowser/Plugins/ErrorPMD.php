@@ -114,6 +114,8 @@ class ErrorPMD extends AbstractPlugin
      *
      * @param DOMElement $element
      *
+     * @phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+     *
      * @return string
      */
     protected function getSeverity(DOMElement $element): string

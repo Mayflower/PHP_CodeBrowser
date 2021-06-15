@@ -84,6 +84,8 @@ class Application extends BaseApplication
      *
      * @param InputInterface $input
      *
+     * @phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+     *
      * @return string The command name
      */
     protected function getCommandName(InputInterface $input): string
