@@ -30,7 +30,7 @@
         "phploc/phploc": "*",
         "phpmd/phpmd": "1.5.*||~2.6",
         "phpstan/phpstan": "^0.12.5",
-        "phpunit/phpunit": "~8.4||^9.0",
+        "phpunit/phpunit": "^9.5",
         "sebastian/phpcpd": "*"
     },
     "autoload": {

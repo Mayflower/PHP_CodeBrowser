@@ -155,7 +155,7 @@ class IOHelperTest extends AbstractTestCase
         }
 
         $this->ioHelper->deleteFile($filename);
-        $this->assertFileNotExists($filename);
+        $this->assertFileDoesNotExist($filename);
     }
 
     /**
@@ -174,7 +174,7 @@ class IOHelperTest extends AbstractTestCase
         \touch($file);
 
         $this->ioHelper->deleteDirectory($dir);
-        $this->assertFileNotExists($dir);
+        $this->assertFileDoesNotExist($dir);
     }
 
     /**

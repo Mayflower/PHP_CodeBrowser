@@ -147,8 +147,8 @@ class CLIControllerTest extends AbstractTestCase
         $this->controller->run();
 
         $this->assertOutputIsPresent();
-        $this->assertDirectoryNotExists(self::$testOutputDir.'/clear-directory');
-        $this->assertFileNotExists(self::$testOutputDir.'/clear-file');
+        $this->assertDirectoryDoesNotExist(self::$testOutputDir.'/clear-directory');
+        $this->assertFileDoesNotExist(self::$testOutputDir.'/clear-file');
     }
 
     /**
@@ -184,10 +184,10 @@ class CLIControllerTest extends AbstractTestCase
         $this->controller->run();
 
         $this->assertFileExists(self::$testOutputDir.'/index.html');
-        $this->assertFileNotExists(self::$testOutputDir.'/Bad.php.html');
-        $this->assertFileNotExists(self::$testOutputDir.'/Good.php.html');
-        $this->assertDirectoryNotExists(self::$testOutputDir.'/css');
-        $this->assertDirectoryNotExists(self::$testOutputDir.'/img');
-        $this->assertDirectoryNotExists(self::$testOutputDir.'/js');
+        $this->assertFileDoesNotExist(self::$testOutputDir.'/Bad.php.html');
+        $this->assertFileDoesNotExist(self::$testOutputDir.'/Good.php.html');
+        $this->assertDirectoryDoesNotExist(self::$testOutputDir.'/css');
+        $this->assertDirectoryDoesNotExist(self::$testOutputDir.'/img');
+        $this->assertDirectoryDoesNotExist(self::$testOutputDir.'/js');
     }
 }
