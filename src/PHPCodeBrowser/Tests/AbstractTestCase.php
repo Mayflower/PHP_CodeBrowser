@@ -52,6 +52,8 @@
 
 namespace PHPCodeBrowser\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * AbstractTests
  *
@@ -69,7 +71,7 @@ namespace PHPCodeBrowser\Tests;
  *
  * @since Class available since  0.1.0
  */
-class AbstractTestCase extends \PHPUnit\Framework\TestCase
+class AbstractTestCase extends TestCase
 {
     /**
      * PHP_CodeBrowser test output dir

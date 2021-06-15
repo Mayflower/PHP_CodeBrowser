@@ -4,12 +4,13 @@ namespace PHPCodeBrowser\Tests;
 
 use PHPCodeBrowser\Application;
 use PHPCodeBrowser\Command\RunCommand;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Class ApplicationTest
  */
-class ApplicationTest extends \PHPUnit\Framework\TestCase
+class ApplicationTest extends TestCase
 {
     /**
      * @var Application
