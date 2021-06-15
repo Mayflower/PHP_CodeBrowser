@@ -15,16 +15,18 @@
             "role": "developer"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
-        "php": "^7.3",
+        "php": "^7.3||^8.0",
         "ext-dom": "*",
         "monolog/monolog": "~1.7||~2.0",
         "phpunit/php-file-iterator": "~2.0||^3.0",
         "symfony/console": "~3.4||~4.0||~5.0"
     },
     "require-dev": {
-        "humbug/box": "^3.8.3",
-        "mayflower/mo4-coding-standard": "^6.0",
+        "humbug/box": "^3.13",
+        "mayflower/mo4-coding-standard": "^7.0",
         "phploc/phploc": "*",
         "phpmd/phpmd": "1.5.*||~2.6",
         "phpstan/phpstan": "^0.12.5",
