@@ -22,7 +22,7 @@
         "ext-dom": "*",
         "monolog/monolog": "~1.7||~2.0",
         "phpunit/php-file-iterator": "~2.0||^3.0",
-        "symfony/console": "~3.4||~4.0||~5.0"
+        "symfony/console": "~3.4||~4.0||~5.0||~6.0"
     },
     "require-dev": {
         "humbug/box": "^3.13",
@@ -63,5 +63,10 @@
         "clean": "rm -rf build/logs/* build/code-browser",
         "browser": "bin/phpcb -l build/logs -o build/code-browser -s src",
         "phar": "php vendor/bin/box compile"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }

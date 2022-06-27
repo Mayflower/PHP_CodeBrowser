@@ -94,22 +94,6 @@ class IssueXML extends DOMDocument
     protected $xpath;
 
     /**
-     * Do not preserve white spaces.
-     *
-     * @see DOMDocument
-     *
-     * @var bool
-     */
-    public $preserveWhiteSpace = false;
-
-    /**
-     * Provide nice output.
-     *
-     * @var bool
-     */
-    public $formatOutput = true;
-
-    /**
      * Default constructor
      *
      * @param string $version  The version definition for DomDocument
@@ -121,6 +105,8 @@ class IssueXML extends DOMDocument
         $this->appendChild(
             $this->createElement('codebrowser')
         );
+        $this->preserveWhiteSpace = false;
+        $this->formatOutput = true;
     }
 
     /**
