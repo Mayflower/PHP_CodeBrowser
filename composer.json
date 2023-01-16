@@ -18,7 +18,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^7.3||^8.0",
+        "php": "^8.0",
         "ext-dom": "*",
         "monolog/monolog": "~1.7||~2.0",
         "phpunit/php-file-iterator": "~2.0||^3.0",

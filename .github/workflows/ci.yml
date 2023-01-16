@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-          php: [php73, php74, php80]
+          php: [php80, php81, php82]
 
     steps:
     - uses: actions/checkout@v2

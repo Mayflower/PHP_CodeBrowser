@@ -18,9 +18,9 @@
       });
 
       phpVersions = [
-        "php73"
-        "php74"
         "php80"
+        "php81"
+        "php82"
       ];
     in
     {
@@ -33,7 +33,7 @@
                 name = "env-${name}";
                 paths = [
                   (phpEnv pkgs."${name}")
-                  (phpEnv pkgs."${name}").packages.composer2
+                  (phpEnv pkgs."${name}").packages.composer
                 ];
               };
             }
