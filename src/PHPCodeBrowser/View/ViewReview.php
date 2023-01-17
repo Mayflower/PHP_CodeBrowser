@@ -365,7 +365,7 @@ class ViewReview extends ViewAbstract
                     );
                 }
 
-                $line->setAttribute('title', \utf8_encode($message));
+                $line->setAttribute('title', $message);
             }
 
             // Add line number
