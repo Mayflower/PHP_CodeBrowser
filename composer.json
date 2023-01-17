@@ -20,7 +20,7 @@
     "require": {
         "php": "^8.0",
         "ext-dom": "*",
-        "monolog/monolog": "~1.7||~2.0",
+        "monolog/monolog": "~1.7||~2.0||~3.0",
         "phpunit/php-file-iterator": "~2.0||^3.0",
         "symfony/console": "~3.4||~4.0||~5.0||~6.0"
     },
