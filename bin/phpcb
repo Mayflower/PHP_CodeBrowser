@@ -53,5 +53,5 @@ if (file_exists(__DIR__ . '/../../../autoload.php')) {
     include_once __DIR__ . '/../vendor/autoload.php';
 }
 
-$app = new PHPCodeBrowser\Application('PHP_CodeBrowser', '1.1.4');
+$app = new PHPCodeBrowser\Application('PHP_CodeBrowser', '3.0.1');
 $app->run();

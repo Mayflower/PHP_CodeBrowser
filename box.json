@@ -29,5 +29,5 @@
     ],
     "git-commit": "git-commit",
     "git-version": "git-version",
-    "output": "phpcb-3.0.0.phar"
+    "output": "phpcb-3.0.1.phar"
 }
