@@ -106,7 +106,7 @@ class IssueXML extends DOMDocument
             $this->createElement('codebrowser')
         );
         $this->preserveWhiteSpace = false;
-        $this->formatOutput = true;
+        $this->formatOutput       = true;
     }
 
     /**
