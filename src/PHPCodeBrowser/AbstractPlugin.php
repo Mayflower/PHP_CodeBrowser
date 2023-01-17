@@ -85,7 +85,7 @@ abstract class AbstractPlugin
      *
      * @var string
      */
-    public $pluginName;
+    protected $pluginName;
 
     /**
      * The IssueXML object

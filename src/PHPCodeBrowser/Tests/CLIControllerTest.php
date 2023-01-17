@@ -79,7 +79,7 @@ class CLIControllerTest extends AbstractTestCase
     /**
      * @var CLIController $controller
      */
-    public $controller;
+    private $controller;
 
     /**
      * Create and configure a CLIController instance.

@@ -52,7 +52,7 @@ $occuringErrorTypes = array (
 foreach ($fileList as $file) {
     /** @var $file PHPCodeBrowser\File */
     foreach ($file->getIssues() as $issue) {
-        $occuringErrorTypes[$issue->foundBy] = true;
+        $occuringErrorTypes[$issue->getFoundBy()] = true;
     }
 }
 
@@ -85,7 +85,7 @@ foreach ($fileList as $filename => $f) {
     $counts = array_fill_keys($occuringErrorTypes, 0);
 
     foreach ($f->getIssues() as $issue) {
-        $counts[$issue->foundBy] += 1;
+        $counts[$issue->getFoundBy()] += 1;
     }
 
     echo "                    <tr class='$tag'>" . PHP_EOL;

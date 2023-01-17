@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="PHP_CodeSniffer" xsi:noNamespaceSchemaLocation="phpcs.xsd">
+    <description>The coding standard.</description>
+
+    <file>src</file>
+
+    <!-- Include the whole MO4 standard -->
+    <rule ref="MO4"/>
+</ruleset>

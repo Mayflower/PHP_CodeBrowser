@@ -26,7 +26,7 @@
     },
     "require-dev": {
         "humbug/box": "^3.13",
-        "mayflower/mo4-coding-standard": "^7.0",
+        "mayflower/mo4-coding-standard": "^9.0",
         "phploc/phploc": "*",
         "phpmd/phpmd": "1.5.*||~2.6",
         "phpstan/phpstan": "^0.12.5",
@@ -43,7 +43,7 @@
             "php -c php.ini vendor/bin/phpunit -c phpunit.xml.dist",
             "phpcpd -q --log-pmd=build/logs/pmd-cpd.xml src || true",
             "phpmd src xml cleancode,codesize,controversial,design,naming,unusedcode --reportfile build/logs/pmd.xml || true",
-            "phpcs -q --standard=MO4 --report-checkstyle=build/logs/checkstyle.xml src || true",
+            "phpcs -q --report-checkstyle=build/logs/checkstyle.xml || true",
             "@browser"
         ],
         "nope": [
@@ -56,7 +56,7 @@
             "composer update --prefer-dist --no-interaction --no-progress"
         ],
         "ci": [
-            "phpcs -s --standard=MO4 src/PHPCodeBrowser/",
+            "phpcs -s",
             "phpstan analyse --no-progress",
             "phpunit"
         ],

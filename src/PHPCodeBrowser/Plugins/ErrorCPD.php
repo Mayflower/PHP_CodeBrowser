@@ -83,7 +83,7 @@ class ErrorCPD extends AbstractPlugin
     /**
      * @var string $pluginName
      */
-    public $pluginName = 'pmd-cpd';
+    protected $pluginName = 'pmd-cpd';
 
     /**
      * Mapper method for this plugin.

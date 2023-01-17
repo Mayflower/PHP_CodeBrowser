@@ -117,7 +117,7 @@ class File
      */
     public function addIssue(Issue $issue): void
     {
-        if ($issue->fileName !== $this->name) {
+        if ($issue->getFileName() !== $this->name) {
             throw new \InvalidArgumentException(
                 'Tried to add issue to wrong file.'
             );
@@ -186,7 +186,7 @@ class File
         $count = 0;
 
         foreach ($this->issues as $issue) {
-            if (\strcasecmp($issue->severity, 'error') !== 0) {
+            if (\strcasecmp($issue->getSeverity(), 'error') !== 0) {
                 continue;
             }
 

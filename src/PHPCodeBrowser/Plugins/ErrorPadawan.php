@@ -83,7 +83,7 @@ class ErrorPadawan extends AbstractPlugin
      *
      * @var string
      */
-    public $pluginName = 'padawan';
+    protected $pluginName = 'padawan';
 
     /**
      * Name of the attribute that holds the number of the first line

@@ -83,21 +83,21 @@ class Issue
      *
      * @var string
      */
-    public $fileName;
+    private $fileName;
 
     /**
      * Starting Line of the Issue.
      *
      * @var int
      */
-    public $lineStart;
+    private $lineStart;
 
     /**
      * Ending Line of the Issue.
      *
      * @var int
      */
-    public $lineEnd;
+    private $lineEnd;
 
     /**
      * Name of the Plugin that found the Issue.
@@ -105,21 +105,21 @@ class Issue
      *
      * @var string
      */
-    public $foundBy;
+    private $foundBy;
 
     /**
      * Issue Description text.
      *
      * @var string
      */
-    public $description;
+    private $description;
 
     /**
      * Severity of the issue.
      *
      * @var string
      */
-    public $severity;
+    private $severity;
 
     /**
      * Default constructor
@@ -139,5 +139,53 @@ class Issue
         $this->foundBy     = $foundBy;
         $this->description = $description;
         $this->severity    = $severity;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileName(): string
+    {
+        return $this->fileName;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLineStart(): int
+    {
+        return $this->lineStart;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLineEnd(): int
+    {
+        return $this->lineEnd;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFoundBy(): string
+    {
+        return $this->foundBy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeverity(): string
+    {
+        return $this->severity;
     }
 }

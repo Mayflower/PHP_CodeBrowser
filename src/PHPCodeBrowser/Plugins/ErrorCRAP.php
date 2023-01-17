@@ -84,7 +84,7 @@ class ErrorCRAP extends AbstractPlugin
      *
      * @var string
      */
-    public $pluginName = 'coverage';
+    protected $pluginName = 'coverage';
 
     /**
      * Name of the attribute that holds the number of the first line

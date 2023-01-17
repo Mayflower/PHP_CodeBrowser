@@ -87,7 +87,6 @@ class RunCommand extends Command
             $this->getAvailablePlugins()
         );
 
-
         $this->setName('phpcb')
             ->setHelp(
                 'A Code browser for PHP files with syntax highlighting and colored error-sections found by quality assurance tools like PHPUnit, PHPMD or PHP_CodeSniffer.'

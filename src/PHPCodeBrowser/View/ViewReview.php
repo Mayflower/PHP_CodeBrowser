@@ -359,9 +359,9 @@ class ViewReview extends ViewAbstract
                             <div class="text">%s</div>
                         </div>
                         ',
-                        $issue->foundBy,
-                        $issue->foundBy,
-                        $issue->description
+                        $issue->getFoundBy(),
+                        $issue->getFoundBy(),
+                        $issue->getDescription()
                     );
                 }
 
@@ -394,7 +394,7 @@ class ViewReview extends ViewAbstract
                 case 0:
                     break;
                 case 1:
-                    $lineClasses[] = $outputIssues[$lineNumber][0]->foundBy;
+                    $lineClasses[] = $outputIssues[$lineNumber][0]->getFoundBy();
 
                     break;
                 case 1 < $lineErrorCount:
@@ -429,7 +429,7 @@ class ViewReview extends ViewAbstract
         $outputIssues = [];
 
         foreach ($issueList as $issue) {
-            for ($i = $issue->lineStart; $i <= $issue->lineEnd; ++$i) {
+            for ($i = $issue->getLineStart(); $i <= $issue->getLineEnd(); ++$i) {
                 $outputIssues[$i][] = $issue;
             }
         }

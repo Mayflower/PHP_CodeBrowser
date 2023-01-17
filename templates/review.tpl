@@ -57,24 +57,24 @@
                     <tbody>
                         <?php foreach($issues as $issue):?>
 
-                        <tr class="<?php print $issue->foundBy; ?>">
+                        <tr class="<?php print $issue->getFoundBy(); ?>">
                             <td align="center">
-                                <a href="#line_<?php print $issue->lineStart;?>" onclick="switchLine('line_<?php print $issue->lineStart;?>')">
-                                <?php print $issue->lineStart; ?></a>
+                                <a href="#line_<?php print $issue->getLineStart();?>" onclick="switchLine('line_<?php print $issue->getLineStart();?>')">
+                                <?php print $issue->getLineStart(); ?></a>
                             </td>
                             <td align="center">
-                                <a href="#line_<?php print $issue->lineEnd;?>" onclick="switchLine('line_<?php print $issue->lineStart;?>'); new Effect.Highlight('line_<?php print $issue->lineStart."-".$issue->lineEnd; ?>', {duration: 1.5}); return false">
-                                <?php print $issue->lineEnd;?></a>
+                                <a href="#line_<?php print $issue->getLineEnd();?>" onclick="switchLine('line_<?php print $issue->getLineStart();?>'); new Effect.Highlight('line_<?php print $issue->getLineStart()."-".$issue->getLineEnd(); ?>', {duration: 1.5}); return false">
+                                <?php print $issue->getLineEnd();?></a>
                             </td>
                             <td>
-                                <a href="#line_<?php print $issue->lineStart; ?>" onclick="switchLine('line_<?php print $issue->lineStart;?>'); new Effect.Highlight('line_<?php print $issue->lineStart."-".$issue->lineEnd; ?>', {duration: 1.5}); return false">
-                                <?php print (string)$issue->description;?></a>
+                                <a href="#line_<?php print $issue->getLineStart(); ?>" onclick="switchLine('line_<?php print $issue->getLineStart();?>'); new Effect.Highlight('line_<?php print $issue->getLineStart()."-".$issue->getLineEnd(); ?>', {duration: 1.5}); return false">
+                                <?php print (string) $issue->getDescription();?></a>
                             </td>
                             <td>
-                                <?php print $issue->foundBy;?>
+                                <?php print $issue->getFoundBy();?>
                             </td>
                             <td>
-                                <?php print $issue->severity;?>
+                                <?php print $issue->getSeverity();?>
                             </td>
                         </tr>
                         <?php endforeach; ?>

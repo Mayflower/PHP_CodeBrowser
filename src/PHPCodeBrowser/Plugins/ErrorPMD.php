@@ -83,7 +83,7 @@ class ErrorPMD extends AbstractPlugin
      *
      * @var string
      */
-    public $pluginName = 'pmd';
+    protected $pluginName = 'pmd';
 
     /**
      * Name of the attribute that holds the number of the first line

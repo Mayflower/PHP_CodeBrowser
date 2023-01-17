@@ -84,7 +84,7 @@ class ErrorCheckstyle extends AbstractPlugin
      *
      * @var string
      */
-    public $pluginName = 'checkstyle';
+    protected $pluginName = 'checkstyle';
 
     /**
      * Name of the attribute that holds the number of the first line
