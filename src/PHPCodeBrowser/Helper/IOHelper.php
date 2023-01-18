@@ -293,7 +293,7 @@ class IOHelper
      */
     protected static function getCurrentCommonPathPrefix(string $currentPrefix, string $path): string
     {
-        if (0 === \strpos($path, $currentPrefix.DIRECTORY_SEPARATOR)
+        if (\str_starts_with($path, $currentPrefix.DIRECTORY_SEPARATOR)
             || DIRECTORY_SEPARATOR === $currentPrefix
             || '' === $currentPrefix
             || '.' === $currentPrefix

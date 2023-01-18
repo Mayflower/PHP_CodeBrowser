@@ -155,7 +155,7 @@ class ViewReview extends ViewAbstract
         $data['source']   = $this->formatSourceCode($fileName, $issues);
 
         $depth           = \substr_count($shortFilename, DIRECTORY_SEPARATOR);
-        $data['csspath'] = \str_repeat('../', $depth - 1 >= 0 ? $depth - 1 : 0);
+        $data['csspath'] = \str_repeat('../', \max($depth - 1, 0));
 
         //we want to exclude files without issues and there are no issues in this one
         if ($excludeOK && !$data['issues']) {
@@ -294,12 +294,7 @@ class ViewReview extends ViewAbstract
             return $this->highlightPhpCode($sourceCode);
         }
 
-        $sourceCode = \preg_replace(
-            '/^.*$/m',
-            '<li>$0</li>',
-            \htmlentities($sourceCode)
-        );
-        $sourceCode = \preg_replace('/ /', '&nbsp;', $sourceCode);
+        $sourceCode = \preg_replace(['/^.*$/m', '/ /'], ['<li>$0</li>', '&nbsp;'], \htmlentities($sourceCode));
         $sourceCode = '<div class="code"><ol class="code">'.$sourceCode.'</ol></div>';
         $sourceCode = $this->stripInvalidXml($sourceCode);
 

@@ -322,7 +322,7 @@ HERE
      */
     private function handleBackwardCompatibility(array $option): array
     {
-        if (\count($option) === 1 && \strpos($option[0], ',') !== false) {
+        if (\count($option) === 1 && \str_contains($option[0], ',')) {
             $option = \explode(',', $option[0]);
             \error_log('Usage of comma-separated options is deprecated, specify them one-by-one.', E_DEPRECATED);
         }

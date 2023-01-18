@@ -253,8 +253,8 @@ class File
         $firstSubName  = \substr($firstName, $prefixLength);
         $secondSubName = \substr($secondName, $prefixLength);
 
-        $firstIsInSubDir  = (\substr_count($firstSubName, DIRECTORY_SEPARATOR) !== 0);
-        $secondIsInSubDir = (\substr_count($secondSubName, DIRECTORY_SEPARATOR) !== 0);
+        $firstIsInSubDir  = (\str_contains($firstSubName, DIRECTORY_SEPARATOR));
+        $secondIsInSubDir = (\str_contains($secondSubName, DIRECTORY_SEPARATOR));
 
         if ($firstIsInSubDir) {
             return $secondIsInSubDir ? \strcmp($firstSubName, $secondSubName) : -1;

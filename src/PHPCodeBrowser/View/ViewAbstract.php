@@ -242,7 +242,7 @@ class ViewAbstract
             $dir = \dirname($name).DIRECTORY_SEPARATOR;
 
             // Go back until the file is somewhere below curDir
-            while (\strpos($dir, $curDir) !== 0) {
+            while (!\str_starts_with($dir, $curDir)) {
                 // chop off one subDir from $curDir
                 $curDir  = \substr(
                     $curDir,
@@ -347,8 +347,7 @@ class ViewAbstract
 
         \ob_start();
         include $filePath;
-        $contents = \ob_get_contents();
-        \ob_end_clean();
+        $contents = \ob_get_clean();
 
         return $contents;
     }
