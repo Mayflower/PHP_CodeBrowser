@@ -136,7 +136,7 @@ class ErrorPMD extends AbstractPlugin
         return \str_replace(
             '&#10;',
             '',
-            \htmlentities($element->textContent)
+            \htmlentities($element->textContent, ENT_COMPAT)
         );
     }
 }

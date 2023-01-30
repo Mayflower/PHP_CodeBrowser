@@ -220,7 +220,7 @@ class ViewReview extends ViewAbstract
         foreach ($sourceElements as $sourceElement) {
             if ($sourceElement instanceof DOMText) {
                 $span            = $targetDom->createElement('span');
-                $span->nodeValue = \htmlspecialchars($sourceElement->wholeText);
+                $span->nodeValue = \htmlspecialchars($sourceElement->wholeText, ENT_COMPAT);
                 $liElement->appendChild($span);
             }
 
@@ -250,7 +250,7 @@ class ViewReview extends ViewAbstract
                 } else {
                     // append content to current li element
                     $span            = $targetDom->createElement('span');
-                    $span->nodeValue = \htmlspecialchars($sourceChildElement->textContent);
+                    $span->nodeValue = \htmlspecialchars($sourceChildElement->textContent, ENT_COMPAT);
                     $span->setAttribute('class', $elementClass);
                     $liElement->appendChild($span);
                 }
@@ -294,7 +294,7 @@ class ViewReview extends ViewAbstract
             return $this->highlightPhpCode($sourceCode);
         }
 
-        $sourceCode = \preg_replace(['/^.*$/m', '/ /'], ['<li>$0</li>', '&nbsp;'], \htmlentities($sourceCode));
+        $sourceCode = \preg_replace(['/^.*$/m', '/ /'], ['<li>$0</li>', '&nbsp;'], \htmlentities($sourceCode, ENT_COMPAT));
         $sourceCode = '<div class="code"><ol class="code">'.$sourceCode.'</ol></div>';
         $sourceCode = $this->stripInvalidXml($sourceCode);
 

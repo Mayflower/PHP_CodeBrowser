@@ -114,9 +114,7 @@ class ErrorCPD extends AbstractPlugin
                 (int) $file->getAttribute('line'),
                 (int) $file->getAttribute('line') + $lineCount,
                 'Duplication',
-                \htmlentities(
-                    $this->getCpdDescription($parentNode->childNodes, $file)
-                ),
+                \htmlentities($this->getCpdDescription($parentNode->childNodes, $file), ENT_COMPAT),
                 'notice'
             );
         }

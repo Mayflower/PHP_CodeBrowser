@@ -309,7 +309,7 @@ abstract class AbstractPlugin
      */
     protected function getDescription(DOMElement $element): string
     {
-        return \htmlentities($element->getAttribute($this->descriptionAttr));
+        return \htmlentities($element->getAttribute($this->descriptionAttr), ENT_COMPAT);
     }
 
     /**
@@ -323,6 +323,6 @@ abstract class AbstractPlugin
      */
     protected function getSeverity(DOMElement $element): string
     {
-        return \htmlentities($element->getAttribute($this->severityAttr));
+        return \htmlentities($element->getAttribute($this->severityAttr), ENT_COMPAT);
     }
 }
