@@ -181,6 +181,6 @@ HERE;
             ),
         ];
         $actual   = $this->errorCheckstyle->getFileList();
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

@@ -239,7 +239,7 @@ class CLIController
 
         // init needed classes
         $viewReview = new ViewReview(
-            \getenv('PHPCB_TEMPLATE_DIR') ?: \dirname(__FILE__, 3).'/templates',
+            \getenv('PHPCB_TEMPLATE_DIR') ? \getenv('PHPCB_TEMPLATE_DIR') : \dirname(__FILE__, 3).'/templates',
             $this->htmlOutputDir,
             $this->ioHelper,
             $this->phpSuffixes
@@ -255,6 +255,7 @@ class CLIController
 
             // conversion of XML file cc to cb format
             foreach ($this->registeredPlugins as $className) {
+                /** @var AbstractPlugin $plugin */
                 $plugin = \array_key_exists($className, $this->pluginOptions) ? new $className(
                     $issueXml,
                     $this->pluginOptions[$className]

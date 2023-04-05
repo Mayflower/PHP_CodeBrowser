@@ -153,7 +153,7 @@ class SourceHandler
             $filename = $file;
             $file     = \realpath($file);
         } else {
-            $filename = $file->getPathName();
+            $filename = $file->getPathname();
             $file     = $file->getRealPath();
         }
 

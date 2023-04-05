@@ -30,7 +30,7 @@ class ApplicationTest extends TestCase
      */
     public function testCommand(): void
     {
-        $this->assertInstanceOf(RunCommand::class, $this->application->get('phpcb'));
+        static::assertInstanceOf(RunCommand::class, $this->application->get('phpcb'));
     }
 
     /**
@@ -40,6 +40,6 @@ class ApplicationTest extends TestCase
     {
         $this->application->getDefinition()->setArguments([new InputArgument('foo')]);
 
-        $this->assertEquals(0, $this->application->getDefinition()->getArgumentCount());
+        static::assertEquals(0, $this->application->getDefinition()->getArgumentCount());
     }
 }

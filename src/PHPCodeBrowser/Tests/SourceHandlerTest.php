@@ -103,11 +103,14 @@ class SourceHandlerTest extends AbstractTestCase
     private $logger;
 
     /**
-     * Initializes common values.
+     * (non-PHPDoc)
+     *
+     * @see AbstractTests#setUp()
      */
-    public function __construct()
+    protected function setUp(): void
     {
-        parent::__construct();
+        parent::setUp();
+
         $xmlStrings = [
             <<<HERE
 <?xml version="1.0" encoding="UTF-8"?>
@@ -119,7 +122,7 @@ class SourceHandlerTest extends AbstractTestCase
     </file>
 </pmd>
 HERE
-        ,
+            ,
             <<<HERE
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="1.2.0RC3">
@@ -135,7 +138,7 @@ HERE
     </file>
 </checkstyle>
 HERE
-        ,
+            ,
         ];
         $issueXML   = new IssueXML();
 
@@ -150,16 +153,6 @@ HERE
             new ErrorCheckstyle($issueXML),
             new ErrorPMD($issueXML),
         ];
-    }
-
-    /**
-     * (non-PHPDoc)
-     *
-     * @see AbstractTests#setUp()
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
 
         $this->logger = new Logger('PHPCodeBrowser');
         $this->logger->pushHandler(new NullHandler());
@@ -182,7 +175,7 @@ HERE
             $this->logger,
             $this->plugins
         );
-        $this->assertEquals($this->sourceHandler, $sourceHandler);
+        static::assertEquals($this->sourceHandler, $sourceHandler);
     }
 
     /**
@@ -211,7 +204,7 @@ HERE
         File::sort($expected);
 
         $actual = $this->sourceHandler->getFiles();
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     /**
@@ -226,7 +219,7 @@ HERE
             '/a/nother/dir/src.php',
         ];
         $actualFiles   = $this->sourceHandler->getFilesWithIssues();
-        $this->assertEquals($expectedFiles, $actualFiles);
+        static::assertEquals($expectedFiles, $actualFiles);
     }
 
     /**
@@ -239,7 +232,7 @@ HERE
         $this->sourceHandler->addSourceFiles(
             [new SplFileInfo(__FILE__), __FILE__]
         );
-        $this->assertContains(__FILE__, \array_keys($this->sourceHandler->getFiles()));
+        static::assertContains(__FILE__, \array_keys($this->sourceHandler->getFiles()));
     }
 
     /**
@@ -265,7 +258,7 @@ HERE
     {
         $expected = '/a/';
         $actual   = $this->sourceHandler->getCommonPathPrefix();
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     /**
@@ -284,7 +277,7 @@ HERE
             ),
         ];
         $this->sourceHandler->excludeMatchingPCRE('/^\/a.*src\.php$/');
-        $this->assertEquals($expected, $this->sourceHandler->getFiles());
+        static::assertEquals($expected, $this->sourceHandler->getFiles());
     }
 
     /**
@@ -303,6 +296,6 @@ HERE
             ),
         ];
         $this->sourceHandler->excludeMatchingPattern('*src.php');
-        $this->assertEquals($expected, $this->sourceHandler->getFiles());
+        static::assertEquals($expected, $this->sourceHandler->getFiles());
     }
 }

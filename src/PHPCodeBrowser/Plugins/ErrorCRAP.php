@@ -115,12 +115,12 @@ class ErrorCRAP extends AbstractPlugin
      * This method provides a default behaviour an can be overloaded to
      * implement special behavior for other plugins.
      *
-     * @param DOMElement $element  The XML plugin node with its errors
-     * @param string     $filename Name of the file to return issues for.
+     * @param \DOMNode $element  The XML plugin node with its errors
+     * @param string   $filename Name of the file to return issues for.
      *
-     * @return array            array of issue objects.
+     * @return array<Issue>
      */
-    public function mapIssues(DOMElement $element, string $filename): array
+    public function mapIssues(\DOMNode $element, string $filename): array
     {
         $errorList = [];
 

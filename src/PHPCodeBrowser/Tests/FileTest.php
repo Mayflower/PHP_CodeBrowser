@@ -89,19 +89,6 @@ class FileTest extends AbstractTestCase
     protected $issues;
 
     /**
-     * Constructor. Initialize some values.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->issues = [
-            new Issue('/some/file/name.php', 39, 39, 'Checkstyle', 'm3', 'error'),
-            new Issue('/some/file/name.php', 50, 52, 'Checkstyle', 'm4', 'warning'),
-            new Issue('/some/file/name.php', 40, 40, 'Checkstyle', 'm4', 'error'),
-        ];
-    }
-
-    /**
      * (non-PHPDoc)
      *
      * @see AbstractTests#setUp()
@@ -109,7 +96,12 @@ class FileTest extends AbstractTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->file = new File('/some/file/name.php');
+        $this->issues = [
+            new Issue('/some/file/name.php', 39, 39, 'Checkstyle', 'm3', 'error'),
+            new Issue('/some/file/name.php', 50, 52, 'Checkstyle', 'm4', 'warning'),
+            new Issue('/some/file/name.php', 40, 40, 'Checkstyle', 'm4', 'error'),
+        ];
+        $this->file   = new File('/some/file/name.php');
     }
 
     /**
@@ -119,12 +111,12 @@ class FileTest extends AbstractTestCase
      */
     public function testInstantiation(): void
     {
-        $this->assertEquals('/some/file/name.php', $this->file->name());
+        static::assertEquals('/some/file/name.php', $this->file->name());
 
         $this->file = new File('/some/file/name.php', $this->issues);
 
-        $this->assertEquals('/some/file/name.php', $this->file->name());
-        $this->assertEquals($this->issues, $this->file->getIssues());
+        static::assertEquals('/some/file/name.php', $this->file->name());
+        static::assertEquals($this->issues, $this->file->getIssues());
     }
 
     /**
@@ -135,7 +127,7 @@ class FileTest extends AbstractTestCase
     public function testIssueAdding(): void
     {
         $this->file->addIssue($this->issues[0]);
-        $this->assertEquals(
+        static::assertEquals(
             [$this->issues[0]],
             $this->file->getIssues()
         );
@@ -161,7 +153,7 @@ class FileTest extends AbstractTestCase
      */
     public function testBasename(): void
     {
-        $this->assertEquals('name.php', $this->file->basename());
+        static::assertEquals('name.php', $this->file->basename());
     }
 
     /**
@@ -171,7 +163,7 @@ class FileTest extends AbstractTestCase
      */
     public function testDirName(): void
     {
-        $this->assertEquals('/some/file', $this->file->dirName());
+        static::assertEquals('/some/file', $this->file->dirName());
     }
 
     /**
@@ -181,19 +173,19 @@ class FileTest extends AbstractTestCase
      */
     public function testIssueCount(): void
     {
-        $this->assertEquals(0, $this->file->getIssueCount());
+        static::assertEquals(0, $this->file->getIssueCount());
 
         $this->file->addIssue($this->issues[0]);
-        $this->assertEquals(1, $this->file->getIssueCount());
+        static::assertEquals(1, $this->file->getIssueCount());
 
         $this->file = new File(
             '/some/file/name.php',
             [$this->issues[0]]
         );
-        $this->assertEquals(1, $this->file->getIssueCount());
+        static::assertEquals(1, $this->file->getIssueCount());
 
         $this->file->addIssue($this->issues[1]);
-        $this->assertEquals(2, $this->file->getIssueCount());
+        static::assertEquals(2, $this->file->getIssueCount());
     }
 
     /**
@@ -204,7 +196,7 @@ class FileTest extends AbstractTestCase
     public function testErrorCount(): void
     {
         $this->file = new File('/some/file/name.php', $this->issues);
-        $this->assertEquals(2, $this->file->getErrorCount());
+        static::assertEquals(2, $this->file->getErrorCount());
     }
 
     /**
@@ -215,7 +207,7 @@ class FileTest extends AbstractTestCase
     public function testEarningCount(): void
     {
         $this->file = new File('/some/file/name.php', $this->issues);
-        $this->assertEquals(1, $this->file->getWarningCount());
+        static::assertEquals(1, $this->file->getWarningCount());
     }
 
     /**
@@ -235,9 +227,9 @@ class FileTest extends AbstractTestCase
         );
         $this->file->mergeWith($otherFile);
 
-        $this->assertEquals(2, $this->file->getErrorCount());
-        $this->assertEquals(1, $this->file->getWarningCount());
-        $this->assertEquals(
+        static::assertEquals(2, $this->file->getErrorCount());
+        static::assertEquals(1, $this->file->getWarningCount());
+        static::assertEquals(
             \array_values($this->issues),
             \array_values($this->file->getIssues())
         );
@@ -304,6 +296,6 @@ class FileTest extends AbstractTestCase
 
         File::sort($mixed);
         $mixed = \array_values($mixed);
-        $this->assertEquals($sorted, $mixed);
+        static::assertEquals($sorted, $mixed);
     }
 }

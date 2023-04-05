@@ -108,8 +108,8 @@ class IOHelperTest extends AbstractTestCase
         }
 
         $this->ioHelper->createFile($filename, $content);
-        $this->assertFileExists($filename);
-        $this->assertEquals($content, \file_get_contents($filename));
+        static::assertFileExists($filename);
+        static::assertEquals($content, \file_get_contents($filename));
 
         \unlink($filename);
     }
@@ -133,9 +133,9 @@ class IOHelperTest extends AbstractTestCase
         }
 
         $this->ioHelper->createFile($filename, $content);
-        $this->assertFileExists($dirName);
-        $this->assertFileExists($filename);
-        $this->assertEquals($content, \file_get_contents($filename));
+        static::assertFileExists($dirName);
+        static::assertFileExists($filename);
+        static::assertEquals($content, \file_get_contents($filename));
 
         \unlink($filename);
         \rmdir($dirName);
@@ -155,7 +155,7 @@ class IOHelperTest extends AbstractTestCase
         }
 
         $this->ioHelper->deleteFile($filename);
-        $this->assertFileDoesNotExist($filename);
+        static::assertFileDoesNotExist($filename);
     }
 
     /**
@@ -174,7 +174,7 @@ class IOHelperTest extends AbstractTestCase
         \touch($file);
 
         $this->ioHelper->deleteDirectory($dir);
-        $this->assertFileDoesNotExist($dir);
+        static::assertFileDoesNotExist($dir);
     }
 
     /**
@@ -200,11 +200,11 @@ class IOHelperTest extends AbstractTestCase
         \file_put_contents($srcFile, $content);
 
         $this->ioHelper->copyFile($srcFile, $dstDir);
-        $this->assertFileExists($srcFile);
-        $this->assertFileExists($dstDir);
-        $this->assertFileExists($dstFile);
-        $this->assertEquals($content, \file_get_contents($dstFile));
-        $this->assertEquals($content, \file_get_contents($srcFile));
+        static::assertFileExists($srcFile);
+        static::assertFileExists($dstDir);
+        static::assertFileExists($dstFile);
+        static::assertEquals($content, \file_get_contents($dstFile));
+        static::assertEquals($content, \file_get_contents($srcFile));
 
         \unlink($dstFile);
         \rmdir($dstDir);
@@ -255,7 +255,7 @@ class IOHelperTest extends AbstractTestCase
      */
     public function testGetCommonPathPrefixForNoFiles(): void
     {
-        $this->assertEquals(
+        static::assertEquals(
             '/',
             $this->ioHelper::getCommonPathPrefix([])
         );

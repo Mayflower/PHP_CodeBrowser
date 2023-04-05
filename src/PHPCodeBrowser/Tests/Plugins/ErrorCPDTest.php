@@ -154,6 +154,6 @@ HERE;
             ),
         ];
         $actual   = $this->errorCPD->getFileList();
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

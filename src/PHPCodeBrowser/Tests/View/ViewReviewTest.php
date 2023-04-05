@@ -104,7 +104,7 @@ class ViewReviewTest extends AbstractTestCase
         $this->ioMock = $this->createMock(IOHelper::class);
 
         $this->viewReview = new ViewReview(
-            \getenv('PHPCB_TEMPLATE_DIR') ?: \dirname(__FILE__, 5).'/templates',
+            \getenv('PHPCB_TEMPLATE_DIR') ? \getenv('PHPCB_TEMPLATE_DIR') : \dirname(__FILE__, 5).'/templates',
             self::$testOutputDir,
             $this->ioMock
         );
@@ -119,13 +119,13 @@ class ViewReviewTest extends AbstractTestCase
     {
         $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.\basename(__FILE__).'.html';
 
-        $this->ioMock->expects($this->once())
+        $this->ioMock->expects(static::once())
             ->method('loadFile')
-            ->with($this->equalTo(__FILE__))
+            ->with(static::equalTo(__FILE__))
             ->willReturn(\file_get_contents(__FILE__));
-        $this->ioMock->expects($this->once())
+        $this->ioMock->expects(static::once())
             ->method('createFile')
-            ->with($this->equalTo($expectedFile));
+            ->with(static::equalTo($expectedFile));
 
         $this->viewReview->generate(
             [],
@@ -153,13 +153,13 @@ class ViewReviewTest extends AbstractTestCase
         ];
 
         $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.\basename(__FILE__).'.html';
-        $this->ioMock->expects($this->once())
+        $this->ioMock->expects(static::once())
             ->method('loadFile')
-            ->with($this->equalTo(__FILE__))
+            ->with(static::equalTo(__FILE__))
             ->willReturn(\file_get_contents(__FILE__));
-        $this->ioMock->expects($this->once())
+        $this->ioMock->expects(static::once())
             ->method('createFile')
-            ->with($this->equalTo($expectedFile));
+            ->with(static::equalTo($expectedFile));
 
         $this->viewReview->generate(
             $issueList,
@@ -181,13 +181,13 @@ class ViewReviewTest extends AbstractTestCase
         ];
 
         $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.\basename(__FILE__).'.html';
-        $this->ioMock->expects($this->once())
+        $this->ioMock->expects(static::once())
             ->method('loadFile')
-            ->with($this->equalTo(__FILE__))
+            ->with(static::equalTo(__FILE__))
             ->willReturn(\file_get_contents(__FILE__));
-        $this->ioMock->expects($this->once())
+        $this->ioMock->expects(static::once())
             ->method('createFile')
-            ->with($this->equalTo($expectedFile));
+            ->with(static::equalTo($expectedFile));
 
         $this->viewReview->generate(
             $issueList,
@@ -204,7 +204,7 @@ class ViewReviewTest extends AbstractTestCase
     public function testGenerateWithTextHighlighter(): void
     {
         if (!\class_exists('Text_Highlighter')) {
-            $this->markTestIncomplete();
+            static::markTestIncomplete();
         }
 
         $html     = <<< EOT
@@ -221,13 +221,13 @@ EOT;
         $fileName = $prefix.'file.html';
 
         $expectedFile = self::$testOutputDir.'/file.html.html';
-        $this->ioMock->expects($this->once())
+        $this->ioMock->expects(static::once())
             ->method('loadFile')
-            ->with($this->equalTo($fileName))
+            ->with(static::equalTo($fileName))
             ->willReturn($html);
-        $this->ioMock->expects($this->once())
+        $this->ioMock->expects(static::once())
             ->method('createFile')
-            ->with($this->equalTo($expectedFile));
+            ->with(static::equalTo($expectedFile));
 
         $issues = [
             new Issue($fileName, 5, 5, 'finder', 'description', 'severity'),
@@ -245,9 +245,9 @@ EOT;
     {
         $expectedFile = self::$testOutputDir.DIRECTORY_SEPARATOR.\basename(self::$xmlBasic).'.html';
 
-        $this->ioMock->expects($this->once())
+        $this->ioMock->expects(static::once())
             ->method('createFile')
-            ->with($this->equalTo($expectedFile));
+            ->with(static::equalTo($expectedFile));
 
         $issueList = [
             new Issue(self::$xmlBasic, 5, 5, 'finder', 'description', 'severity'),
@@ -267,10 +267,10 @@ EOT;
      */
     public function testCopyResourceFolders(): void
     {
-        $this->ioMock->expects($this->exactly(3))
+        $this->ioMock->expects(static::exactly(3))
             ->method('copyDirectory')
             ->with(
-                $this->matchesRegularExpression(
+                static::matchesRegularExpression(
                     '|^'.\realpath(__DIR__.'/../../../templates/').'|'
                 )
             );
@@ -290,11 +290,11 @@ EOT;
             's/B/anotherfile.php' => new File('s/B/anotherfile.php'),
         ];
 
-        $this->ioMock->expects($this->once())
+        $this->ioMock->expects(static::once())
             ->method('createFile')
             ->with(
-                $this->logicalAnd(
-                    $this->stringEndsWith('index.html')
+                static::logicalAnd(
+                    static::stringEndsWith('index.html')
                 )
             );
         $this->viewReview->generateIndex($files);

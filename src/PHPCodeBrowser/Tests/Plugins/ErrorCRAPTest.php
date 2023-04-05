@@ -178,7 +178,7 @@ HERE;
             ),
         ];
         $actual   = $this->errorCrap->getFileList();
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     /**
@@ -217,6 +217,6 @@ HERE;
             ),
         ];
         $actual   = $this->errorCrap->getFileList();
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

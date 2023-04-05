@@ -184,6 +184,6 @@ HERE;
             ),
         ];
         $actual   = $this->errorCoverage->getFileList();
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

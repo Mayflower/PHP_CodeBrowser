@@ -156,9 +156,9 @@ class RunCommand extends Command
      *
      * @phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      *
-     * @return int|null null or 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->checkErrors($input);
 
@@ -276,7 +276,7 @@ HERE
         foreach ($plugins as $pluginKey => $plugin) {
             $name = \substr($plugin, \strlen('Error'));
 
-            if (!\in_array(\strtolower($name), $disabledPlugins)) {
+            if (!\in_array(\strtolower($name), $disabledPlugins, true)) {
                 continue;
             }
 

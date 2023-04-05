@@ -184,7 +184,7 @@ class ViewReview extends ViewAbstract
         $code = \highlight_string($sourceCode, true);
 
         if (\extension_loaded('mbstring') && !\mb_check_encoding($code, 'UTF-8')) {
-            $detectOrder   = \mb_detect_order();
+            $detectOrder   = (array) \mb_detect_order();
             $detectOrder[] = 'iso-8859-1';
 
             $encoding = \mb_detect_encoding($code, $detectOrder, true);
@@ -204,7 +204,7 @@ class ViewReview extends ViewAbstract
         $sourceDom->loadHTML('<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'.$code);
 
         //fetch <code>-><span>->children from php generated html
-        $sourceElements = $sourceDom->getElementsByTagname('code')->item(0)
+        $sourceElements = $sourceDom->getElementsByTagName('code')->item(0)
             ->childNodes->item(0)->childNodes;
 
         //create target dom
@@ -290,7 +290,7 @@ class ViewReview extends ViewAbstract
         $sourceCode = $this->ioHelper->loadFile($file);
         $extension  = \pathinfo($file, PATHINFO_EXTENSION);
 
-        if (\in_array($extension, $this->phpSuffixes)) {
+        if (\in_array($extension, $this->phpSuffixes, true)) {
             return $this->highlightPhpCode($sourceCode);
         }
 
@@ -339,7 +339,7 @@ class ViewReview extends ViewAbstract
             $line->setAttribute('id', 'line_'.$lineNumber);
 
             $lineClasses = [
-                ($lineNumber % 2) ? 'odd' : 'even',
+                ($lineNumber % 2 === 0) ? 'odd' : 'even',
             ];
 
             if (isset($outputIssues[$lineNumber])) {

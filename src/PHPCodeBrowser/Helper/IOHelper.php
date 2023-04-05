@@ -222,13 +222,12 @@ class IOHelper
     /**
      * Copy a directory within all its items.
      *
-     * @param string $source  The source directory
-     * @param string $target  The target to create
-     * @param array  $exclude List of files / folders that should not be copyed
+     * @param string $source The source directory
+     * @param string $target The target to create
      *
      * @return void
      */
-    public function copyDirectory(string $source, string $target, array $exclude = []): void
+    public function copyDirectory(string $source, string $target): void
     {
         // first check for target itself
         $this->createDirectory($target);
@@ -245,7 +244,6 @@ class IOHelper
             // create folder recursive
             if (!$iterator->isDot()
                 && $iterator->isDir()
-                && !\in_array($item, $exclude)
             ) {
                 $this->copyDirectory(
                     $source.'/'.$item,

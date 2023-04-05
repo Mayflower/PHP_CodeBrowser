@@ -1,19 +1,49 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$element of method PHPCodeBrowser\\\\AbstractPlugin\\:\\:mapIssues\\(\\) expects DOMElement, DOMNode given\\.$#"
+			message: "#^Only booleans are allowed in a negated boolean, array\\<PHPCodeBrowser\\\\File\\> given\\.$#"
 			count: 1
-			path: src/PHPCodeBrowser/AbstractPlugin.php
+			path: src/PHPCodeBrowser/CLIController.php
 
 		-
-			message: "#^Call to an undefined method DOMNode\\:\\:getAttribute\\(\\)\\.$#"
-			count: 1
-			path: src/PHPCodeBrowser/Plugins/ErrorCPD.php
+			message: "#^Only booleans are allowed in a negated boolean, mixed given\\.$#"
+			count: 4
+			path: src/PHPCodeBrowser/Command/RunCommand.php
 
 		-
-			message: "#^Call to an undefined method DOMNode\\:\\:getAttribute\\(\\)\\.$#"
+			message: "#^Only booleans are allowed in an if condition, mixed given\\.$#"
 			count: 1
-			path: src/PHPCodeBrowser/Plugins/ErrorCoverage.php
+			path: src/PHPCodeBrowser/Command/RunCommand.php
+
+		-
+			message: "#^Construct empty\\(\\) is not allowed\\. Use more strict comparison\\.$#"
+			count: 2
+			path: src/PHPCodeBrowser/Helper/IOHelper.php
+
+		-
+			message: "#^Only booleans are allowed in a ternary operator condition, DOMNode\\|null given\\.$#"
+			count: 1
+			path: src/PHPCodeBrowser/IssueXML.php
+
+		-
+			message: "#^Only booleans are allowed in an if condition, mixed given\\.$#"
+			count: 1
+			path: src/PHPCodeBrowser/IssueXML.php
+
+		-
+			message: "#^Only booleans are allowed in a negated boolean, string given\\.$#"
+			count: 1
+			path: src/PHPCodeBrowser/Plugins/ErrorCRAP.php
+
+		-
+			message: "#^Construct empty\\(\\) is not allowed\\. Use more strict comparison\\.$#"
+			count: 1
+			path: src/PHPCodeBrowser/View/ViewAbstract.php
+
+		-
+			message: "#^Only booleans are allowed in a negated boolean, string given\\.$#"
+			count: 2
+			path: src/PHPCodeBrowser/View/ViewAbstract.php
 
 		-
 			message: "#^Comparison operation \"\\<\" between 1 and int\\<2, max\\> is always true\\.$#"
@@ -36,6 +66,21 @@ parameters:
 			path: src/PHPCodeBrowser/View/ViewReview.php
 
 		-
+			message: "#^Construct empty\\(\\) is not allowed\\. Use more strict comparison\\.$#"
+			count: 1
+			path: src/PHPCodeBrowser/View/ViewReview.php
+
+		-
+			message: "#^Only booleans are allowed in a negated boolean, array given\\.$#"
+			count: 1
+			path: src/PHPCodeBrowser/View/ViewReview.php
+
+		-
 			message: "#^Result of && is always false\\.$#"
 			count: 2
+			path: src/PHPCodeBrowser/View/ViewReview.php
+
+		-
+			message: "#^Switch condition type \\(int\\<0, max\\>\\) does not match case condition 1 \\< \\$lineErrorCount \\(bool\\)\\.$#"
+			count: 1
 			path: src/PHPCodeBrowser/View/ViewReview.php

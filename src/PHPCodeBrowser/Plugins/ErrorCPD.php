@@ -88,13 +88,14 @@ class ErrorCPD extends AbstractPlugin
     /**
      * Mapper method for this plugin.
      *
-     * @param DOMElement $element  The XML plugin node with its errors
-     * @param string     $filename
+     * @param \DOMNode $element  The XML plugin node with its errors
+     * @param string   $filename
      *
-     * @return array
+     * @return array<Issue>
      */
-    public function mapIssues(DOMElement $element, string $filename): array
+    public function mapIssues(\DOMNode $element, string $filename): array
     {
+        /** @var DOMElement $parentNode */
         $parentNode = $element->parentNode;
         $files      = $this->issueXml->query(
             'file[@path="'.$filename.'"]',

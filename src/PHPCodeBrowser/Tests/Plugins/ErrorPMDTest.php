@@ -182,6 +182,6 @@ HERE;
             ),
         ];
         $actual   = $this->errorPmd->getFileList();
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }
