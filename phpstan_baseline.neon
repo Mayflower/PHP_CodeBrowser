@@ -26,11 +26,6 @@ parameters:
 			path: src/PHPCodeBrowser/IssueXML.php
 
 		-
-			message: "#^Only booleans are allowed in an if condition, mixed given\\.$#"
-			count: 1
-			path: src/PHPCodeBrowser/IssueXML.php
-
-		-
 			message: "#^Only booleans are allowed in a negated boolean, string given\\.$#"
 			count: 1
 			path: src/PHPCodeBrowser/Plugins/ErrorCRAP.php
